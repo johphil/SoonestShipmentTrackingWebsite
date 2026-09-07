@@ -1,0 +1,121 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Site" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Soonest Global Express Corporation</asp:ContentPlaceHolder></title>
+    <link rel="stylesheet" href="~/Content/Site.css" runat="server" />
+</head>
+<body>
+    <form id="mainForm" runat="server">
+
+        <!-- Top utility bar -->
+        <div class="topbar">
+            <div class="container">
+                <div class="topbar-info">
+                    <span><strong>Email:</strong> info@soonestglobal.com</span>
+                    <span><strong>Call:</strong> +632 249 8970</span>
+                    <span><strong>Hours:</strong> Mon - Sat 09:00 - 19:00</span>
+                </div>
+                <div class="topbar-social">
+                    <a href="https://www.facebook.com/soonestglobal/" target="_blank" rel="noopener">Facebook</a>
+                    <a href="https://soonestglobal.com/instagram.com/soonestglobal" target="_blank" rel="noopener">Instagram</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo header -->
+        <div class="site-header">
+            <div class="container">
+                <a class="brand" runat="server" href="Default.aspx">
+                    <span class="brand-name">SOONEST <span>GLOBAL</span> EXPRESS</span>
+                    <span class="brand-sub">CORPORATION</span>
+                </a>
+                <div>
+                    <a runat="server" href="Track.aspx" class="btn btn-navy">Track Shipment</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main nav -->
+        <div class="navbar">
+            <div class="container">
+                <ul class="nav-links">
+                    <li><a runat="server" href="Default.aspx">Home</a></li>
+                    <li><a runat="server" href="Track.aspx">Track Shipment</a></li>
+                    <asp:PlaceHolder ID="pnlCustomerNav" runat="server" Visible="false">
+                        <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
+                    </asp:PlaceHolder>
+                    <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
+                        <li><a runat="server" href="Admin/Dashboard.aspx">Admin Dashboard</a></li>
+                        <li><a runat="server" href="Admin/Shipments.aspx">Manage Shipments</a></li>
+                    </asp:PlaceHolder>
+                </ul>
+
+                <div class="nav-actions">
+                    <asp:PlaceHolder ID="pnlLoggedIn" runat="server" Visible="false">
+                        <span class="welcome-text">Signed in as <asp:Literal ID="litUserName" runat="server" /></span>
+                        <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
+                    </asp:PlaceHolder>
+                    <asp:PlaceHolder ID="pnlLoggedOut" runat="server">
+                        <a runat="server" href="Account/Login.aspx" class="btn btn-outline">Log in</a>
+                        <a runat="server" href="Account/Register.aspx" class="btn btn-red">Register</a>
+                    </asp:PlaceHolder>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flash message -->
+        <asp:Panel ID="pnlFlashMessage" runat="server" Visible="false">
+            <div class="container" style="margin-top:18px;">
+                <div class="alert-success"><asp:Literal ID="litFlashMessage" runat="server" /></div>
+            </div>
+        </asp:Panel>
+
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+
+        <!-- Footer -->
+        <div class="site-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <h5>Get In Touch</h5>
+                        <p>
+                            Las Piñas City (Main Office and Warehouse)<br />
+                            Jerusalem Street, BF Martinville Manuyo Dos,<br />
+                            Las Piñas City, Philippines
+                        </p>
+                        <p>
+                            Tel: +632 249 8970<br />
+                            Fax: +632 422 0995<br />
+                            Email: info@soonestglobal.com
+                        </p>
+                    </div>
+                    <div>
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a runat="server" href="Default.aspx">Home</a></li>
+                            <li><a runat="server" href="Track.aspx">Track Shipment</a></li>
+                            <li><a runat="server" href="Account/Register.aspx">Create Account</a></li>
+                            <li><a runat="server" href="Account/Login.aspx">Log In</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5>Services</h5>
+                        <ul>
+                            <li>International Freight</li>
+                            <li>Domestic Delivery</li>
+                            <li>Allied Services</li>
+                            <li>Balikbayan Boxes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                Soonest Global Express Corporation &copy; <%= DateTime.Now.Year %>. All rights reserved.
+            </div>
+        </div>
+    </form>
+</body>
+</html>
