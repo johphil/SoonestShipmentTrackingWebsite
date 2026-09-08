@@ -25,7 +25,7 @@ namespace SoonestShipmentTrackingWebsite.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("database", throwIfV1Schema: false)
         {
         }
 

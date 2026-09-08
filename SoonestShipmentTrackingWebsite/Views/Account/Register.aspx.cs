@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using SoonestShipmentTrackingWebsite.App_Start;
+using SoonestShipmentTrackingWebsite.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,14 +13,43 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
 {
     public partial class Register : System.Web.UI.Page
     {
+        private ApplicationSignInManager _signInManager;
+        public ApplicationSignInManager SignInManager =>
+            _signInManager ?? (_signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>());
+
+        private ApplicationUserManager _userManager;
+        public ApplicationUserManager UserManager =>
+            _userManager ?? (_userManager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>());
+
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
+
         protected void btnRegister_Click(object sender, EventArgs e)
         {
-           
+            if (!Page.IsValid)
+                return;
 
+            var user = new ApplicationUser
+            {
+                UserName = txtEmail.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                PhoneNumber = txtPhone.Text.Trim(),
+                FullName = txtFullName.Text.Trim(),
+                Address = txtAddress.Text.Trim()
+            };
+
+            var result = UserManager.Create(user, txtPassword.Text);
+            if (result.Succeeded)
+            {
+                UserManager.AddToRole(user.Id, "Customer");
+                SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
+                Response.Redirect("~/Views/Customer/MyShipments.aspx");
+                return;
+            }
+
+            litError.Text = HttpUtility.HtmlEncode(string.Join(" ", result.Errors));
+            pnlError.Visible = true;
         }
     }
 }

@@ -48,8 +48,8 @@
                         <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
                     </asp:PlaceHolder>
                     <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
-                        <li><a runat="server" href="Admin/Dashboard.aspx">Admin Dashboard</a></li>
-                        <li><a runat="server" href="Admin/Shipments.aspx">Manage Shipments</a></li>
+                        <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
+                        <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
                     </asp:PlaceHolder>
                 </ul>
 
@@ -59,8 +59,8 @@
                         <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
                     </asp:PlaceHolder>
                     <asp:PlaceHolder ID="pnlLoggedOut" runat="server">
-                        <a runat="server" href="Account/Login.aspx" class="btn btn-outline">Log in</a>
-                        <a runat="server" href="Account/Register.aspx" class="btn btn-red">Register</a>
+                        <a runat="server" href="~/Views/Account/Login.aspx" class="btn btn-outline">Log in</a>
+                        <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red">Register</a>
                     </asp:PlaceHolder>
                 </div>
             </div>
@@ -97,8 +97,8 @@
                         <ul>
                             <li><a runat="server" href="Default.aspx">Home</a></li>
                             <li><a runat="server" href="Track.aspx">Track Shipment</a></li>
-                            <li><a runat="server" href="Account/Register.aspx">Create Account</a></li>
-                            <li><a runat="server" href="Account/Login.aspx">Log In</a></li>
+                            <li><a runat="server" href="~/Views/Account/Register.aspx">Create Account</a></li>
+                            <li><a runat="server" href="~/Views/Account/Login.aspx">Log In</a></li>
                         </ul>
                     </div>
                     <div>
