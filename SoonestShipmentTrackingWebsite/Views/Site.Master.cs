@@ -18,7 +18,7 @@ namespace SoonestShipmentTrackingWebsite.Views
 
         protected void btnLogOff_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Default.aspx");
+            Response.Redirect("~/Views/Default.aspx");
         }
     }
 }

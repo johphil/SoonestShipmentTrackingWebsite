@@ -52,7 +52,7 @@
             <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-red btn-block" Text="Register" OnClick="btnRegister_Click" ValidationGroup="Register" />
 
             <p style="text-align:center;margin-top:16px;font-size:13.5px;">
-                Already have an account? <a runat="server" href="~/Account/Login.aspx">Log in</a>
+                Already have an account? <a runat="server" href="~/Views/Account/Login.aspx">Log in</a>
             </p>
         </div>
     </div>

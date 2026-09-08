@@ -43,6 +43,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.4\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -71,6 +83,12 @@
     <Content Include="Global.asax" />
     <Content Include="Views\Account\Login.aspx" />
     <Content Include="Views\Account\Register.aspx" />
+    <Content Include="Views\Admin\CreateShipment.aspx" />
+    <Content Include="Views\Admin\Dashboard.aspx" />
+    <Content Include="Views\Admin\Shipments.aspx" />
+    <Content Include="Views\Admin\UpdateStatus.aspx" />
+    <Content Include="Views\Customer\MyShipments.aspx" />
+    <Content Include="Views\Customer\ShipmentDetails.aspx" />
     <Content Include="Views\Default.aspx" />
     <Content Include="Views\Track.aspx" />
     <Content Include="Web.config" />
@@ -79,6 +97,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\StatusDisplayHelper.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Shipment.cs" />
+    <Compile Include="Models\ShipmentHistory.cs" />
+    <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Account\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -93,6 +116,48 @@
     </Compile>
     <Compile Include="Views\Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\CreateShipment.aspx.cs">
+      <DependentUpon>CreateShipment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\CreateShipment.aspx.designer.cs">
+      <DependentUpon>CreateShipment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Shipments.aspx.cs">
+      <DependentUpon>Shipments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Shipments.aspx.designer.cs">
+      <DependentUpon>Shipments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\UpdateStatus.aspx.cs">
+      <DependentUpon>UpdateStatus.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\UpdateStatus.aspx.designer.cs">
+      <DependentUpon>UpdateStatus.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Customer\MyShipments.aspx.cs">
+      <DependentUpon>MyShipments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Customer\MyShipments.aspx.designer.cs">
+      <DependentUpon>MyShipments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Customer\ShipmentDetails.aspx.cs">
+      <DependentUpon>ShipmentDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Customer\ShipmentDetails.aspx.designer.cs">
+      <DependentUpon>ShipmentDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -126,11 +191,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Views\Admin\" />
-    <Folder Include="Views\Customer\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

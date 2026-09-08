@@ -14,7 +14,7 @@
             </p>
 
             <div class="track-box">
-                <asp:TextBox ID="txtControlNumber" runat="server" placeholder="Enter your Control No. to track a shipment" />
+                <asp:TextBox ID="txtControlNumber" runat="server" placeholder="Enter Control No. to track a shipment" />
                 <asp:Button ID="btnTrack" runat="server" CssClass="btn btn-red" Text="Track" OnClick="btnTrack_Click" />
             </div>
         </div>
@@ -65,7 +65,7 @@
                         partners across all seven continents — because international trade only
                         works with strong global relationships.
                     </p>
-                    <a runat="server" href="~/Account/Register.aspx" class="btn btn-navy">Create a Customer Account</a>
+                    <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-navy">Create a Customer Account</a>
                 </div>
                 <div>
                     <div class="card-panel text-center">
@@ -139,8 +139,8 @@
         <div class="container">
             <div class="section-title" style="justify-content:center;">Ready to Ship With Us?</div>
             <p class="section-lead" style="margin:0 auto 22px;">Register a free customer account to manage and track every shipment tied to you in one place.</p>
-            <a runat="server" href="~/Account/Register.aspx" class="btn btn-red">Get Started</a>
-            <a runat="server" href="~/Track.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Track a Shipment</a>
+            <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red">Get Started</a>
+            <a runat="server" href="~/Views/Track.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Track a Shipment</a>
         </div>
     </div>
 

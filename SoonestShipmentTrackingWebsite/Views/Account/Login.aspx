@@ -32,7 +32,7 @@
             <asp:Button ID="btnLogin" runat="server" CssClass="btn btn-red btn-block" Text="Log In" OnClick="btnLogin_Click" ValidationGroup="Login" />
 
             <p style="text-align:center;margin-top:16px;font-size:13.5px;">
-                No account yet? <a runat="server" href="~/Account/Register.aspx">Register</a>
+                No account yet? <a runat="server" href="~/Views/Account/Register.aspx">Register</a>
             </p>
 
             <hr style="border:none;border-top:1px solid #eceef1;" />
