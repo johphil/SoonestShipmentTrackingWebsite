@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using SoonestShipmentTrackingWebsite.App_Start;
+using SoonestShipmentTrackingWebsite.Helpers;
 using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -49,11 +50,16 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
             };
 
             var result = UserManager.Create(user, txtPassword.Text);
+            
             if (result.Succeeded)
             {
-                UserManager.AddToRole(user.Id, "Customer");
-                SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
-                Response.Redirect("~/Views/Customer/MyShipments.aspx");
+                //Send verification email
+                EmailHelper.SendEmailVerification(user.Email, user.FullName, "12345", 30);
+
+                //Execute this after verification success
+                //UserManager.AddToRole(user.Id, "Customer");
+                //SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
+                //Response.Redirect("~/Views/Customer/MyShipments.aspx");
                 return;
             }
 

@@ -1,4 +1,5 @@
-﻿using SoonestShipmentTrackingWebsite.Models;
+﻿using SoonestShipmentTrackingWebsite.Helpers;
+using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +84,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     Location = txtSenderAddress.Text.Trim(),
                     Notes = "Shipment created."
                 });
-                _db.SaveChanges();
+                int result = _db.SaveChanges();
+
+                if (result > 0)
+                {
+                    EmailHelper.SendShipmentCreatedEmail(shipment);
+                }
 
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} created for {customer.FullName}.";
                 Response.Redirect("~/Views/Admin/Shipments.aspx");
