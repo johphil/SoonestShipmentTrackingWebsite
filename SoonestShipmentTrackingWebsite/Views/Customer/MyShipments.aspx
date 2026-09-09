@@ -5,7 +5,6 @@
     <div class="container">
         <div class="card-panel">
             <div class="page-heading">My Shipments</div>
-
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                 EmptyDataText="You don't have any shipments yet. Once our team creates a shipment on your account, it will show up here.">
                 <Columns>

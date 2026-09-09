@@ -6,7 +6,7 @@
         <div class="card-panel">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
                 <div class="page-heading" style="margin:0;">All Shipments</div>
-                <a runat="server" href="Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
+                <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
             </div>
 
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"

@@ -19,5 +19,18 @@ namespace SoonestShipmentTrackingWebsite.Views
             var controlNumber = (txtControlNumber.Text ?? "").Trim();
             Response.Redirect("Track.aspx?controlNumber=" + HttpUtility.UrlEncode(controlNumber));
         }
+
+        protected void btnGetStarted_Click(object sender, EventArgs e)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    Response.Redirect("~/Views/Admin/Dashboard.aspx");
+                    return;
+                }
+                Response.Redirect("~/Views/Customer/MyShipments.aspx");
+            }
+        }
     }
 }

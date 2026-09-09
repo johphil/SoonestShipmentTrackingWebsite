@@ -37,7 +37,7 @@
                     <HeaderTemplate><table class="data-grid"><thead><tr><th>Status</th><th>Location</th><th>Date</th></tr></thead><tbody></HeaderTemplate>
                     <ItemTemplate>
                         <tr>
-                            <%--<td><%# SoonestGlobalExpress.Helpers.StatusDisplayHelper.Badge((SoonestGlobalExpress.Models.ShipmentStatus)Eval("Status")) %></td>--%>
+                            <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
                             <td><%# Eval("Location") %></td>
                             <td><%# Eval("Timestamp", "{0:MMM d, yyyy h:mm tt}") %></td>
                         </tr>

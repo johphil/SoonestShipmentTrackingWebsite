@@ -48,7 +48,7 @@ namespace SoonestShipmentTrackingWebsite.Views
         protected void btnLogOff_Click(object sender, EventArgs e)
         {
             AuthenticationManager.SignOut(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ApplicationCookie);
-            Response.Redirect("~/Default.aspx");
+            Response.Redirect("~/Views/Default.aspx");
         }
     }
 }

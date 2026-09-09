@@ -139,7 +139,7 @@
         <div class="container">
             <div class="section-title" style="justify-content:center;">Ready to Ship With Us?</div>
             <p class="section-lead" style="margin:0 auto 22px;">Register a free customer account to manage and track every shipment tied to you in one place.</p>
-            <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red">Get Started</a>
+            <asp:LinkButton ID="btnGetStarted" runat="server" CssClass="btn btn-red" OnClick="btnGetStarted_Click">Get Started</asp:LinkButton>
             <a runat="server" href="~/Views/Track.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Track a Shipment</a>
         </div>
     </div>
