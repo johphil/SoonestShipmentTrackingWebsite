@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using SoonestShipmentTrackingWebsite.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,7 +14,25 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+                LoadData();
+        }
 
+        private void LoadData()
+        {
+            using (var _db = new ApplicationDbContext())
+            {
+                var userId = User.Identity.GetUserId();
+
+                var shipments = _db.Shipments
+                    .Where(s => s.CustomerId == userId)
+                    .OrderByDescending(s => s.UpdatedDate)
+                    .AsNoTracking()
+                    .ToList();
+
+                gvShipments.DataSource = shipments;
+                gvShipments.DataBind();
+            }
         }
     }
 }

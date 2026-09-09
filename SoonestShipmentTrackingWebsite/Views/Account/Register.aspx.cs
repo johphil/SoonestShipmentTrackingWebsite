@@ -23,6 +23,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    Response.Redirect("~/Views/Admin/Dashboard.aspx");
+                    return;
+                }
+                Response.Redirect("~/Views/Customer/MyShipments.aspx");
+            }
         }
 
         protected void btnRegister_Click(object sender, EventArgs e)
