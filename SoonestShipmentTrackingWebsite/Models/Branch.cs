@@ -10,10 +10,31 @@ namespace SoonestShipmentTrackingWebsite.Models
     {
         public int Id { get; set; }
 
-        [StringLength(50)]
-        public string Name { get; set; }
+        [Required, StringLength(100)]
+        public string BranchName { get; set; }
 
-        [StringLength(150)]
-        public string Location { get; set; }
+        [Required, StringLength(250)]
+        public string Address { get; set; }
+
+        [Required, StringLength(100)]
+        public string City { get; set; }
+
+        [Phone, StringLength(30)]
+        public string ContactNumber { get; set; }
+
+        [EmailAddress, StringLength(150)]
+        public string Email { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
+
+        public Branch()
+        {
+            IsActive = true;
+            CreatedDate = DateTime.Now;
+            UpdatedDate = DateTime.Now;
+        }
     }
 }

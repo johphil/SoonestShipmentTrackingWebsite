@@ -109,10 +109,14 @@
     <Content Include="Views\Account\Login.aspx" />
     <Content Include="Views\Account\Register.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
+    <Content Include="Views\Admin\BranchEdit.aspx" />
+    <Content Include="Views\Admin\Branches.aspx" />
     <Content Include="Views\Admin\CreateShipment.aspx" />
     <Content Include="Views\Admin\Dashboard.aspx" />
     <Content Include="Views\Admin\Shipments.aspx" />
     <Content Include="Views\Admin\UpdateStatus.aspx" />
+    <Content Include="Views\Admin\UserAccounts.aspx" />
+    <Content Include="Views\Admin\UserRoleEdit.aspx" />
     <Content Include="Views\Customer\MyShipments.aspx" />
     <Content Include="Views\Customer\ShipmentDetails.aspx" />
     <Content Include="Views\Default.aspx" />
@@ -136,6 +140,7 @@
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipmentHistory.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
+    <Compile Include="Models\UserAccountRow.cs" />
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -159,6 +164,20 @@
     </Compile>
     <Compile Include="Views\Account\VerifyEmail.aspx.designer.cs">
       <DependentUpon>VerifyEmail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\BranchEdit.aspx.cs">
+      <DependentUpon>BranchEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\BranchEdit.aspx.designer.cs">
+      <DependentUpon>BranchEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Branches.aspx.cs">
+      <DependentUpon>Branches.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Branches.aspx.designer.cs">
+      <DependentUpon>Branches.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Admin\CreateShipment.aspx.cs">
       <DependentUpon>CreateShipment.aspx</DependentUpon>
@@ -187,6 +206,20 @@
     </Compile>
     <Compile Include="Views\Admin\UpdateStatus.aspx.designer.cs">
       <DependentUpon>UpdateStatus.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\UserAccounts.aspx.cs">
+      <DependentUpon>UserAccounts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\UserAccounts.aspx.designer.cs">
+      <DependentUpon>UserAccounts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\UserRoleEdit.aspx.cs">
+      <DependentUpon>UserRoleEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\UserRoleEdit.aspx.designer.cs">
+      <DependentUpon>UserRoleEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Customer\MyShipments.aspx.cs">
       <DependentUpon>MyShipments.aspx</DependentUpon>

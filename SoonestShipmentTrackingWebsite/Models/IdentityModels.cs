@@ -58,6 +58,10 @@ namespace SoonestShipmentTrackingWebsite.Models
             modelBuilder.Entity<Shipment>()
                 .Property(s => s.ControlNumber)
                 .IsRequired();
+
+            modelBuilder.Entity<Branch>()
+                .Property(b => b.BranchName)
+                .IsRequired();
         }
     }
 }

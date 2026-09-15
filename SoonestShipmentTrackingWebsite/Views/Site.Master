@@ -53,8 +53,8 @@
                     <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
                         <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
                         <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
-                        <li><a runat="server" href="~/Views/Admin/ManageStaff.aspx">Manage Staff</a></li>
-                        <li><a runat="server" href="~/Views/Admin/ManageBranch.aspx">Manage Branch</a></li>
+                        <li><a runat="server" href="~/Views/Admin/UserAccounts.aspx">Manage Staff</a></li>
+                        <li><a runat="server" href="~/Views/Admin/Branches.aspx">Manage Branch</a></li>
                     </asp:PlaceHolder>
                 </ul>
 

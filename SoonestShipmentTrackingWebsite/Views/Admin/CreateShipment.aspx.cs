@@ -24,7 +24,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 var customerRoleId = _db.Roles.Where(r => r.Name == "Customer").Select(r => r.Id).FirstOrDefault();
                 var customers = customerRoleId == null
                     ? new System.Collections.Generic.List<ApplicationUser>()
-                    : _db.Users.Where(u => u.Roles.Any(r => r.RoleId == customerRoleId)).OrderBy(u => u.FullName).ToList();
+                    : _db.Users.Where(u => u.Roles.Any(r => r.RoleId == customerRoleId) && u.EmailConfirmed).OrderBy(u => u.FullName).ToList();
 
                 ddlCustomer.Items.Clear();
                 ddlCustomer.Items.Add(new System.Web.UI.WebControls.ListItem("-- Select registered customer --", ""));
