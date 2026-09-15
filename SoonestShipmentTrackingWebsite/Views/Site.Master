@@ -50,9 +50,11 @@
                         <li><a runat="server" href="Track.aspx">Track Shipment</a></li>
                         <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
                     </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
+                    <asp:PlaceHolder ID="pnlStaffNav" runat="server" Visible="false">
                         <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
                         <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
+                    </asp:PlaceHolder>
+                    <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
                         <li><a runat="server" href="~/Views/Admin/UserAccounts.aspx">Manage Staff</a></li>
                         <li><a runat="server" href="~/Views/Admin/Branches.aspx">Manage Branch</a></li>
                     </asp:PlaceHolder>
@@ -122,7 +124,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                Soonest Global Express Corporation &copy; <%= DateTime.Now.Year %>. All rights reserved.
+                Soonest Global Express Corporation &copy; 2026. All rights reserved.
            
             </div>
         </div>

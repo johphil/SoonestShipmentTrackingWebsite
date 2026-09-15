@@ -14,10 +14,10 @@
             <div class="form-group">
                 <label>Access Level</label>
                 <div class="role-picker">
-                    <asp:RadioButtonList ID="rblRole" runat="server" RepeatLayout="Flow" RepeatDirection="Vertical">
-                        <asp:ListItem Text="Admin — full access to shipments, branches, and user accounts" Value="Admin" />
-                        <asp:ListItem Text="Staff — internal team member" Value="Staff" />
-                        <asp:ListItem Text="Customer — can register shipments and track their own parcels" Value="Customer" />
+                    <asp:RadioButtonList ID="rblRole" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" class="role-list">
+                        <asp:ListItem Text="Admin" Value="Admin" />
+                        <asp:ListItem Text="Staff" Value="Staff" />
+                        <asp:ListItem Text="Customer" Value="Customer" />
                     </asp:RadioButtonList>
                 </div>
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="rblRole" Display="Dynamic" CssClass="field-error" ErrorMessage="Select an access level." ValidationGroup="Role" />

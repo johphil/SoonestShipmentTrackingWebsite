@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="UpdateStatus.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.UpdateStatus" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" Async="true" AutoEventWireup="true" CodeBehind="UpdateStatus.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.UpdateStatus" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Update Status</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="section" style="padding-top:36px;">

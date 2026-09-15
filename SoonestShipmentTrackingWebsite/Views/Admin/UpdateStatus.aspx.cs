@@ -58,7 +58,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
+        protected async void btnSave_Click(object sender, EventArgs e)
         {
             using (var _db = new ApplicationDbContext())
             {
@@ -80,7 +80,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 shipment.CurrentStatus = newStatus;
                 shipment.UpdatedDate = DateTime.Now;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 _db.ShipmentHistories.Add(new ShipmentHistory
                 {
@@ -89,9 +89,16 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     Location = txtLocation.Text.Trim(),
                     Notes = txtNotes.Text.Trim()
                 });
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} updated to {StatusDisplayHelper.Label(newStatus)}.";
+                
+                //Send SMS
+                if (newStatus == ShipmentStatus.OutForDelivery)
+                {
+                    await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber);
+                }
+                
                 Response.Redirect("~/Views/Admin/Shipments.aspx");
             }
         }

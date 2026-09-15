@@ -30,7 +30,9 @@ namespace SoonestShipmentTrackingWebsite.Views
             {
                 litUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
                 pnlCustomerNav.Visible = Context.User.IsInRole("Customer");
+                pnlStaffNav.Visible = Context.User.IsInRole("Staff") || Context.User.IsInRole("Admin");
                 pnlAdminNav.Visible = Context.User.IsInRole("Admin");
+
             }
 
             // One-shot flash message set by a previous page via Session

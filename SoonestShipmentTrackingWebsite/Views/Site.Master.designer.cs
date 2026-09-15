@@ -42,6 +42,15 @@ namespace SoonestShipmentTrackingWebsite.Views
         protected global::System.Web.UI.WebControls.PlaceHolder pnlCustomerNav;
 
         /// <summary>
+        /// pnlStaffNav control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder pnlStaffNav;
+
+        /// <summary>
         /// pnlAdminNav control.
         /// </summary>
         /// <remarks>
