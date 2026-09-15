@@ -25,7 +25,7 @@ namespace SoonestShipmentTrackingWebsite.Models
 
         public ShipmentHistory()
         {
-            Timestamp = DateTime.UtcNow;
+            Timestamp = DateTime.Now;
         }
     }
 }

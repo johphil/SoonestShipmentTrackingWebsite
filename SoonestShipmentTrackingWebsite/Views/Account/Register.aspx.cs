@@ -50,16 +50,21 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
             };
 
             var result = UserManager.Create(user, txtPassword.Text);
-            
+
             if (result.Succeeded)
             {
-                //Send verification email
-                EmailHelper.SendEmailVerification(user.Email, user.FullName, "12345", 30);
+                UserManager.AddToRole(user.Id, "Customer");
 
-                //Execute this after verification success
-                //UserManager.AddToRole(user.Id, "Customer");
-                //SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
-                //Response.Redirect("~/Views/Customer/MyShipments.aspx");
+                // Don't sign the user in yet — send them to the code-entry
+                // page first. EmailConfirmed stays false until they verify.
+                user.EmailVerificationCode = VerificationCodeHelper.GenerateCode();
+                user.EmailVerificationCodeExpiresAt = DateTime.UtcNow.Add(VerificationCodeHelper.CodeLifetime);
+                UserManager.Update(user);
+
+                string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Account/VerifyEmail.aspx?email=" + HttpUtility.UrlEncode(user.Email));
+                EmailHelper.SendEmailVerification(user.Email, user.FullName, user.EmailVerificationCode, user.EmailVerificationCodeExpiresAt, redirectUrl);
+
+                Response.Redirect("~/Views/Account/VerifyEmail.aspx?email=" + HttpUtility.UrlEncode(user.Email));
                 return;
             }
 

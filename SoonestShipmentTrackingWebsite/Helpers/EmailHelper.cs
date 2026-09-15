@@ -38,7 +38,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
-        public static void SendEmailVerification(string emailRecipient, string customerName, string verificationCode, int expirationMinutes)
+        public static void SendEmailVerification(string emailRecipient, string customerName, string verificationCode, DateTime? expirationDateTime, string redirectUrl)
         {
             using (var mail = new MailMessage())
             {
@@ -49,7 +49,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
                 mail.To.Add(emailRecipient);
                 mail.Subject = $"Email Verification Required";
-                mail.Body = EmailFormatAccountEmailVerification(customerName, verificationCode, expirationMinutes.ToString());
+                mail.Body = EmailFormatAccountEmailVerification(customerName, verificationCode, expirationDateTime?.ToString("MMM dd, yyyy HH:mm tt"), redirectUrl);
                 mail.IsBodyHtml = true;
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -441,7 +441,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     </html>";
         }
 
-        private static string EmailFormatAccountEmailVerification(string customerName, string verificationCode, string expirationMinutes)
+        private static string EmailFormatAccountEmailVerification(string customerName, string verificationCode, string expirationDateTime, string redirectUrl)
         {
             return $@"
                     <!DOCTYPE html>
@@ -554,7 +554,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                                                     <tr>
                                                         <td align=""center"" style=""padding:10px 0 30px 0;"">
 
-                                                            <a href=""{{{{VERIFICATION_URL}}}}""
+                                                            <a href=""{redirectUrl}""
                                                                style=""
                                                                    display:inline-block;
                                                                    background-color:#d62828;
@@ -566,8 +566,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                                                                    border-radius:6px;
                                                                "">
                                                                 Verify My Account
-                                                            </a>
-
+                                                            </a>    
                                                         </td>
                                                     </tr>
 
@@ -608,7 +607,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                                                                 color:#888888;
                                                                 margin-top:10px;
                                                             "">
-                                                                This code expires in {expirationMinutes} minutes.
+                                                                This code will expire on {expirationDateTime}.
                                                             </div>
 
                                                         </td>
@@ -632,9 +631,9 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                                                     line-height:1.6;
                                                     word-break:break-all;
                                                 "">
-                                                    <a href=""{{{{VERIFICATION_URL}}}}""
+                                                    <a href=""{redirectUrl}""
                                                        style=""color:#0b2540;"">
-                                                        {{{{VERIFICATION_URL}}}}
+                                                        {redirectUrl}
                                                     </a>
                                                 </p>
 

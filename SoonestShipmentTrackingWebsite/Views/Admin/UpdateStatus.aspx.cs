@@ -71,8 +71,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
 
+                //Prevent duplicate status na magkasunod
+                if (shipment.CurrentStatus == newStatus)
+                {
+                    ShowError("Shipment status cannot be the same.");
+                    return;
+                }
+
                 shipment.CurrentStatus = newStatus;
-                shipment.UpdatedDate = DateTime.UtcNow;
+                shipment.UpdatedDate = DateTime.Now;
                 _db.SaveChanges();
 
                 _db.ShipmentHistories.Add(new ShipmentHistory
@@ -87,6 +94,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} updated to {StatusDisplayHelper.Label(newStatus)}.";
                 Response.Redirect("~/Views/Admin/Shipments.aspx");
             }
+        }
+
+        private void ShowError(string message)
+        {
+            litError.Text = HttpUtility.HtmlEncode(message);
+            pnlError.Visible = true;
         }
     }
 }

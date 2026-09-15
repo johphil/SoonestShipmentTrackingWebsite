@@ -49,8 +49,8 @@ namespace SoonestShipmentTrackingWebsite.Models
         public Shipment()
         {
             History = new List<ShipmentHistory>();
-            CreatedDate = DateTime.UtcNow;
-            UpdatedDate = DateTime.UtcNow;
+            CreatedDate = DateTime.Now;
+            UpdatedDate = DateTime.Now;
             CurrentStatus = ShipmentStatus.Pending;
         }
     }

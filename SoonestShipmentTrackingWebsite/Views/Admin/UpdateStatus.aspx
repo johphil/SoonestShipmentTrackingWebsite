@@ -12,6 +12,10 @@
                 </div>
                 <asp:Literal ID="litCurrentBadge" runat="server" />
             </div>
+            
+            <asp:Panel ID="pnlError" runat="server" Visible="false">
+                <div class="validation-summary"><asp:Literal ID="litError" runat="server" /></div>
+            </asp:Panel>
 
             <div class="form-group">
                 <label>New Status</label>

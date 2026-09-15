@@ -7,48 +7,39 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SoonestShipmentTrackingWebsite.Views.Admin
+namespace SoonestShipmentTrackingWebsite.Views.Account
 {
 
 
-    public partial class UpdateStatus
+    public partial class VerifyEmail
     {
 
         /// <summary>
-        /// litControlNumber control.
+        /// litEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litControlNumber;
+        protected global::System.Web.UI.WebControls.Literal litEmail;
 
         /// <summary>
-        /// litRecipientName control.
+        /// pnlInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litRecipientName;
+        protected global::System.Web.UI.WebControls.Panel pnlInfo;
 
         /// <summary>
-        /// litDestinationCity control.
+        /// litInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litDestinationCity;
-
-        /// <summary>
-        /// litCurrentBadge control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litCurrentBadge;
+        protected global::System.Web.UI.WebControls.Literal litInfo;
 
         /// <summary>
         /// pnlError control.
@@ -69,57 +60,39 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litError;
 
         /// <summary>
-        /// ddlNewStatus control.
+        /// hdnEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlNewStatus;
+        protected global::System.Web.UI.WebControls.HiddenField hdnEmail;
 
         /// <summary>
-        /// txtLocation control.
+        /// txtCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLocation;
+        protected global::System.Web.UI.WebControls.TextBox txtCode;
 
         /// <summary>
-        /// txtNotes control.
+        /// btnVerify control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNotes;
+        protected global::System.Web.UI.WebControls.Button btnVerify;
 
         /// <summary>
-        /// btnSave control.
+        /// btnResend control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
-
-        /// <summary>
-        /// rptHistory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptHistory;
-
-        /// <summary>
-        /// lblNoHistory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoHistory;
+        protected global::System.Web.UI.WebControls.LinkButton btnResend;
     }
 }

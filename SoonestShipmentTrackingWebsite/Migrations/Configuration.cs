@@ -25,6 +25,9 @@ namespace SoonestShipmentTrackingWebsite.Migrations
             if (!roleManager.RoleExists("Admin"))
                 roleManager.Create(new IdentityRole("Admin"));
 
+            if (!roleManager.RoleExists("Staff"))
+                roleManager.Create(new IdentityRole("Staff"));
+
             if (!roleManager.RoleExists("Customer"))
                 roleManager.Create(new IdentityRole("Customer"));
 
