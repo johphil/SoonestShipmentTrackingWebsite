@@ -111,8 +111,6 @@
     <Content Include="Views\Account\VerifyEmail.aspx" />
     <Content Include="Views\Admin\CreateShipment.aspx" />
     <Content Include="Views\Admin\Dashboard.aspx" />
-    <Content Include="Views\Admin\ManageBranch.aspx" />
-    <Content Include="Views\Admin\ManageStaff.aspx" />
     <Content Include="Views\Admin\Shipments.aspx" />
     <Content Include="Views\Admin\UpdateStatus.aspx" />
     <Content Include="Views\Customer\MyShipments.aspx" />
@@ -175,20 +173,6 @@
     </Compile>
     <Compile Include="Views\Admin\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Admin\ManageBranch.aspx.cs">
-      <DependentUpon>ManageBranch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Admin\ManageBranch.aspx.designer.cs">
-      <DependentUpon>ManageBranch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Admin\ManageStaff.aspx.cs">
-      <DependentUpon>ManageStaff.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Admin\ManageStaff.aspx.designer.cs">
-      <DependentUpon>ManageStaff.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Admin\Shipments.aspx.cs">
       <DependentUpon>Shipments.aspx</DependentUpon>
