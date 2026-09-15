@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SoonestShipmentTrackingWebsite/Web.config
+/SoonestShipmentTrackingWebsite/Web.Debug.config
+/SoonestShipmentTrackingWebsite/Web.Release.config
