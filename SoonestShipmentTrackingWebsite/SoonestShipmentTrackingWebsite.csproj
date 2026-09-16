@@ -110,8 +110,6 @@
     <Content Include="Views\Account\Login.aspx" />
     <Content Include="Views\Account\Register.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
-    <Content Include="Views\Admin\BranchEdit.aspx" />
-    <Content Include="Views\Admin\Branches.aspx" />
     <Content Include="Views\Admin\CreateShipment.aspx" />
     <Content Include="Views\Admin\Dashboard.aspx" />
     <Content Include="Views\Admin\Shipments.aspx" />
@@ -137,7 +135,6 @@
     <Compile Include="Helpers\StatusDisplayHelper.cs" />
     <Compile Include="Helpers\VerificationCodeHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipmentHistory.cs" />
@@ -165,20 +162,6 @@
     </Compile>
     <Compile Include="Views\Account\VerifyEmail.aspx.designer.cs">
       <DependentUpon>VerifyEmail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Admin\BranchEdit.aspx.cs">
-      <DependentUpon>BranchEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Admin\BranchEdit.aspx.designer.cs">
-      <DependentUpon>BranchEdit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Admin\Branches.aspx.cs">
-      <DependentUpon>Branches.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Admin\Branches.aspx.designer.cs">
-      <DependentUpon>Branches.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Admin\CreateShipment.aspx.cs">
       <DependentUpon>CreateShipment.aspx</DependentUpon>
