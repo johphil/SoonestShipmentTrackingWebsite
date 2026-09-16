@@ -36,7 +36,6 @@ namespace SoonestShipmentTrackingWebsite.Models
         {
         }
 
-        public DbSet<Branch> Branches { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<ShipmentHistory> ShipmentHistories { get; set; }
 
@@ -57,10 +56,6 @@ namespace SoonestShipmentTrackingWebsite.Models
 
             modelBuilder.Entity<Shipment>()
                 .Property(s => s.ControlNumber)
-                .IsRequired();
-
-            modelBuilder.Entity<Branch>()
-                .Property(b => b.BranchName)
                 .IsRequired();
         }
     }
