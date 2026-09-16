@@ -27,7 +27,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             var roleNamesById = _db.Roles.ToDictionary(r => r.Id, r => r.Name);
 
             var rows = _db.Users
-                .OrderBy(u => u.FullName)
                 .ToList()
                 .Select(u => new UserAccountRow
                 {
@@ -40,6 +39,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         : "(none)",
                     IsCurrentUser = u.Id == currentUserId
                 })
+                .OrderBy(e => e.CurrentRole)
                 .ToList();
 
             gvUsers.DataSource = rows;

@@ -14,7 +14,8 @@
             <div class="form-group">
                 <label>Access Level</label>
                 <div class="role-picker">
-                    <asp:RadioButtonList ID="rblRole" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" class="role-list">
+                    <asp:RadioButtonList ID="rblRole" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" class="role-list" 
+                                         AutoPostBack="true" OnSelectedIndexChanged="rblRole_SelectedIndexChanged">
                         <asp:ListItem Text="Admin" Value="Admin" />
                         <asp:ListItem Text="Staff" Value="Staff" />
                         <asp:ListItem Text="Customer" Value="Customer" />

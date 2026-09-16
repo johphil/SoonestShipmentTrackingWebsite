@@ -15,11 +15,15 @@ namespace SoonestShipmentTrackingWebsite.Models
         public string FullName { get; set; }
         public string Address { get; set; }
 
+        public int? BranchId { get; set; }  // Nullable for "Customer" and "Admin" roles
+        public virtual Branch Branch { get; set; }  // "Customer", "Admin", "BranchStaff"
+
         // Backs the code-input email verification flow (Account/VerifyEmail.aspx).
         // IdentityUser.EmailConfirmed is the actual "is verified" flag; these
         // two just hold the pending one-time code and its expiry.
         public string EmailVerificationCode { get; set; }
         public DateTime? EmailVerificationCodeExpiresAt { get; set; }
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
