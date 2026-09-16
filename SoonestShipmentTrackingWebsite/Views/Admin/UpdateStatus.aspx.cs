@@ -74,11 +74,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
 
                 //Prevent duplicate status na magkasunod
-                if (shipment.CurrentStatus == newStatus)
-                {
-                    ShowError("Shipment status cannot be the same.");
-                    return;
-                }
+                //if (shipment.CurrentStatus == newStatus)
+                //{
+                //    ShowError("Shipment status cannot be the same.");
+                //    return;
+                //}
 
                 shipment.CurrentStatus = newStatus;
                 shipment.UpdatedDate = DateTime.Now;
@@ -101,8 +101,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber);
                 }
                 else
-                {
-                    EmailHelper.SendShipmentUpdateEmail(shipment);
+                {                                                                                    
+                    string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
+                    EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
                 }
 
                 Response.Redirect("~/Views/Admin/Shipments.aspx");

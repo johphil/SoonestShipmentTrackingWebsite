@@ -3,6 +3,7 @@ using SoonestShipmentTrackingWebsite.Helpers;
 using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -14,30 +15,24 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin")) return;
-
-            if (!IsPostBack)
-            {
-                using (var _db = new ApplicationDbContext())
-                {
-                    var customer = _db.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
-                    if (!customer.EmailConfirmed)
-                    {
-
-                        return;
-                    }
-                }
-            }
+            if (!AccessControlHelper.EnsureRole(this, "Customer")) return;
         }
 
         protected void btnCreate_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid)
+                return;
+
             using (var _db = new ApplicationDbContext())
             {
-                if (!Page.IsValid)
+                var customerId = User.Identity.GetUserId();
+                var customer = _db.Users.FirstOrDefault(u => u.Id == customerId);
+                if (customer == null)
+                {
+                    litError.Text = "Your account could not be found. Please log in again.";
+                    pnlError.Visible = true;
                     return;
-
-                var customer = _db.Users.FirstOrDefault(u => u.Id == User.Identity.GetUserId());
+                }
 
                 decimal? weight = null;
                 if (decimal.TryParse(txtWeight.Text, out var parsedWeight))
@@ -61,7 +56,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     PackageDescription = txtPackageDescription.Text.Trim(),
                     WeightKg = weight,
                     EstimatedDeliveryDate = estDelivery,
-                    CurrentStatus = ShipmentStatus.Pending
+                    // Customer-submitted shipments start in PendingApproval,
+                    // not Pending — a Staff member has to approve them first
+                    // (see Views/Staff/ReviewShipment.aspx) before they enter
+                    // the normal fulfillment pipeline.
+                    CurrentStatus = ShipmentStatus.PendingApproval
                 };
 
                 _db.Shipments.Add(shipment);
@@ -70,26 +69,26 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 _db.ShipmentHistories.Add(new ShipmentHistory
                 {
                     ShipmentId = shipment.Id,
-                    Status = ShipmentStatus.Pending,
+                    Status = ShipmentStatus.PendingApproval,
                     Location = txtSenderAddress.Text.Trim(),
-                    Notes = "Shipment created."
+                    Notes = "Shipment submitted by customer, awaiting staff approval."
                 });
                 int result = _db.SaveChanges();
 
-                if (result > 0)
-                {
-                    EmailHelper.SendShipmentCreatedEmail(shipment);
-                }
+                    //if (result > 0)
+                    //{
+                    //    EmailHelper.SendShipmentCreatedEmail(shipment);
+                    //}
 
-                Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} created for {customer.FullName}.";
-                Response.Redirect("~/Views/Admin/Shipments.aspx");
+                Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} submitted and is awaiting staff approval.";
+                Response.Redirect("~/Views/Customer/MyShipments.aspx");
             }
         }
 
         private static string GenerateControlNumber()
         {
             var suffix = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpperInvariant();
-            return $"SGE{DateTime.UtcNow:yyyyMMdd}{suffix}";
+            return $"SGE{DateTime.Now:yyyyMMdd}{suffix}";
         }
     }
 }

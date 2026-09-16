@@ -69,7 +69,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
-        public static void SendShipmentUpdateEmail(Shipment shipment)
+        public static void SendShipmentUpdateEmail(Shipment shipment, string shipmentTrackUrl)
         {
             _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
             _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
@@ -80,9 +80,11 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     "Soonest Global Express"
                 );
 
+                mail.To.Add(shipment.RecipientEmail);
                 mail.To.Add(shipment.Customer.Email);
                 mail.Subject = $"Shipment Status Update - {StatusDisplayHelper.Label(shipment.CurrentStatus)}";
-                mail.Body = EmailFormatShipmentStatusUpdate(shipment.Customer.FullName, shipment.ControlNumber, StatusDisplayHelper.Label(shipment.CurrentStatus), shipment.UpdatedDate.ToString(), shipment.SenderAddress, shipment.RecipientAddress, shipment.History.Last().Location, "www.google.com", "Shipment status has been updated. This is status message.");
+                var lastHistory = shipment.History.OrderByDescending(e => e.Timestamp).First();
+                mail.Body = EmailFormatShipmentStatusUpdate(shipment.Customer.FullName, shipment.ControlNumber, StatusDisplayHelper.Label(shipment.CurrentStatus), shipment.UpdatedDate.ToString(), shipment.SenderAddress, shipment.RecipientAddress, lastHistory.Location, shipmentTrackUrl, lastHistory.Notes);
                 mail.IsBodyHtml = true;
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -746,7 +748,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     </html>";
         }
 
-        private static string EmailFormatShipmentStatusUpdate(string customerName, string controlNumber, string shipmentStatus, string statusDateTime, string origin, string destination, string currentLocation, string trackingUrl, string statusMessage)
+        private static string EmailFormatShipmentStatusUpdate(string customerName, string controlNumber, string shipmentStatus, string statusDateTime, string origin, string destination, string currentLocation, string shipmentTrackUrl, string statusMessage)
         {
             return $@"<!DOCTYPE html>
                     <html lang=""en"">
@@ -1024,7 +1026,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                                                     <td align=""center""
                                                         style=""padding:5px 0 25px 0;"">
 
-                                                        <a href=""{trackingUrl}""
+                                                        <a href=""{shipmentTrackUrl}""
                                                             style=""
                                                                 display:inline-block;
                                                                 background-color:#d62828;
@@ -1059,9 +1061,9 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                                                 line-height:1.6;
                                                 word-break:break-all;
                                             "">
-                                                <a href=""{trackingUrl}""
+                                                <a href=""{shipmentTrackUrl}""
                                                     style=""color:#0b2540;"">
-                                                    {trackingUrl}
+                                                    {shipmentTrackUrl}
                                                 </a>
                                             </p>
 

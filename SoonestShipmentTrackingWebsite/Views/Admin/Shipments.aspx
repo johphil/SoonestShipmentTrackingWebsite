@@ -29,8 +29,6 @@
                         <ItemTemplate>
                             <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/UpdateStatus.aspx?id=" + Eval("Id") %>'
                                 CssClass="btn btn-outline" Text="Update Status" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
-                            <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Track.aspx?controlNumber=" + Eval("ControlNumber") %>'
-    CssClass="btn btn-outline" Text="Track" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

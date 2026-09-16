@@ -11,6 +11,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         public int Id { get; set; }
 
         public int ShipmentId { get; set; }
+
         public virtual Shipment Shipment { get; set; }
 
         public ShipmentStatus Status { get; set; }

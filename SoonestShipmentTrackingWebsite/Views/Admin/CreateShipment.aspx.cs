@@ -101,7 +101,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         private static string GenerateControlNumber()
         {
             var suffix = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpperInvariant();
-            return $"SGE{DateTime.UtcNow:yyyyMMdd}{suffix}";
+            return $"SGE{DateTime.Now:yyyyMMdd}{suffix}";
         }
     }
 }

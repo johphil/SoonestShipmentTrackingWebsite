@@ -58,7 +58,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
                 // Don't sign the user in yet — send them to the code-entry
                 // page first. EmailConfirmed stays false until they verify.
                 user.EmailVerificationCode = VerificationCodeHelper.GenerateCode();
-                user.EmailVerificationCodeExpiresAt = DateTime.UtcNow.Add(VerificationCodeHelper.CodeLifetime);
+                user.EmailVerificationCodeExpiresAt = DateTime.Now.Add(VerificationCodeHelper.CodeLifetime);
                 UserManager.Update(user);
 
                 string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Account/VerifyEmail.aspx?email=" + HttpUtility.UrlEncode(user.Email));

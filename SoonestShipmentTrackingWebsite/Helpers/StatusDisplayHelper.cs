@@ -20,6 +20,8 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 case ShipmentStatus.Delivered: return "badge-success";
                 case ShipmentStatus.FailedDelivery: return "badge-danger";
                 case ShipmentStatus.Returned: return "badge-dark";
+                case ShipmentStatus.PendingApproval: return "badge-warning";
+                case ShipmentStatus.Cancelled: return "badge-danger";
                 default: return "badge-pending";
             }
         }
@@ -33,6 +35,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 case ShipmentStatus.ArrivedAtHub: return "Arrived at Hub";
                 case ShipmentStatus.OutForDelivery: return "Out for Delivery";
                 case ShipmentStatus.FailedDelivery: return "Failed Delivery";
+                case ShipmentStatus.PendingApproval: return "Pending Approval";
                 default: return status.ToString();
             }
         }

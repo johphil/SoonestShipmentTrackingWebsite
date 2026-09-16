@@ -21,7 +21,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
             if (!int.TryParse(Request.QueryString["id"], out var id))
             {
-                Response.Redirect("~/Customer/MyShipments.aspx");
+                Response.Redirect("~/Views/Customer/MyShipments.aspx");
                 return;
             }
 
