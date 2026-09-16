@@ -2,6 +2,7 @@
 using SoonestShipmentTrackingWebsite.Views.Admin;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -11,11 +12,14 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 {
     public static class EmailHelper
     {
-        private static string EmailSenderUsername = "johphilencarnacion@gmail.com";
-        private static string EmailSenderPassword = "lvfdqtkztspouonc";
+        private static string _emailSenderUsername;
+        private static string _emailSenderPassword;
 
         public static void SendShipmentCreatedEmail(Shipment shipment)
         {
+            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
+            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
+
             using (var mail = new MailMessage())
             {
                 mail.From = new MailAddress(
@@ -31,7 +35,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
                     smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(EmailSenderUsername, EmailSenderPassword);
+                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
 
                     smtp.Send(mail);
                 }
@@ -40,6 +44,9 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
         public static void SendEmailVerification(string emailRecipient, string customerName, string verificationCode, DateTime? expirationDateTime, string redirectUrl)
         {
+            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
+            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
+
             using (var mail = new MailMessage())
             {
                 mail.From = new MailAddress(
@@ -55,13 +62,38 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
                     smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(EmailSenderUsername, EmailSenderPassword);
+                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
 
                     smtp.Send(mail);
                 }
             }
         }
 
+        public static void SendShipmentUpdateEmail(Shipment shipment)
+        {
+            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
+            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
+            using (var mail = new MailMessage())
+            {
+                mail.From = new MailAddress(
+                    "noreply@yourdomain.com",
+                    "Soonest Global Express"
+                );
+
+                mail.To.Add(shipment.Customer.Email);
+                mail.Subject = $"Shipment Status Update - {StatusDisplayHelper.Label(shipment.CurrentStatus)}";
+                mail.Body = EmailFormatShipmentStatusUpdate(shipment.Customer.FullName, shipment.ControlNumber, StatusDisplayHelper.Label(shipment.CurrentStatus), shipment.UpdatedDate.ToString(), shipment.SenderAddress, shipment.RecipientAddress, shipment.History.Last().Location, "www.google.com", "Shipment status has been updated. This is status message.");
+                mail.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.EnableSsl = true;
+                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
+
+                    smtp.Send(mail);
+                }
+            }
+        }
 
         private static string EmailFormatShipmentCreated(string controlNumber, string customerName, string recipient, string origin, string destination)
         {
@@ -709,6 +741,377 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                             </tr>
 
                         </table>
+
+                    </body>
+                    </html>";
+        }
+
+        private static string EmailFormatShipmentStatusUpdate(string customerName, string controlNumber, string shipmentStatus, string statusDateTime, string origin, string destination, string currentLocation, string trackingUrl, string statusMessage)
+        {
+            return $@"<!DOCTYPE html>
+                    <html lang=""en"">
+                    <head>
+                        <meta charset=""UTF-8"">
+                        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                        <title>Shipment Status Update</title>
+                    </head>
+
+                    <body style=""
+                        margin:0;
+                        padding:0;
+                        background-color:#f4f6f8;
+                        font-family:Arial, Helvetica, sans-serif;
+                        color:#333333;
+                    "">
+
+                    ```
+                    <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0""
+                            style=""background-color:#f4f6f8; padding:30px 10px;"">
+
+                        <tr>
+                            <td align=""center"">
+
+                                <!-- Main Container -->
+                                <table width=""600"" cellpadding=""0"" cellspacing=""0"" border=""0""
+                                        style=""
+                                            max-width:600px;
+                                            width:100%;
+                                            background:#ffffff;
+                                            border-radius:10px;
+                                            overflow:hidden;
+                                        "">
+
+                                    <!-- Header -->
+                                    <tr>
+                                        <td align=""center""
+                                            style=""
+                                                background-color:#0b2540;
+                                                padding:28px 20px;
+                                            "">
+
+                                            <div style=""
+                                                font-size:24px;
+                                                font-weight:bold;
+                                                color:#ffffff;
+                                                letter-spacing:1px;
+                                            "">
+                                                SOONEST GLOBAL EXPRESS
+                                            </div>
+
+                                            <div style=""
+                                                color:#dce5ee;
+                                                font-size:13px;
+                                                margin-top:6px;
+                                            "">
+                                                Fast. Reliable. Delivered.
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <!-- Content -->
+                                    <tr>
+                                        <td style=""padding:40px 35px 35px 35px;"">
+
+                                            <h1 style=""
+                                                margin:0 0 18px 0;
+                                                color:#0b2540;
+                                                font-size:25px;
+                                                text-align:center;
+                                            "">
+                                                Shipment Status Update
+                                            </h1>
+
+                                            <p style=""
+                                                margin:0 0 18px 0;
+                                                font-size:15px;
+                                                line-height:1.6;
+                                                color:#555555;
+                                            "">
+                                                Hello <strong>{customerName}</strong>,
+                                            </p>
+
+                                            <p style=""
+                                                margin:0 0 20px 0;
+                                                font-size:15px;
+                                                line-height:1.6;
+                                                color:#555555;
+                                            "">
+                                                We would like to inform you that there has been an
+                                                update to the status of your shipment.
+                                            </p>
+
+                                            <!-- Shipment Status -->
+                                            <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                                                    border=""0""
+                                                    style=""
+                                                        background-color:#f5f7fa;
+                                                        border-radius:8px;
+                                                        margin-bottom:25px;
+                                                    "">
+
+                                                <tr>
+                                                    <td align=""center"" style=""padding:22px;"">
+
+                                                        <div style=""
+                                                            font-size:12px;
+                                                            color:#777777;
+                                                            margin-bottom:8px;
+                                                            letter-spacing:.5px;
+                                                        "">
+                                                            CURRENT SHIPMENT STATUS
+                                                        </div>
+
+                                                        <div style=""
+                                                            font-size:24px;
+                                                            font-weight:bold;
+                                                            color:#0b2540;
+                                                        "">
+                                                            {shipmentStatus}
+                                                        </div>
+
+                                                        <div style=""
+                                                            font-size:12px;
+                                                            color:#888888;
+                                                            margin-top:10px;
+                                                        "">
+                                                            Updated on {statusDateTime}
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
+                                            <!-- Shipment Details -->
+                                            <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                                                    border=""0""
+                                                    style=""
+                                                        margin-bottom:25px;
+                                                        border-collapse:collapse;
+                                                    "">
+
+                                                <tr>
+                                                    <td colspan=""2""
+                                                        style=""
+                                                            padding:0 0 12px 0;
+                                                            font-size:13px;
+                                                            font-weight:bold;
+                                                            color:#0b2540;
+                                                        "">
+                                                        SHIPMENT DETAILS
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style=""
+                                                        padding:10px 0;
+                                                        font-size:13px;
+                                                        color:#777777;
+                                                        border-bottom:1px solid #eeeeee;
+                                                    "">
+                                                        Tracking Number
+                                                    </td>
+
+                                                    <td align=""right""
+                                                        style=""
+                                                            padding:10px 0;
+                                                            font-size:13px;
+                                                            font-weight:bold;
+                                                            color:#0b2540;
+                                                            border-bottom:1px solid #eeeeee;
+                                                        "">
+                                                        {controlNumber}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style=""
+                                                        padding:10px 0;
+                                                        font-size:13px;
+                                                        color:#777777;
+                                                        border-bottom:1px solid #eeeeee;
+                                                    "">
+                                                        Origin
+                                                    </td>
+
+                                                    <td align=""right""
+                                                        style=""
+                                                            padding:10px 0;
+                                                            font-size:13px;
+                                                            color:#333333;
+                                                            border-bottom:1px solid #eeeeee;
+                                                        "">
+                                                        {origin}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style=""
+                                                        padding:10px 0;
+                                                        font-size:13px;
+                                                        color:#777777;
+                                                        border-bottom:1px solid #eeeeee;
+                                                    "">
+                                                        Destination
+                                                    </td>
+
+                                                    <td align=""right""
+                                                        style=""
+                                                            padding:10px 0;
+                                                            font-size:13px;
+                                                            color:#333333;
+                                                            border-bottom:1px solid #eeeeee;
+                                                        "">
+                                                        {destination}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style=""
+                                                        padding:10px 0;
+                                                        font-size:13px;
+                                                        color:#777777;
+                                                    "">
+                                                        Latest Location
+                                                    </td>
+
+                                                    <td align=""right""
+                                                        style=""
+                                                            padding:10px 0;
+                                                            font-size:13px;
+                                                            color:#333333;
+                                                        "">
+                                                        {currentLocation}
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
+                                            <!-- Latest Update -->
+                                            <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                                                    border=""0""
+                                                    style=""
+                                                        border-left:4px solid #d62828;
+                                                        background-color:#fff8f8;
+                                                        margin-bottom:25px;
+                                                    "">
+
+                                                <tr>
+                                                    <td style=""
+                                                        padding:15px 18px;
+                                                        font-size:13px;
+                                                        line-height:1.6;
+                                                        color:#666666;
+                                                    "">
+
+                                                        <strong style=""color:#0b2540;"">
+                                                            Latest Update
+                                                        </strong>
+
+                                                        <br>
+                                                        {statusMessage}
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
+                                            <!-- Track Shipment Button -->
+                                            <table width=""100%"" cellpadding=""0"" cellspacing=""0""
+                                                    border=""0"">
+
+                                                <tr>
+                                                    <td align=""center""
+                                                        style=""padding:5px 0 25px 0;"">
+
+                                                        <a href=""{trackingUrl}""
+                                                            style=""
+                                                                display:inline-block;
+                                                                background-color:#d62828;
+                                                                color:#ffffff;
+                                                                text-decoration:none;
+                                                                font-size:15px;
+                                                                font-weight:bold;
+                                                                padding:14px 35px;
+                                                                border-radius:6px;
+                                                            "">
+                                                            Track My Shipment
+                                                        </a>
+
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
+                                            <p style=""
+                                                margin:0 0 20px 0;
+                                                font-size:13px;
+                                                line-height:1.6;
+                                                color:#777777;
+                                            "">
+                                                You can use your tracking number to view the latest
+                                                shipment information and updates online.
+                                            </p>
+
+                                            <p style=""
+                                                margin:0;
+                                                font-size:12px;
+                                                line-height:1.6;
+                                                word-break:break-all;
+                                            "">
+                                                <a href=""{trackingUrl}""
+                                                    style=""color:#0b2540;"">
+                                                    {trackingUrl}
+                                                </a>
+                                            </p>
+
+                                        </td>
+                                    </tr>
+
+                                    <!-- Footer -->
+                                    <tr>
+                                        <td align=""center""
+                                            style=""
+                                                background-color:#f1f3f5;
+                                                padding:25px 20px;
+                                            "">
+
+                                            <div style=""
+                                                font-size:13px;
+                                                font-weight:bold;
+                                                color:#0b2540;
+                                                margin-bottom:8px;
+                                            "">
+                                                SOONEST GLOBAL EXPRESS
+                                            </div>
+
+                                            <div style=""
+                                                font-size:11px;
+                                                color:#888888;
+                                                line-height:1.5;
+                                            "">
+                                                This is an automated email. Please do not reply
+                                                to this message.
+                                            </div>
+
+                                            <div style=""
+                                                font-size:11px;
+                                                color:#aaaaaa;
+                                                margin-top:10px;
+                                            "">
+                                                © 2026 Soonest Global Express. All rights reserved.
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                            </td>
+                        </tr>
+
+                    </table>
+                    ```
 
                     </body>
                     </html>";

@@ -119,6 +119,7 @@
     <Content Include="Views\Admin\UserAccounts.aspx" />
     <Content Include="Views\Admin\UserRoleEdit.aspx" />
     <Content Include="Views\Customer\MyShipments.aspx" />
+    <Content Include="Views\Customer\RequestShipment.aspx" />
     <Content Include="Views\Customer\ShipmentDetails.aspx" />
     <Content Include="Views\Default.aspx" />
     <Content Include="Views\Forbidden.aspx" />
@@ -229,6 +230,13 @@
     </Compile>
     <Compile Include="Views\Customer\MyShipments.aspx.designer.cs">
       <DependentUpon>MyShipments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Customer\RequestShipment.aspx.cs">
+      <DependentUpon>RequestShipment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Customer\RequestShipment.aspx.designer.cs">
+      <DependentUpon>RequestShipment.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Customer\ShipmentDetails.aspx.cs">
       <DependentUpon>ShipmentDetails.aspx</DependentUpon>

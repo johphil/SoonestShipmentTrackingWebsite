@@ -100,7 +100,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber);
                 }
-                
+                else
+                {
+                    EmailHelper.SendShipmentUpdateEmail(shipment);
+                }
+
                 Response.Redirect("~/Views/Admin/Shipments.aspx");
             }
         }
