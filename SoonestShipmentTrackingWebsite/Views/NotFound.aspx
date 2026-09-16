@@ -3,14 +3,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container">
     <div class="error-page">
-        <div class="error-code">4<span>0</span>4</div>
+        <h1>404</h1>
         <h2>Page Not Found</h2>
         <p>
             The page you're looking for doesn't exist, may have been moved, or the
             link you followed might be out of date.
         </p>
         <a runat="server" href="~/Views/Default.aspx" class="btn btn-red">Back to Home</a>
-        <a runat="server" href="~/Views/Track.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Track a Shipment</a>
     </div>
 </div>
 </asp:Content>

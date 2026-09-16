@@ -13,6 +13,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin")) return;
+
             if (!IsPostBack)
                 LoadData();
         }

@@ -15,6 +15,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!AccessControlHelper.EnsureRole(this, "Customer")) return;
+
             if (IsPostBack) return;
 
             if (!int.TryParse(Request.QueryString["id"], out var id))

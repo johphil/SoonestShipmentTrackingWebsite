@@ -16,6 +16,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin")) return;
+
             if (!IsPostBack)
             {
                 if (string.IsNullOrEmpty(Request.QueryString["id"]) || !int.TryParse(Request.QueryString["id"], out _))
