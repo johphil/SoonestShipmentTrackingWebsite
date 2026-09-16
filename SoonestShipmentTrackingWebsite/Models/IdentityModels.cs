@@ -36,7 +36,6 @@ namespace SoonestShipmentTrackingWebsite.Models
         }
 
         public DbSet<Branch> Branches { get; set; }
-        public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<ShipmentHistory> ShipmentHistories { get; set; }
 
