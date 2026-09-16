@@ -3,7 +3,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container">
     <div class="error-page">
-        <h1>403</h1>
+        <div class="error-code">4<span>0</span>3</div>
         <h2>Access Denied</h2>
         <p>
             You don't have permission to view this page. If you think this is a

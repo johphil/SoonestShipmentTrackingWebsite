@@ -3,7 +3,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container">
     <div class="error-page">
-        <h1>404</h1>
+        <div class="error-code">4<span>0</span>4</div>
         <h2>Page Not Found</h2>
         <p>
             The page you're looking for doesn't exist, may have been moved, or the
