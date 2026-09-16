@@ -48,7 +48,6 @@
                     <li><a runat="server" href="Default.aspx">Home</a></li>
                     <asp:PlaceHolder ID="pnlCustomerNav" runat="server" Visible="false">
                         <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
-                        <li><a runat="server" href="Customer/RequestShipment.aspx">Request Shipment</a></li>
                     </asp:PlaceHolder>
                     <asp:PlaceHolder ID="pnlStaffNav" runat="server" Visible="false">
                         <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
