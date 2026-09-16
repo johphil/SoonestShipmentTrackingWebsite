@@ -34,12 +34,6 @@
             <p style="text-align:center;margin-top:16px;font-size:13.5px;">
                 No account yet? <a runat="server" href="~/Views/Account/Register.aspx">Register</a>
             </p>
-
-            <hr style="border:none;border-top:1px solid #eceef1;" />
-            <p style="font-size:12px;color:#6b7684;">
-                Admin demo login: <code>admin@soonestglobalexpress.local</code> / <code>Admin@12345</code>
-                (change this in <code>Migrations/Configuration.cs</code> before deploying).
-            </p>
         </div>
     </div>
 </div>
