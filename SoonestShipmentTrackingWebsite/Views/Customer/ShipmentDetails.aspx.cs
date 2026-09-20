@@ -45,9 +45,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litDestinationCity.Text = Server.HtmlEncode(shipment.DestinationCity);
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
-                litSenderName.Text = Server.HtmlEncode(shipment.SenderName);
                 litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress);
                 litPackageDescription.Text = string.IsNullOrWhiteSpace(shipment.PackageDescription)
                     ? "-" : Server.HtmlEncode(shipment.PackageDescription);

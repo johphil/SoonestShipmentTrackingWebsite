@@ -18,21 +18,17 @@ namespace SoonestShipmentTrackingWebsite.Models
         public virtual ApplicationUser Customer { get; set; }
 
         [Required, StringLength(100)]
-        public string SenderName { get; set; }
-        [StringLength(250)]
-        public string SenderAddress { get; set; }
-
-        [Required, StringLength(100)]
         public string RecipientName { get; set; }
         [Required, StringLength(250)]
         public string RecipientAddress { get; set; }
-        [Required, StringLength(100)]
-        public string DestinationCity { get; set; }
 
         [Phone]
         public string RecipientPhone { get; set; }
         [EmailAddress]
         public string RecipientEmail { get; set; }
+
+        [StringLength(100)]
+        public string RiderName { get; set; }
 
         [StringLength(150)]
         public string PackageDescription { get; set; }

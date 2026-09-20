@@ -29,7 +29,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
                 mail.To.Add(shipment.Customer.Email);
                 mail.Subject = $"Shipment Created - {shipment.ControlNumber}";
-                mail.Body = EmailFormatShipmentCreated(shipment.ControlNumber, shipment.Customer.FullName, shipment.RecipientName, shipment.SenderAddress, shipment.RecipientAddress);
+                mail.Body = EmailFormatShipmentCreated(shipment.ControlNumber, shipment.Customer.FullName, shipment.RecipientName, "sender address", shipment.RecipientAddress);
                 mail.IsBodyHtml = true;
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -84,7 +84,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 mail.To.Add(shipment.Customer.Email);
                 mail.Subject = $"Shipment Status Update - {StatusDisplayHelper.Label(shipment.CurrentStatus)}";
                 var lastHistory = shipment.History.OrderByDescending(e => e.Timestamp).First();
-                mail.Body = EmailFormatShipmentStatusUpdate(shipment.Customer.FullName, shipment.ControlNumber, StatusDisplayHelper.Label(shipment.CurrentStatus), shipment.UpdatedDate.ToString(), shipment.SenderAddress, shipment.RecipientAddress, lastHistory.Location, shipmentTrackUrl, lastHistory.Notes);
+                mail.Body = EmailFormatShipmentStatusUpdate(shipment.Customer.FullName, shipment.ControlNumber, StatusDisplayHelper.Label(shipment.CurrentStatus), shipment.UpdatedDate.ToString(), "sender address", shipment.RecipientAddress, "lastHistoryLocation", shipmentTrackUrl, lastHistory.Notes);
                 mail.IsBodyHtml = true;
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))

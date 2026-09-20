@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="UserRoleEdit.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.UserRoleEdit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Manage Access</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+    <div class="section" style="padding-top:36px;">
     <div class="container" style="max-width:520px;">
         <div class="card-panel">
             <div class="page-heading">Manage Access</div>

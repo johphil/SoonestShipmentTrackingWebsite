@@ -17,6 +17,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
             if (!IsPostBack)
                 BindCustomers();
+
+            txtEstDelivery.Text = DateTime.Today.ToString("yyyy-MM-dd");
         }
 
         private void BindCustomers()
@@ -63,11 +65,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     ControlNumber = GenerateControlNumber(),
                     CustomerId = customer.Id,
-                    SenderName = txtSenderName.Text.Trim(),
-                    SenderAddress = txtSenderAddress.Text.Trim(),
                     RecipientName = txtRecipientName.Text.Trim(),
                     RecipientAddress = txtRecipientAddress.Text.Trim(),
-                    DestinationCity = txtDestinationCity.Text.Trim(),
                     RecipientPhone = string.IsNullOrWhiteSpace(txtRecipientPhone.Text) ? customer.PhoneNumber : txtRecipientPhone.Text.Trim(),
                     RecipientEmail = string.IsNullOrWhiteSpace(txtRecipientEmail.Text) ? customer.Email : txtRecipientEmail.Text.Trim(),
                     PackageDescription = txtPackageDescription.Text.Trim(),
@@ -83,7 +82,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     ShipmentId = shipment.Id,
                     Status = ShipmentStatus.Pending,
-                    Location = txtSenderAddress.Text.Trim(),
                     Notes = "Shipment created."
                 });
                 int result = _db.SaveChanges();
@@ -102,6 +100,32 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             var suffix = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpperInvariant();
             return $"SGE{DateTime.Now:yyyyMMdd}{suffix}";
+        }
+
+        protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlCustomer.SelectedIndex > 0)
+            {
+                using (var _db = new ApplicationDbContext())
+                {
+                    var customer = _db.Users.FirstOrDefault(u => u.Id == ddlCustomer.SelectedValue);
+
+                    if (customer != null)
+                    {
+                        txtRecipientName.Text = customer.FullName;
+                        txtRecipientPhone.Text = customer.PhoneNumber;
+                        txtRecipientEmail.Text = customer.Email;
+                        txtRecipientAddress.Text = customer.Address;
+                    }
+                }
+            }
+            else
+            {
+                txtRecipientName.Text = "";
+                txtRecipientPhone.Text = "";
+                txtRecipientEmail.Text = "";
+                txtRecipientAddress.Text = "";
+            }
         }
     }
 }

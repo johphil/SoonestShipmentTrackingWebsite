@@ -45,7 +45,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litDestinationCity.Text = Server.HtmlEncode(shipment.DestinationCity);
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
 
                 ddlNewStatus.Items.Clear();
@@ -82,13 +81,16 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 shipment.CurrentStatus = newStatus;
                 shipment.UpdatedDate = DateTime.Now;
+                
+                if (newStatus == ShipmentStatus.OutForDelivery)
+                    shipment.RiderName = txtRiderName.Text.Trim();
+
                 await _db.SaveChangesAsync();
 
                 _db.ShipmentHistories.Add(new ShipmentHistory
                 {
                     ShipmentId = shipment.Id,
                     Status = newStatus,
-                    Location = txtLocation.Text.Trim(),
                     Notes = txtNotes.Text.Trim()
                 });
                 await _db.SaveChangesAsync();
@@ -114,6 +116,17 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             litError.Text = HttpUtility.HtmlEncode(message);
             pnlError.Visible = true;
+        }
+
+        protected void ddlNewStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
+            if (newStatus == ShipmentStatus.OutForDelivery)
+            {
+                txtRiderName.Visible = true;
+            }
+            else 
+                txtRiderName.Visible = false;
         }
     }
 }

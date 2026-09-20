@@ -20,7 +20,6 @@
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="RecipientName" HeaderText="Recipient" />
-                    <asp:BoundField DataField="DestinationCity" HeaderText="Destination" />
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></ItemTemplate>
                     </asp:TemplateField>

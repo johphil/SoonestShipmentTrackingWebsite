@@ -19,12 +19,12 @@
 
             <div class="form-group">
                 <label>New Status</label>
-                <asp:DropDownList ID="ddlNewStatus" runat="server" CssClass="form-control" />
+                <asp:DropDownList ID="ddlNewStatus" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlNewStatus_SelectedIndexChanged"/>
             </div>
 
             <div class="form-group">
-                <label>Current Location</label>
-                <asp:TextBox ID="txtLocation" runat="server" CssClass="form-control" placeholder="e.g. Las Piñas Sorting Hub" />
+                <label>Rider Name</label>
+                <asp:TextBox ID="txtRiderName" runat="server" CssClass="form-control" Visible="false" />
             </div>
 
             <div class="form-group">
@@ -39,11 +39,10 @@
         <div class="card-panel">
             <h4 style="margin-top:0;color:#0b2540;">History</h4>
             <asp:Repeater ID="rptHistory" runat="server">
-                <HeaderTemplate><table class="data-grid"><thead><tr><th>Status</th><th>Location</th><th>Notes</th><th>Date</th></tr></thead><tbody></HeaderTemplate>
+                <HeaderTemplate><table class="data-grid"><thead><tr><th>Status</th><th>Notes</th><th>Date</th></tr></thead><tbody></HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
-                        <td><%# Eval("Location") %></td>
                         <td><%# Eval("Notes") %></td>
                         <td><%# Eval("Timestamp", "{0:MMM d, yyyy h:mm tt}") %></td>
                     </tr>

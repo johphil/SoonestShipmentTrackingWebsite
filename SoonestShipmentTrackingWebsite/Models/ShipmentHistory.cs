@@ -16,9 +16,6 @@ namespace SoonestShipmentTrackingWebsite.Models
 
         public ShipmentStatus Status { get; set; }
 
-        [StringLength(150)]
-        public string Location { get; set; }
-
         [StringLength(500)]
         public string Notes { get; set; }
 

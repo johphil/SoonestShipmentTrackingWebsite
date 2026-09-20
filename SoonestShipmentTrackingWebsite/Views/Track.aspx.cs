@@ -53,7 +53,6 @@ namespace SoonestShipmentTrackingWebsite.Views
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litDestinationCity.Text = Server.HtmlEncode(shipment.DestinationCity);
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litEta.Text = shipment.EstimatedDeliveryDate.HasValue
                     ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy")

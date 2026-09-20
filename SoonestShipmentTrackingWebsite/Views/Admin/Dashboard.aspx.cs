@@ -40,7 +40,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         s.ControlNumber,
                         CustomerName = _db.Users.FirstOrDefault(u => u.Id == s.CustomerId)?.FullName ?? "(unknown)",
                         s.RecipientName,
-                        s.DestinationCity,
                         s.CurrentStatus,
                         s.UpdatedDate
                     })
