@@ -27,7 +27,7 @@
 
     <section class="section about-reference">
         <div class="container two-col">
-            <div class="about-photo"><img src="https://images.unsplash.com/photo-1586528116493-da8b5f9a4d6a?auto=format&amp;fit=crop&amp;w=1100&amp;q=80" alt="Warehouse logistics operations" /></div>
+            <div class="about-photo"><img src="../Assets/soonesttruck_400.png" alt="Warehouse logistics operations" /></div>
             <div>
                 <div class="reference-kicker">ABOUT US</div>
                 <h2 class="reference-heading">Moving Packages.<br /><span>Connecting People.</span></h2>
@@ -60,7 +60,7 @@
 
     <section class="section text-center"><div class="container cta-reference">
         <div class="reference-kicker">READY WHEN YOU ARE</div>
-        <h2 class="reference-heading">Let’s move what<br /><span>matters to you.</span></h2>
+        <h2 class="reference-heading">Let's move what<br /><span>matters to you.</span></h2>
         <p class="section-lead">Create a customer account to manage and track every shipment in one place.</p>
         <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red btn-sm">Get Started <img class="btn-arrow" src="../Assets/icons/arrow-right.svg" alt="" /></a>
         <a runat="server" href="~/Views/Track.aspx" class="btn btn-navy btn-sm">Track a Shipment</a>

@@ -1,1 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="21" stroke="#F47B20" stroke-width="3"/><path d="M14 27.5 22 14l4 8 8-3.5L28 34l-5-8-9 1.5Z" fill="#F47B20"/><path d="M18 31h12" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <!-- Definitions for clean masking and clipping -->
+  <defs>
+    <!-- Top-left to bottom-right slanting cut -->
+    <clipPath id="top-semi-clip">
+      <polygon points="0,0 400,0 400,185 0,230" />
+    </clipPath>
+    <clipPath id="bottom-semi-clip">
+      <polygon points="0,230 400,185 400,400 0,400" />
+    </clipPath>
+  </defs>
+
+  <g transform="translate(10, 0)">
+    <!-- Silver Outer Orbit Swoosh Ring -->
+    <path d="M 235 25 
+             C 295 25, 330 110, 275 220 
+             C 240 290, 180 375, 125 385 
+             C 95 390, 75 370, 95 330 
+             C 70 365, 85 398, 125 398 
+             C 195 398, 260 300, 295 220 
+             C 345 100, 310 10, 225 10 
+             C 185 10, 150 35, 120 70 
+             C 135 40, 180 25, 235 25 Z" 
+          fill="#C0C4C8" />
+
+    <!-- Red Top Half-Circle Shape -->
+    <g clip-path="url(#top-semi-clip)">
+      <path d="M 215 65 
+               C 140 65, 80 120, 75 195 
+               L 255 145 
+               C 250 100, 235 75, 215 65 Z" 
+            fill="#E31B23" />
+      <circle cx="215" cy="200" r="135" fill="#E31B23" />
+    </g>
+
+    <!-- Dark Green Bottom Half-Circle Shape -->
+    <g clip-path="url(#bottom-semi-clip)">
+      <circle cx="215" cy="200" r="135" fill="#005A36" />
+    </g>
+  </g>
+</svg>
