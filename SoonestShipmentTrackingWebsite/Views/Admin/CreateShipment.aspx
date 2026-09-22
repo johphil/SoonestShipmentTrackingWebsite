@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="CreateShipment.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.CreateShipment" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="CreateShipment.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.CreateShipment" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">New Shipment</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:760px;">
         <div class="card-panel">
             <div class="page-heading">Create Shipment</div>
@@ -76,7 +76,7 @@
             </div>
 
             <asp:Button ID="btnCreate" runat="server" CssClass="btn btn-red" Text="Create Shipment" OnClick="btnCreate_Click" ValidationGroup="CreateShipment" />
-            <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Cancel</a>
+            <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Cancel</a>
         </div>
     </div>
 </div>

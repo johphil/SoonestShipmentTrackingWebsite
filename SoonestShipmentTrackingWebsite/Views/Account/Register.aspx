@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.Register" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.Register" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Create Account</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:560px;">
         <div class="card-panel">
             <div class="page-heading">Create a Customer Account</div>

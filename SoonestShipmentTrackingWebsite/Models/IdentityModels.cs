@@ -14,6 +14,8 @@ namespace SoonestShipmentTrackingWebsite.Models
     {
         public string FullName { get; set; }
         public string Address { get; set; }
+        public int? BranchId { get; set; }
+        public virtual Branch Branch { get; set; }
 
         // Backs the code-input email verification flow (Account/VerifyEmail.aspx).
         // IdentityUser.EmailConfirmed is the actual "is verified" flag; these
@@ -47,6 +49,12 @@ namespace SoonestShipmentTrackingWebsite.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOptional(u => u.Branch)
+                .WithMany()
+                .HasForeignKey(u => u.BranchId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Shipment>()
                 .HasMany(s => s.History)

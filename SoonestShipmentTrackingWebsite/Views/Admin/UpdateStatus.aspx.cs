@@ -47,6 +47,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
                 litDestinationCity.Text = Server.HtmlEncode(shipment.DestinationCity);
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
+                txtRiderName.Text = shipment.RiderName;
 
                 ddlNewStatus.Items.Clear();
                 foreach (ShipmentStatus status in Enum.GetValues(typeof(ShipmentStatus)))
@@ -72,6 +73,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
 
                 var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
+
+                if (newStatus == ShipmentStatus.OutForDelivery && string.IsNullOrWhiteSpace(txtRiderName.Text))
+                {
+                    ShowError("Rider name is required when the shipment is marked Out for Delivery.");
+                    return;
+                }
+                shipment.RiderName = string.IsNullOrWhiteSpace(txtRiderName.Text) ? null : txtRiderName.Text.Trim();
 
                 //Prevent duplicate status na magkasunod
                 //if (shipment.CurrentStatus == newStatus)

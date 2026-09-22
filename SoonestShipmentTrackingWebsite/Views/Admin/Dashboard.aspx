@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Dashboard" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Dashboard" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Admin Dashboard</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container">
 
         <div class="stat-mini-grid">
@@ -15,11 +15,11 @@
 
         <div style="margin-bottom:22px;">
             <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
-            <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Manage All Shipments</a>
+            <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Manage All Shipments</a>
         </div>
 
         <div class="card-panel">
-            <h4 style="margin-top:0;color:#0b2540;">Recent Shipments</h4>
+            <h4 style="margin-top:0;color:#07233d;">Recent Shipments</h4>
             <asp:GridView ID="gvRecent" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                 EmptyDataText="No shipments yet.">
                 <Columns>
@@ -34,7 +34,7 @@
                     <asp:TemplateField HeaderText="">
                         <ItemTemplate>
                             <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/UpdateStatus.aspx?id=" + Eval("Id") %>'
-                                CssClass="btn btn-outline" Text="Update" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
+                                CssClass="btn btn-outline" Text="Update" style="padding:5px 12px;font-size:11.5px;border-color:#07233d;color:#07233d;" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

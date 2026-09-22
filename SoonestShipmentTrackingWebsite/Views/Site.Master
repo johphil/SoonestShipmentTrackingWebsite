@@ -1,133 +1,97 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Site" %>
-
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Site" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-        <asp:ContentPlaceHolder ID="TitleContent" runat="server">Soonest Global Express Corporation</asp:ContentPlaceHolder>
-    </title>
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Soonest Global Express Corporation</asp:ContentPlaceHolder></title>
     <link rel="stylesheet" href="~/Content/Site.css" runat="server" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Views/Theme.css") %>" />
 </head>
 <body>
-    <form id="mainForm" runat="server">
-
-        <!-- Top utility bar -->
-        <div class="topbar">
-            <div class="container">
-                <div class="topbar-info">
-                    <span><strong>Email:</strong> info@soonestglobal.com</span>
-                    <span><strong>Call:</strong> +632 249 8970</span>
-                    <span><strong>Hours:</strong> Mon - Sat 09:00 - 19:00</span>
-                </div>
-                <div class="topbar-social">
-                    <a href="https://www.facebook.com/soonestglobal/" target="_blank" rel="noopener">Facebook</a>
-                    <a href="https://soonestglobal.com/instagram.com/soonestglobal" target="_blank" rel="noopener">Instagram</a>
-                </div>
-            </div>
+<form id="mainForm" runat="server">
+    <header class="site-header">
+        <div class="container">
+            <a class="brand" runat="server" href="Default.aspx">
+                <img class="brand-icon-img" src="<%= ResolveUrl("~/Assets/icons/logo.svg") %>" alt="Soonest Global Express" />
+                <span class="brand-name">Soonest Global Express<span class="brand-sub">CORPORATION</span></span>
+            </a>
         </div>
-
-        <!-- Logo header -->
-        <div class="site-header">
-            <div class="container">
+    </header>
+    <nav class="navbar" id="siteNav">
+        <div class="container">
+            <ul class="nav-links">
+                <li><a runat="server" href="Default.aspx">Home</a></li>
+                <asp:PlaceHolder ID="pnlCustomerNav" runat="server" Visible="false">
+                    <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
+                    <li><a runat="server" href="Customer/RequestShipment.aspx">Request Shipment</a></li>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="pnlStaffNav" runat="server" Visible="false">
+                    <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
+                    <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
+                    <li><a runat="server" href="~/Views/Admin/UserAccounts.aspx">Manage Staff</a></li>
+                    <li><a runat="server" href="~/Views/Admin/Branches.aspx">Manage Branch</a></li>
+                    <li><a runat="server" href="~/Views/Admin/Reports.aspx">Reports</a></li>
+                </asp:PlaceHolder>
+            </ul>
+            <div class="nav-actions">
+                <asp:PlaceHolder ID="pnlLoggedIn" runat="server" Visible="false">
+                    <span class="welcome-text">Signed in as <asp:Literal ID="litUserName" runat="server" /></span>
+                    <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="pnlLoggedOut" runat="server">
+                    <a runat="server" href="~/Views/Account/Login.aspx" class="btn btn-outline"><img class="btn-icon" src="<%= ResolveUrl("~/Assets/icons/user.svg") %>" alt="" />Login</a>
+                    <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red"><img class="btn-icon" src="<%= ResolveUrl("~/Assets/icons/user.svg") %>" alt="" />Sign Up</a>
+                </asp:PlaceHolder>
+            </div>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+    <asp:Panel ID="pnlFlashMessage" runat="server" Visible="false">
+        <div class="container" style="margin-top:18px;"><div class="alert-success"><asp:Literal ID="litFlashMessage" runat="server" /></div></div>
+    </asp:Panel>
+    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    <footer class="site-footer">
+        <div class="container"><div class="footer-grid">
+            <div class="footer-brand">
                 <a class="brand" runat="server" href="Default.aspx">
-                    <span class="brand-name">SOONEST <span>GLOBAL</span> EXPRESS</span>
-                    <span class="brand-sub">CORPORATION</span>
+                    <img class="brand-icon-img" src="<%= ResolveUrl("~/Assets/icons/logo.svg") %>" alt="Soonest Global Express" />
+                    <span class="brand-name">Soonest Global Express<span class="brand-sub">CORPORATION</span></span>
                 </a>
-                <div>
-                    <a runat="server" href="Track.aspx" class="btn btn-navy">Track Shipment</a>
-                </div>
+                <p>Dependable local and international logistics with real-time tracking, secure handling, and people who care about every parcel.</p>
             </div>
-        </div>
-
-        <!-- Main nav -->
-        <div class="navbar">
-            <div class="container">
-                <ul class="nav-links">
-                    <li><a runat="server" href="Default.aspx">Home</a></li>
-                    <asp:PlaceHolder ID="pnlCustomerNav" runat="server" Visible="false">
-                        <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
-                        <li><a runat="server" href="Customer/RequestShipment.aspx">Request Shipment</a></li>
-                    </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="pnlStaffNav" runat="server" Visible="false">
-                        <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
-                        <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
-                    </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
-                        <li><a runat="server" href="~/Views/Admin/UserAccounts.aspx">Manage Staff</a></li>
-                        <li><a runat="server" href="~/Views/Admin/Branches.aspx">Manage Branch</a></li>
-                    </asp:PlaceHolder>
-                </ul>
-
-                <div class="nav-actions">
-                    <asp:PlaceHolder ID="pnlLoggedIn" runat="server" Visible="false">
-                        <span class="welcome-text">Signed in as
-                            <asp:Literal ID="litUserName" runat="server" /></span>
-                        <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
-                    </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="pnlLoggedOut" runat="server">
-                        <a runat="server" href="~/Views/Account/Login.aspx" class="btn btn-outline">Log in</a>
-                        <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red">Register</a>
-                    </asp:PlaceHolder>
-                </div>
-            </div>
-        </div>
-
-        <!-- Flash message -->
-        <asp:Panel ID="pnlFlashMessage" runat="server" Visible="false">
-            <div class="container" style="margin-top: 18px;">
-                <div class="alert-success">
-                    <asp:Literal ID="litFlashMessage" runat="server" /></div>
-            </div>
-        </asp:Panel>
-
-        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-
-        <!-- Footer -->
-        <div class="site-footer">
-            <div class="container">
-                <div class="footer-grid">
-                    <div>
-                        <h5>Get In Touch</h5>
-                        <p>
-                            Las Piñas City (Main Office and Warehouse)<br />
-                            Jerusalem Street, BF Martinville Manuyo Dos,<br />
-                            Las Piñas City, Philippines
-                       
-                        </p>
-                        <p>
-                            Tel: +632 249 8970<br />
-                            Fax: +632 422 0995<br />
-                            Email: info@soonestglobal.com
-                       
-                        </p>
-                    </div>
-                    <div>
-                        <h5>Quick Links</h5>
-                        <ul>
-                            <li><a runat="server" href="Default.aspx">Home</a></li>
-                            <li><a runat="server" href="Track.aspx">Track Shipment</a></li>
-                            <li><a runat="server" href="~/Views/Account/Register.aspx">Create Account</a></li>
-                            <li><a runat="server" href="~/Views/Account/Login.aspx">Log In</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h5>Services</h5>
-                        <ul>
-                            <li>International Freight</li>
-                            <li>Domestic Delivery</li>
-                            <li>Allied Services</li>
-                            <li>Balikbayan Boxes</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                Soonest Global Express Corporation &copy; 2026. All rights reserved.
-           
-            </div>
-        </div>
-    </form>
+            <div><h5>Get In Touch</h5><p>Las Pi&ntilde;as City (Main Office and Warehouse)<br />Jerusalem Street, BF Martinville Manuyo Dos,<br />Las Pi&ntilde;as City, Philippines</p><p>Tel: +632 249 8970<br />Email: info@soonestglobal.com</p></div>
+            <div><h5>Quick Links</h5><ul><li><a runat="server" href="Default.aspx">Home</a></li><li><a runat="server" href="Track.aspx">Track Shipment</a></li><li><a runat="server" href="~/Views/Account/Register.aspx">Create Account</a></li><li><a runat="server" href="~/Views/Account/Login.aspx">Log In</a></li></ul></div>
+            <div><h5>Services</h5><ul><li>International Freight</li><li>Domestic Delivery</li><li>Real-Time Tracking</li><li>Dedicated Support</li></ul></div>
+        </div></div>
+        <div class="footer-bottom">Soonest Global Express Corporation &copy; 2026. All rights reserved.</div>
+    </footer>
+</form>
+<script type="text/javascript">
+    (function () {
+        var nav = document.getElementById('siteNav');
+        var toggle = document.getElementById('navToggle');
+        if (nav && toggle) {
+            toggle.addEventListener('click', function () {
+                var open = nav.className.indexOf('nav-open') !== -1;
+                nav.className = open ? nav.className.replace(/\s*nav-open/g, '') : nav.className + ' nav-open';
+                toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+            });
+        }
+        var path = (location.pathname || '').toLowerCase();
+        var current = path.substring(path.lastIndexOf('/') + 1);
+        if (current === '' || current === 'default') { current = 'default.aspx'; }
+        var links = document.querySelectorAll('.nav-links a');
+        for (var i = 0; i < links.length; i++) {
+            var href = (links[i].getAttribute('href') || '').toLowerCase();
+            var file = href.substring(href.lastIndexOf('/') + 1);
+            if (file && file === current) {
+                links[i].className += (links[i].className ? ' ' : '') + 'active';
+            }
+        }
+    })();
+</script>
 </body>
 </html>

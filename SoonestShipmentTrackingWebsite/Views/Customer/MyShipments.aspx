@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="MyShipments.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Customer.MyShipments" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="MyShipments.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Customer.MyShipments" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">My Shipments</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container">
         <div class="card-panel">
             <div class="page-heading">My Shipments</div>
@@ -21,7 +21,7 @@
                     <asp:TemplateField HeaderText="">
                         <ItemTemplate>
                             <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Customer/ShipmentDetails.aspx?id=" + Eval("Id") %>'
-                                CssClass="btn btn-outline" Text="View History" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
+                                CssClass="btn btn-outline" Text="View History" style="padding:5px 12px;font-size:11.5px;border-color:#07233d;color:#07233d;" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

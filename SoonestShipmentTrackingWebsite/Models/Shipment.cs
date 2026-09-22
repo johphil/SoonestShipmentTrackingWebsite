@@ -39,6 +39,14 @@ namespace SoonestShipmentTrackingWebsite.Models
         public decimal? WeightKg { get; set; }
 
         public ShipmentStatus CurrentStatus { get; set; }
+        [StringLength(100)]
+        public string RiderName { get; set; }
+        public bool IsOrderReceived { get; set; }
+        public DateTime? OrderReceivedDate { get; set; }
+        public bool IssueReported { get; set; }
+        [StringLength(1000)]
+        public string IssueReport { get; set; }
+        public DateTime? IssueReportedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }

@@ -38,6 +38,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     CurrentRole = u.Roles.Any()
                         ? string.Join(", ", u.Roles.Select(r => roleNamesById.ContainsKey(r.RoleId) ? roleNamesById[r.RoleId] : "Unknown"))
                         : "(none)",
+                    BranchName = u.Branch == null ? "-" : u.Branch.BranchName,
                     IsCurrentUser = u.Id == currentUserId
                 })
                 .ToList();

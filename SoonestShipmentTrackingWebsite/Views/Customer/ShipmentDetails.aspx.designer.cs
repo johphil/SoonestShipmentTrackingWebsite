@@ -86,6 +86,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litEta;
 
+        protected global::System.Web.UI.WebControls.Panel pnlFeedback;
+        protected global::System.Web.UI.WebControls.Literal litFeedback;
+        protected global::System.Web.UI.WebControls.Button btnOrderReceived;
+        protected global::System.Web.UI.WebControls.TextBox txtIssueReport;
+        protected global::System.Web.UI.WebControls.Button btnReportIssue;
+
         /// <summary>
         /// rptHistory control.
         /// </summary>

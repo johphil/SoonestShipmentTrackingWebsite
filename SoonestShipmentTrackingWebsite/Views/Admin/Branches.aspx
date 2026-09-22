@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Branches.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Branches" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Branches.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Branches" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Manage Branches</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container">
         <div class="card-panel">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -26,7 +26,7 @@
                     <asp:TemplateField HeaderText="">
                         <ItemTemplate>
                             <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/BranchEdit.aspx?id=" + Eval("Id") %>'
-                                CssClass="btn btn-outline" Text="Edit" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
+                                CssClass="btn btn-outline" Text="Edit" style="padding:5px 12px;font-size:11.5px;border-color:#07233d;color:#07233d;" />
                             <asp:LinkButton runat="server" CommandName="DeleteBranch" CommandArgument='<%# Eval("Id") %>'
                                 CssClass="btn btn-outline" Text="Delete" style="padding:5px 12px;font-size:11.5px;border-color:#c8202f;color:#c8202f;"
                                 OnClientClick="return confirm('Delete this branch? This cannot be undone.');" />

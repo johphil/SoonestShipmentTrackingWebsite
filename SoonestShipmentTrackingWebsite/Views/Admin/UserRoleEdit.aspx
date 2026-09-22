@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="UserRoleEdit.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.UserRoleEdit" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="UserRoleEdit.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.UserRoleEdit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Manage Access</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:520px;">
         <div class="card-panel">
             <div class="page-heading">Manage Access</div>
@@ -23,8 +23,14 @@
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="rblRole" Display="Dynamic" CssClass="field-error" ErrorMessage="Select an access level." ValidationGroup="Role" />
             </div>
 
+            <div class="form-group">
+                <label>Designated Branch <span style="color:#c62828;">*</span> <small>(required for Staff)</small></label>
+                <asp:DropDownList ID="ddlBranch" runat="server" CssClass="form-control" />
+                <asp:CustomValidator ID="valBranch" runat="server" Display="Dynamic" CssClass="field-error" ValidationGroup="Role" OnServerValidate="valBranch_ServerValidate" ErrorMessage="Select the branch where this Staff member is designated." />
+            </div>
+
             <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Access Level" OnClick="btnSave_Click" ValidationGroup="Role" />
-            <a runat="server" href="~/Views/Admin/UserAccounts.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Cancel</a>
+            <a runat="server" href="~/Views/Admin/UserAccounts.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Cancel</a>
         </div>
     </div>
 </div>

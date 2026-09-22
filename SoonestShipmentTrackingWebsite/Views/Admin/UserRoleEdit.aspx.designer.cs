@@ -50,6 +50,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList rblRole;
 
+        protected global::System.Web.UI.WebControls.DropDownList ddlBranch;
+        protected global::System.Web.UI.WebControls.CustomValidator valBranch;
+
         /// <summary>
         /// btnSave control.
         /// </summary>

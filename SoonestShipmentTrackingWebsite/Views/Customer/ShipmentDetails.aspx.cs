@@ -53,12 +53,61 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     ? "-" : Server.HtmlEncode(shipment.PackageDescription);
                 litEta.Text = shipment.EstimatedDeliveryDate.HasValue
                     ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy") : "TBD";
+                pnlFeedback.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered;
+                btnOrderReceived.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IsOrderReceived;
+                btnReportIssue.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IssueReported;
+                litFeedback.Text = shipment.IsOrderReceived
+                    ? "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Order received on " + shipment.OrderReceivedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>"
+                    : "";
+                if (shipment.IssueReported)
+                    litFeedback.Text += "<div class=\"validation-summary\">Issue report submitted on " + shipment.IssueReportedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>";
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
                 rptHistory.DataSource = history;
                 rptHistory.DataBind();
                 lblNoHistory.Visible = !history.Any();
             }
+        }
+
+        protected void btnOrderReceived_Click(object sender, EventArgs e)
+        {
+            UpdateCustomerFeedback(true, null);
+        }
+
+        protected void btnReportIssue_Click(object sender, EventArgs e)
+        {
+            var issue = (txtIssueReport.Text ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(issue))
+            {
+                litFeedback.Text = "<div class=\"validation-summary\">Please describe the issue before submitting.</div>";
+                pnlFeedback.Visible = true;
+                return;
+            }
+            UpdateCustomerFeedback(false, issue);
+        }
+
+        private void UpdateCustomerFeedback(bool received, string issue)
+        {
+            if (!int.TryParse(Request.QueryString["id"], out var id)) return;
+            using (var db = new ApplicationDbContext())
+            {
+                var shipment = db.Shipments.FirstOrDefault(s => s.Id == id && s.CustomerId == User.Identity.GetUserId());
+                if (shipment == null || shipment.CurrentStatus != ShipmentStatus.Delivered) return;
+                if (received && !shipment.IsOrderReceived)
+                {
+                    shipment.IsOrderReceived = true;
+                    shipment.OrderReceivedDate = DateTime.Now;
+                }
+                if (!received && !shipment.IssueReported)
+                {
+                    shipment.IssueReported = true;
+                    shipment.IssueReport = issue;
+                    shipment.IssueReportedDate = DateTime.Now;
+                }
+                shipment.UpdatedDate = DateTime.Now;
+                db.SaveChanges();
+            }
+            Response.Redirect(Request.RawUrl);
         }
     }
 }

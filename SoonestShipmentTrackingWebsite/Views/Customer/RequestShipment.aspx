@@ -1,11 +1,11 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="RequestShipment.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Customer.RequestShipment" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="RequestShipment.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Customer.RequestShipment" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Request Shipment</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:760px;">
         <div class="card-panel">
             <div class="page-heading">Request Shipment</div>
-            <div class="page-subheading" style="color:#6b7684;font-size:13px;margin-bottom:16px;">
+            <div class="page-subheading" style="color:#5c7186;font-size:13px;margin-bottom:16px;">
                 Your shipment will be reviewed by our staff before it's approved for pickup.
             </div>
 
@@ -73,7 +73,7 @@
             </div>
 
             <asp:Button ID="btnCreate" runat="server" CssClass="btn btn-red" Text="Submit Shipment" OnClick="btnCreate_Click" ValidationGroup="CreateShipment" />
-            <a runat="server" href="~/Views/Customer/MyShipments.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Cancel</a>
+            <a runat="server" href="~/Views/Customer/MyShipments.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Cancel</a>
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="Site.Master" AutoEventWireup="true" CodeBehind="Track.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Track" %>
+<%@ Page Language="C#" MasterPageFile="Site.Master" AutoEventWireup="true" CodeBehind="Track.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Track" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Track Shipment</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container">
 
         <div class="card-panel" style="margin-bottom:20px;">
@@ -22,17 +22,17 @@
             <div class="card-panel" style="margin-bottom:20px;">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;">
                     <div>
-                        <h2 class="mt-0" style="color:#0b2540;margin-bottom:4px;"><asp:Literal ID="litControlNumber" runat="server" /></h2>
-                        <p style="color:#6b7684;margin:0;">To <asp:Literal ID="litRecipientName" runat="server" />, <asp:Literal ID="litDestinationCity" runat="server" /></p>
+                        <h2 class="mt-0" style="color:#07233d;margin-bottom:4px;"><asp:Literal ID="litControlNumber" runat="server" /></h2>
+                        <p style="color:#5c7186;margin:0;">To <asp:Literal ID="litRecipientName" runat="server" />, <asp:Literal ID="litDestinationCity" runat="server" /></p>
                     </div>
                     <asp:Literal ID="litStatusBadge" runat="server" />
                 </div>
-                <hr style="border:none;border-top:1px solid #eceef1;margin:16px 0;" />
+                <hr style="border:none;border-top:1px solid #dbe6f0;margin:16px 0;" />
                 <p class="mb-0"><strong>Estimated Delivery:</strong> <asp:Literal ID="litEta" runat="server" /></p>
             </div>
 
             <div class="card-panel">
-                <h4 style="color:#0b2540;margin-top:0;">Shipment History</h4>
+                <h4 style="color:#07233d;margin-top:0;">Shipment History</h4>
                 <asp:Repeater ID="rptHistory" runat="server">
                     <HeaderTemplate><table class="data-grid"><thead><tr><th>Status</th><th>Location</th><th>Date</th></tr></thead><tbody></HeaderTemplate>
                     <ItemTemplate>
@@ -44,7 +44,7 @@
                     </ItemTemplate>
                     <FooterTemplate></tbody></table></FooterTemplate>
                 </asp:Repeater>
-                <asp:Label ID="lblNoHistory" runat="server" Text="No tracking events recorded yet." Visible="false" style="color:#6b7684;" />
+                <asp:Label ID="lblNoHistory" runat="server" Text="No tracking events recorded yet." Visible="false" style="color:#5c7186;" />
             </div>
         </asp:Panel>
 

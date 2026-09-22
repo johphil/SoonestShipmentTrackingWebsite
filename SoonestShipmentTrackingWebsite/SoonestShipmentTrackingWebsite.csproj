@@ -105,6 +105,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\icons\arrow-right.svg" />
+    <Content Include="Assets\icons\globe.svg" />
+    <Content Include="Assets\icons\logo.svg" />
+    <Content Include="Assets\icons\package.svg" />
+    <Content Include="Assets\icons\shield.svg" />
+    <Content Include="Assets\icons\support.svg" />
+    <Content Include="Assets\icons\track.svg" />
+    <Content Include="Assets\icons\user.svg" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Views\Account\Login.aspx" />
@@ -124,6 +132,7 @@
     <Content Include="Views\Default.aspx" />
     <Content Include="Views\Forbidden.aspx" />
     <Content Include="Views\NotFound.aspx" />
+    <Content Include="Views\Theme.css" />
     <Content Include="Views\Track.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -201,6 +210,13 @@
     </Compile>
     <Compile Include="Views\Admin\Shipments.aspx.designer.cs">
       <DependentUpon>Shipments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Admin\UpdateStatus.aspx.cs">
       <DependentUpon>UpdateStatus.aspx</DependentUpon>

@@ -13,6 +13,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string CurrentRole { get; set; }
+        public string BranchName { get; set; }
         public bool IsCurrentUser { get; set; }
     }
 }

@@ -86,6 +86,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLocation;
 
+        protected global::System.Web.UI.WebControls.TextBox txtRiderName;
+
         /// <summary>
         /// txtNotes control.
         /// </summary>

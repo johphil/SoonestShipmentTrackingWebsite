@@ -16,7 +16,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         /// redirect was already issued (the caller should "return"
         /// immediately in that case).
         /// </summary>
-        public static bool EnsureRole(Page page, string requiredRole)
+        public static bool EnsureRole(Page page, params string[] requiredRoles)
         {
             bool isAuthenticated = page.User != null && page.User.Identity.IsAuthenticated;
 
@@ -27,13 +27,24 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 return false;
             }
 
-            if (!page.User.IsInRole(requiredRole))
+            bool bProceed = false;
+
+            for (int i = 0; i < requiredRoles.Length; i++)
+            {
+                if (page.User.IsInRole(requiredRoles[i]))
+                {
+                    bProceed = true;
+                    break;
+                }
+            }
+
+            if (bProceed)
+                return true;
+            else
             {
                 page.Response.Redirect("~/Views/Forbidden.aspx");
                 return false;
             }
-
-            return true;
         }
     }
 }

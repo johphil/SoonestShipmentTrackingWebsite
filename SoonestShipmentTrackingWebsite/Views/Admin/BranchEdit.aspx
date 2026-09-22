@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="BranchEdit.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.BranchEdit" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="BranchEdit.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.BranchEdit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Branch</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:640px;">
         <div class="card-panel">
             <div class="page-heading"><asp:Literal ID="litHeading" runat="server" Text="Add Branch" /></div>
@@ -48,7 +48,7 @@
             </div>
 
             <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Branch" OnClick="btnSave_Click" ValidationGroup="Branch" />
-            <a runat="server" href="~/Views/Admin/Branches.aspx" class="btn btn-outline" style="border-color:#0b2540;color:#0b2540;">Cancel</a>
+            <a runat="server" href="~/Views/Admin/Branches.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Cancel</a>
         </div>
     </div>
 </div>
