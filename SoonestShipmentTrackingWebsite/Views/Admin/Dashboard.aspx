@@ -26,9 +26,12 @@
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
                     <asp:BoundField DataField="CustomerName" HeaderText="Customer" />
                     <asp:BoundField DataField="RecipientName" HeaderText="Recipient" />
-                    <asp:BoundField DataField="DestinationCity" HeaderText="Destination" />
+                    <asp:BoundField DataField="RecipientAddress" HeaderText="Destination" />
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Rider">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RiderInfo(Eval("CurrentStatus"), Eval("RiderName")) %></ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="UpdatedDate" HeaderText="Last Update" DataFormatString="{0:MMM d, h:mm tt}" />
                     <asp:TemplateField HeaderText="">

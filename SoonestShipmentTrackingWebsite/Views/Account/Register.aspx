@@ -1,9 +1,9 @@
 <%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.Register" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Create Account</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section app-section" style="padding-top:44px;">
+<div class="section auth-section">
     <div class="container" style="max-width:560px;">
-        <div class="card-panel">
+        <div class="auth-card">
             <div class="page-heading">Create a Customer Account</div>
             <div class="page-subheading">Register to view and track every shipment tied to you.</div>
 
@@ -27,7 +27,7 @@
 
             <div class="form-group">
                 <label>Phone Number</label>
-                <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" placeholder="+63 900 000 0000" />
+                <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" placeholder="0987 654 3210" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPhone" Display="Dynamic" CssClass="field-error" ErrorMessage="Phone number is required." ValidationGroup="Register" />
             </div>
 
@@ -51,7 +51,7 @@
 
             <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-red btn-block" Text="Register" OnClick="btnRegister_Click" ValidationGroup="Register" />
 
-            <p style="text-align:center;margin-top:16px;font-size:13.5px;">
+            <p style="text-align:center;margin-top:16px;font-size:13.5px;color:#93aac3;">
                 Already have an account? <a runat="server" href="~/Views/Account/Login.aspx">Log in</a>
             </p>
         </div>

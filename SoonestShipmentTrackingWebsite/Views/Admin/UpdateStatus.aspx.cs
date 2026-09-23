@@ -47,6 +47,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
                 litDestinationCity.Text = Server.HtmlEncode(shipment.DestinationCity);
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 txtRiderName.Text = shipment.RiderName;
 
                 ddlNewStatus.Items.Clear();
@@ -108,11 +109,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber);
                 }
-                else
-                {                                                                                    
-                    string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
-                    EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
-                }
+
+                string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
+                EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
 
                 Response.Redirect("~/Views/Admin/Shipments.aspx");
             }

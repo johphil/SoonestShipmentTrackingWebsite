@@ -58,6 +58,7 @@ namespace SoonestShipmentTrackingWebsite.Views
                 litEta.Text = shipment.EstimatedDeliveryDate.HasValue
                     ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy")
                     : "TBD";
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
                 rptHistory.DataSource = history;
@@ -69,3 +70,4 @@ namespace SoonestShipmentTrackingWebsite.Views
         }
     }
 }
+

@@ -20,7 +20,6 @@
                     <asp:TextBox ID="txtControlNumber" runat="server" placeholder="Enter tracking number" />
                     <asp:Button ID="btnTrack" runat="server" CssClass="btn btn-track" Text="Track Shipment" OnClick="btnTrack_Click" />
                 </div>
-                <div class="sample-tracking"><span class="sample-pin"><img src="../Assets/icons/track.svg" alt="" /></span><b>SGE123456789</b><span class="sample-status">In Transit</span><span class="sample-arrow"><img src="../Assets/icons/arrow-right.svg" alt="" /></span></div>
             </div>
         </div>
     </section>

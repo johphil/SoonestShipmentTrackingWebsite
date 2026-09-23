@@ -26,10 +26,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 litTotal.Text = shipments.Count.ToString();
                 litPending.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.Pending).ToString();
-                litInTransit.Text = shipments.Count(s =>
-                    s.CurrentStatus == ShipmentStatus.InTransit ||
-                    s.CurrentStatus == ShipmentStatus.PickedUp ||
-                    s.CurrentStatus == ShipmentStatus.ArrivedAtHub).ToString();
+                litInTransit.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.InTransit).ToString();
                 litOutForDelivery.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.OutForDelivery).ToString();
                 litDelivered.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.Delivered).ToString();
                 litCustomers.Text = GetCustomerCount().ToString();
@@ -43,8 +40,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         s.ControlNumber,
                         CustomerName = _db.Users.FirstOrDefault(u => u.Id == s.CustomerId)?.FullName ?? "(unknown)",
                         s.RecipientName,
-                        s.DestinationCity,
+                        s.RecipientAddress,
                         s.CurrentStatus,
+                        s.RiderName,
                         s.UpdatedDate
                     })
                     .ToList();

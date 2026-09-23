@@ -8,7 +8,7 @@
             <div style="display:flex;justify-content:space-between;align-items:flex-start;">
                 <div>
                     <h2 class="mt-0" style="color:#07233d;margin-bottom:4px;"><asp:Literal ID="litControlNumber" runat="server" /></h2>
-                    <p style="color:#5c7186;margin:0;">To <asp:Literal ID="litRecipientName" runat="server" />, <asp:Literal ID="litDestinationCity" runat="server" /></p>
+                    <p style="color:#5c7186;margin:0;">To <asp:Literal ID="litRecipientName" runat="server" />, <asp:Literal ID="litRecipientAddress1" runat="server" /></p>
                 </div>
                 <asp:Literal ID="litStatusBadge" runat="server" />
             </div>
@@ -21,6 +21,7 @@
                 <div>
                     <p><strong>Package:</strong> <asp:Literal ID="litPackageDescription" runat="server" /></p>
                     <p><strong>Estimated Delivery:</strong> <asp:Literal ID="litEta" runat="server" /></p>
+                    <p><strong>Rider:</strong> <asp:Literal ID="litRiderInfo" runat="server" /></p>
                 </div>
             </div>
         </div>

@@ -51,6 +51,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litCurrentBadge;
 
         /// <summary>
+        /// litRiderInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litRiderInfo;
+
+        /// <summary>
         /// pnlError control.
         /// </summary>
         /// <remarks>
@@ -86,6 +95,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLocation;
 
+        /// <summary>
+        /// txtRiderName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRiderName;
 
         /// <summary>

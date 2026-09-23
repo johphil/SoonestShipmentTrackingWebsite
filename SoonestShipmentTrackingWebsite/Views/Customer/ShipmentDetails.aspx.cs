@@ -27,6 +27,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
             var userId = User.Identity.GetUserId();
 
+            // The customer opened a shipment (e.g. via a notification), so
+            // clear the unread state on the bell.
+            NotificationHelper.MarkAllSeen();
+
             using (var _db = new ApplicationDbContext())
             {
                 var shipment = _db.Shipments
@@ -45,7 +49,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litDestinationCity.Text = Server.HtmlEncode(shipment.DestinationCity);
+                litRecipientAddress1.Text = Server.HtmlEncode(shipment.RecipientAddress);
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litSenderName.Text = Server.HtmlEncode(shipment.SenderName);
                 litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress);
@@ -53,6 +57,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     ? "-" : Server.HtmlEncode(shipment.PackageDescription);
                 litEta.Text = shipment.EstimatedDeliveryDate.HasValue
                     ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy") : "TBD";
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 pnlFeedback.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered;
                 btnOrderReceived.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IsOrderReceived;
                 btnReportIssue.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IssueReported;
@@ -91,7 +96,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
             if (!int.TryParse(Request.QueryString["id"], out var id)) return;
             using (var db = new ApplicationDbContext())
             {
-                var shipment = db.Shipments.FirstOrDefault(s => s.Id == id && s.CustomerId == User.Identity.GetUserId());
+                var cId = User.Identity.GetUserId();
+                var shipment = db.Shipments.FirstOrDefault(s => s.Id == id && s.CustomerId == cId);
                 if (shipment == null || shipment.CurrentStatus != ShipmentStatus.Delivered) return;
                 if (received && !shipment.IsOrderReceived)
                 {

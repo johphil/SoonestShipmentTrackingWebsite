@@ -10,9 +10,12 @@
                 <Columns>
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
                     <asp:BoundField DataField="RecipientName" HeaderText="Recipient" />
-                    <asp:BoundField DataField="DestinationCity" HeaderText="Destination" />
+                    <asp:BoundField DataField="RecipientAddress" HeaderText="Destination" />
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Rider">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RiderInfo(Eval("CurrentStatus"), Eval("RiderName")) %></ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Est. Delivery">
                         <ItemTemplate><%# Eval("EstimatedDeliveryDate") != null ? Eval("EstimatedDeliveryDate", "{0:MMM d, yyyy}") : "-" %></ItemTemplate>

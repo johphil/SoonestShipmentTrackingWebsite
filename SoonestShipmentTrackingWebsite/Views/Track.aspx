@@ -29,6 +29,7 @@
                 </div>
                 <hr style="border:none;border-top:1px solid #dbe6f0;margin:16px 0;" />
                 <p class="mb-0"><strong>Estimated Delivery:</strong> <asp:Literal ID="litEta" runat="server" /></p>
+                <p style="margin-top:8px;"><strong>Rider:</strong> <asp:Literal ID="litRiderInfo" runat="server" /></p>
             </div>
 
             <div class="card-panel">

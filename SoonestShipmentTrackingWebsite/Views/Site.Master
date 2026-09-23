@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Soonest Global Express Corporation</asp:ContentPlaceHolder></title>
-    <link rel="stylesheet" href="~/Content/Site.css" runat="server" />
     <link rel="stylesheet" href="<%= ResolveUrl("~/Views/Theme.css") %>" />
 </head>
 <body>
@@ -22,6 +21,8 @@
         <div class="container">
             <ul class="nav-links">
                 <li><a runat="server" href="Default.aspx">Home</a></li>
+                <li><a runat="server" href="About.aspx">About</a></li>
+                <li><a runat="server" href="Contact.aspx">Contact</a></li>
                 <asp:PlaceHolder ID="pnlCustomerNav" runat="server" Visible="false">
                     <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
                 </asp:PlaceHolder>
@@ -36,6 +37,32 @@
                 </asp:PlaceHolder>
             </ul>
             <div class="nav-actions">
+                <asp:PlaceHolder ID="pnlCustomerNotif" runat="server" Visible="false">
+                    <div class="notif-wrap" id="notifWrap">
+                        <button type="button" class="notif-bell" id="notifBell" aria-label="Notifications" aria-expanded="false">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+                            <span class="notif-badge" id="notifBadge" runat="server"><asp:Literal ID="litNotifCount" runat="server" /></span>
+                        </button>
+                        <div class="notif-dropdown" id="notifDropdown">
+                            <div class="notif-head">Notifications</div>
+                            <div class="notif-list">
+                                <asp:Repeater ID="rptNotifications" runat="server">
+                                    <ItemTemplate>
+                                        <a class='notif-item <%# (bool)Eval("IsUnread") ? "unread" : "" %>' href='<%# ResolveUrl("~/Views/Customer/ShipmentDetails.aspx?id=" + Eval("ShipmentId")) %>'>
+                                            <span class="notif-dot"></span>
+                                            <span class="notif-body">
+                                                <span class="notif-msg"><%# Eval("Message") %></span>
+                                                <span class="notif-meta"><%# Eval("TimeAgo") %></span>
+                                            </span>
+                                        </a>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                                <asp:Label ID="lblNoNotif" runat="server" CssClass="notif-empty" Text="No shipment updates yet." Visible="false" />
+                            </div>
+                            <a class="notif-viewall" runat="server" href="~/Views/Customer/MyShipments.aspx">View all shipments</a>
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlLoggedIn" runat="server" Visible="false">
                     <span class="welcome-text">Signed in as <asp:Literal ID="litUserName" runat="server" /></span>
                     <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
@@ -90,7 +117,22 @@
                 links[i].className += (links[i].className ? ' ' : '') + 'active';
             }
         }
+
+        var wrap = document.getElementById('notifWrap');
+        var bell = document.getElementById('notifBell');
+        if (wrap && bell) {
+            bell.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var open = wrap.className.indexOf('open') !== -1;
+                wrap.className = open ? wrap.className.replace(/\s*open/g, '') : wrap.className + ' open';
+                bell.setAttribute('aria-expanded', open ? 'false' : 'true');
+            });
+            document.addEventListener('click', function (e) {
+                if (wrap.className.indexOf('open') !== -1 && !wrap.contains(e.target)) {
+                    wrap.className = wrap.className.replace(/\s*open/g, '');
+                    bell.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
     })();
 </script>
-</body>
-</html>

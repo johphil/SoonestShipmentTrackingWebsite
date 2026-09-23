@@ -1,4 +1,4 @@
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -68,7 +68,14 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         private void ShowError(string message) { lblError.Text = HttpUtility.HtmlEncode(message); lblError.Visible = true; }
         private class ReportRow
         {
-            public string ControlNumber { get; set; } public string CustomerName { get; set; } public string DestinationCity { get; set; } public string CurrentStatus { get; set; } public string RiderName { get; set; } public string IsOrderReceived { get; set; } public string IssueReported { get; set; } public DateTime UpdatedDate { get; set; }
+            public string ControlNumber { get; set; }
+            public string CustomerName { get; set; }
+            public string DestinationCity { get; set; }
+            public string CurrentStatus { get; set; }
+            public string RiderName { get; set; }
+            public string IsOrderReceived { get; set; }
+            public string IssueReported { get; set; }
+            public DateTime UpdatedDate { get; set; }
         }
     }
 }

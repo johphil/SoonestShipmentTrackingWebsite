@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Reports.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Reports" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Reports.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Reports" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Reports</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="section app-section" style="padding-top:44px;"><div class="container">

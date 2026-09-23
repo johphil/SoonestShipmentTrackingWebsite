@@ -34,8 +34,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         CustomerName = _db.Users.FirstOrDefault(u => u.Id == s.CustomerId)?.FullName ?? "(unknown)",
                         CustomerEmail = _db.Users.FirstOrDefault(u => u.Id == s.CustomerId)?.Email ?? "",
                         s.RecipientName,
-                        s.DestinationCity,
+                        s.RecipientAddress,
                         s.CurrentStatus,
+                        s.RiderName,
                         s.UpdatedDate
                     })
                     .ToList();
