@@ -92,7 +92,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     shipment.ControlNumber,
                     StatusDisplayHelper.Label(shipment.CurrentStatus),
                     shipment.UpdatedDate.ToString("MMM dd, yyyy hh:mm tt"),
-                    shipment.SenderAddress,
+                    shipment.BranchOrigin,
                     shipment.RecipientAddress,
                     lastHistory?.Location,
                     shipmentTrackUrl,
