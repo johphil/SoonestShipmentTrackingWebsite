@@ -43,6 +43,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         s.BranchOrigin,
                         s.RecipientAddress,
                         s.CurrentStatus,
+                        s.IssueReported,
+                        s.IsIssueResolved,
                         s.RiderName,
                         s.UpdatedDate
                     })

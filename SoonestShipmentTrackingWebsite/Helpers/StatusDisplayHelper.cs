@@ -59,5 +59,25 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
             return HttpUtility.HtmlEncode(riderName.Trim());
         }
+
+        public static string IssueIndicator(object issueReportedValue, object issueResolvedValue)
+        {
+            var issueReported = false;
+            var issueResolved = false;
+
+            if (issueReportedValue != null)
+                bool.TryParse(Convert.ToString(issueReportedValue), out issueReported);
+
+            if (issueResolvedValue != null)
+                bool.TryParse(Convert.ToString(issueResolvedValue), out issueResolved);
+
+            if (!issueReported)
+                return "<span class=\"status-badge badge-pending\">No Issue</span>";
+
+            if (issueResolved)
+                return "<span class=\"status-badge badge-success\">Issue Resolved</span>";
+
+            return "<span class=\"status-badge badge-danger\">Issue Reported</span>";
+        }
     }
 }

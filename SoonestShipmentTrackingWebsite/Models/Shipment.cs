@@ -46,9 +46,11 @@ namespace SoonestShipmentTrackingWebsite.Models
         public bool IsOrderReceived { get; set; }
         public DateTime? OrderReceivedDate { get; set; }
         public bool IssueReported { get; set; }
+        public bool IsIssueResolved { get; set; }
         [StringLength(1000)]
         public string IssueReport { get; set; }
         public DateTime? IssueReportedDate { get; set; }
+        public DateTime? IssueResolvedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }

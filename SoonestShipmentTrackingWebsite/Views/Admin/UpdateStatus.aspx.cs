@@ -49,7 +49,22 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
+                litIssueIndicator.Text = StatusDisplayHelper.IssueIndicator(shipment.IssueReported, shipment.IsIssueResolved);
                 txtRiderName.Text = shipment.RiderName;
+
+                pnlIssue.Visible = shipment.IssueReported;
+                if (shipment.IssueReported)
+                {
+                    litIssueReport.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.IssueReport) ? "No additional details provided." : shipment.IssueReport);
+                    litIssueDate.Text = shipment.IssueReportedDate.HasValue
+                        ? shipment.IssueReportedDate.Value.ToString("MMM d, yyyy h:mm tt")
+                        : "-";
+                    pnlIssueResolvedInfo.Visible = shipment.IsIssueResolved;
+                    litIssueResolvedDate.Text = shipment.IssueResolvedDate.HasValue
+                        ? shipment.IssueResolvedDate.Value.ToString("MMM d, yyyy h:mm tt")
+                        : "-";
+                    btnResolveIssue.Visible = !shipment.IsIssueResolved;
+                }
 
                 ddlNewStatus.Items.Clear();
                 foreach (ShipmentStatus status in Enum.GetValues(typeof(ShipmentStatus)))
@@ -60,6 +75,43 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 rptHistory.DataSource = history;
                 rptHistory.DataBind();
                 lblNoHistory.Visible = !history.Any();
+            }
+        }
+
+        protected void btnResolveIssue_Click(object sender, EventArgs e)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var shipment = db.Shipments.FirstOrDefault(s => s.Id == ShipmentId);
+                if (shipment == null)
+                {
+                    Response.Redirect("~/Views/Admin/Shipments.aspx");
+                    return;
+                }
+
+                if (!shipment.IssueReported || shipment.IsIssueResolved)
+                {
+                    Session["FlashMessage"] = "No unresolved issue found for this shipment.";
+                    Response.Redirect(Request.RawUrl);
+                    return;
+                }
+
+                shipment.IsIssueResolved = true;
+                shipment.IssueResolvedDate = DateTime.Now;
+                shipment.UpdatedDate = DateTime.Now;
+
+                db.ShipmentHistories.Add(new ShipmentHistory
+                {
+                    ShipmentId = shipment.Id,
+                    Status = shipment.CurrentStatus,
+                    Location = string.IsNullOrWhiteSpace(txtLocation.Text) ? shipment.BranchOrigin : txtLocation.Text.Trim(),
+                    Notes = "Customer-reported issue has been resolved."
+                });
+
+                db.SaveChanges();
+
+                Session["FlashMessage"] = $"Issue for shipment {shipment.ControlNumber} has been marked as resolved.";
+                Response.Redirect(Request.RawUrl);
             }
         }
 

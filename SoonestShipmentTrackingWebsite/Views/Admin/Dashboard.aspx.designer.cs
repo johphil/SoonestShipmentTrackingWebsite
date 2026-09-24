@@ -60,6 +60,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litDelivered;
 
         /// <summary>
+        /// litIssues control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litIssues;
+
+        /// <summary>
         /// litCustomers control.
         /// </summary>
         /// <remarks>

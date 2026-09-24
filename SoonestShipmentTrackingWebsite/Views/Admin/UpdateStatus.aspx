@@ -12,9 +12,19 @@
                     <p style="color:#5c7186;margin:6px 0 0;"><strong>Recipient Address:</strong> <asp:Literal ID="litDestinationCity" runat="server" /></p>
                     <p style="color:#5c7186;margin:6px 0 0;"><strong>Branch Origin:</strong> <asp:Literal ID="litBranchOrigin" runat="server" /></p>
                     <p style="color:#5c7186;margin:6px 0 0;"><strong>Rider:</strong> <asp:Literal ID="litRiderInfo" runat="server" /></p>
+                    <p style="color:#5c7186;margin:6px 0 0;"><strong>Issue:</strong> <asp:Literal ID="litIssueIndicator" runat="server" /></p>
                 </div>
                 <asp:Literal ID="litCurrentBadge" runat="server" />
             </div>
+
+            <asp:Panel ID="pnlIssue" runat="server" Visible="false" CssClass="alert-warning" style="margin-bottom:14px;">
+                <div><strong>Reported Issue:</strong> <asp:Literal ID="litIssueReport" runat="server" /></div>
+                <div style="margin-top:6px;"><strong>Reported On:</strong> <asp:Literal ID="litIssueDate" runat="server" /></div>
+                <asp:Panel ID="pnlIssueResolvedInfo" runat="server" Visible="false" style="margin-top:6px;color:#1f7a2e;">
+                    <strong>Resolved On:</strong> <asp:Literal ID="litIssueResolvedDate" runat="server" />
+                </asp:Panel>
+                <asp:Button ID="btnResolveIssue" runat="server" CssClass="btn btn-red" Text="Mark Issue as Resolved" OnClick="btnResolveIssue_Click" style="margin-top:10px;" />
+            </asp:Panel>
             
             <asp:Panel ID="pnlError" runat="server" Visible="false">
                 <div class="validation-summary"><asp:Literal ID="litError" runat="server" /></div>
