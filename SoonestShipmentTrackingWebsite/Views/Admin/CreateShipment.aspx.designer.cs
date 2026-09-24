@@ -51,13 +51,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.TextBox txtSenderName;
 
         /// <summary>
-        /// txtSenderAddress control.
+        /// ddlBranchOrigin control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSenderAddress;
+        protected global::System.Web.UI.WebControls.DropDownList ddlBranchOrigin;
 
         /// <summary>
         /// txtRecipientName control.
@@ -67,15 +67,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRecipientName;
-
-        /// <summary>
-        /// txtDestinationCity control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDestinationCity;
 
         /// <summary>
         /// txtRecipientAddress control.

@@ -26,7 +26,8 @@
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
                     <asp:BoundField DataField="CustomerName" HeaderText="Customer" />
                     <asp:BoundField DataField="RecipientName" HeaderText="Recipient" />
-                    <asp:BoundField DataField="RecipientAddress" HeaderText="Destination" />
+                    <asp:BoundField DataField="BranchOrigin" HeaderText="Branch Origin" />
+                    <asp:BoundField DataField="RecipientAddress" HeaderText="Recipient Address" />
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></ItemTemplate>
                     </asp:TemplateField>

@@ -23,22 +23,16 @@
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtSenderName" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
                 </div>
                 <div class="form-group">
-                    <label>Sender Address</label>
-                    <asp:TextBox ID="txtSenderAddress" runat="server" CssClass="form-control" />
+                    <label>Branch Origin</label>
+                    <asp:DropDownList ID="ddlBranchOrigin" runat="server" CssClass="form-control" />
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlBranchOrigin" InitialValue="" Display="Dynamic" CssClass="field-error" ErrorMessage="Please select a branch origin." ValidationGroup="CreateShipment" />
                 </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-                <div class="form-group">
-                    <label>Recipient Name</label>
-                    <asp:TextBox ID="txtRecipientName" runat="server" CssClass="form-control" />
-                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRecipientName" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
-                </div>
-                <div class="form-group">
-                    <label>Destination City</label>
-                    <asp:TextBox ID="txtDestinationCity" runat="server" CssClass="form-control" />
-                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtDestinationCity" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
-                </div>
+            <div class="form-group">
+                <label>Recipient Name</label>
+                <asp:TextBox ID="txtRecipientName" runat="server" CssClass="form-control" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRecipientName" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
             </div>
 
             <div class="form-group">
@@ -50,13 +44,13 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                 <div class="form-group">
                     <label>Recipient Phone</label>
-                    <asp:TextBox ID="txtRecipientPhone" runat="server" CssClass="form-control" placeholder="+63 900 000 0000" />
-                    <div class="form-hint">Leave blank to use the customer's registered phone.</div>
+                    <asp:TextBox ID="txtRecipientPhone" runat="server" CssClass="form-control" placeholder="0987 654 3210" />
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRecipientPhone" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
                 </div>
                 <div class="form-group">
                     <label>Recipient Email</label>
                     <asp:TextBox ID="txtRecipientEmail" runat="server" CssClass="form-control" TextMode="Email" />
-                    <div class="form-hint">Leave blank to use the customer's registered email.</div>
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRecipientEmail" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
                 </div>
             </div>
 
@@ -64,14 +58,17 @@
                 <div class="form-group">
                     <label>Package Description</label>
                     <asp:TextBox ID="txtPackageDescription" runat="server" CssClass="form-control" />
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPackageDescription" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
                 </div>
                 <div class="form-group">
                     <label>Weight (kg)</label>
                     <asp:TextBox ID="txtWeight" runat="server" CssClass="form-control" />
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtWeight" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
                 </div>
                 <div class="form-group">
-                    <label>Est. Delivery Date</label>
+                    <label>Delivery Date</label>
                     <asp:TextBox ID="txtEstDelivery" runat="server" CssClass="form-control" TextMode="Date" />
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtEstDelivery" Display="Dynamic" CssClass="field-error" ErrorMessage="Required." ValidationGroup="CreateShipment" />
                 </div>
             </div>
 

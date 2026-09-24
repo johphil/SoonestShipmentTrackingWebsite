@@ -46,7 +46,18 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 if (toDate.HasValue) query = query.Where(s => s.UpdatedDate < toDate.Value);
                 var shipments = query.OrderByDescending(s => s.UpdatedDate).ToList();
                 var names = db.Users.ToDictionary(u => u.Id, u => string.IsNullOrWhiteSpace(u.FullName) ? u.Email : u.FullName);
-                CurrentRows = shipments.Select(s => new ReportRow { ControlNumber = s.ControlNumber, CustomerName = names.ContainsKey(s.CustomerId) ? names[s.CustomerId] : "(unknown)", DestinationCity = s.DestinationCity, CurrentStatus = Helpers.StatusDisplayHelper.Label(s.CurrentStatus), RiderName = s.RiderName ?? "-", IsOrderReceived = s.IsOrderReceived ? "Yes" : "No", IssueReported = s.IssueReported ? "Yes" : "No", UpdatedDate = s.UpdatedDate }).ToList();
+                CurrentRows = shipments.Select(s => new ReportRow
+                {
+                    ControlNumber = s.ControlNumber,
+                    CustomerName = names.ContainsKey(s.CustomerId) ? names[s.CustomerId] : "(unknown)",
+                    BranchOrigin = s.BranchOrigin,
+                    RecipientAddress = s.RecipientAddress,
+                    CurrentStatus = Helpers.StatusDisplayHelper.Label(s.CurrentStatus),
+                    RiderName = s.RiderName ?? "-",
+                    IsOrderReceived = s.IsOrderReceived ? "Yes" : "No",
+                    IssueReported = s.IssueReported ? "Yes" : "No",
+                    UpdatedDate = s.UpdatedDate
+                }).ToList();
                 gvReport.DataSource = CurrentRows; gvReport.DataBind();
                 litTotal.Text = shipments.Count.ToString();
                 litDelivered.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.Delivered).ToString();
@@ -59,8 +70,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             Generate();
             var rows = CurrentRows ?? new List<ReportRow>();
-            var csv = new StringBuilder("Control Number,Customer,Destination,Status,Rider,Order Received,Issue Reported,Last Update\r\n");
-            foreach (var r in rows) csv.AppendLine(string.Join(",", new[] { r.ControlNumber, r.CustomerName, r.DestinationCity, r.CurrentStatus, r.RiderName, r.IsOrderReceived, r.IssueReported, r.UpdatedDate.ToString("yyyy-MM-dd HH:mm") }.Select(CsvField)));
+            var csv = new StringBuilder("Control Number,Customer,Branch Origin,Recipient Address,Status,Rider,Order Received,Issue Reported,Last Update\r\n");
+            foreach (var r in rows) csv.AppendLine(string.Join(",", new[] { r.ControlNumber, r.CustomerName, r.BranchOrigin, r.RecipientAddress, r.CurrentStatus, r.RiderName, r.IsOrderReceived, r.IssueReported, r.UpdatedDate.ToString("yyyy-MM-dd HH:mm") }.Select(CsvField)));
             Response.Clear(); Response.ContentType = "text/csv"; Response.AddHeader("Content-Disposition", "attachment;filename=shipment-report.csv"); Response.Write(csv.ToString()); Response.End();
         }
         private static string CsvField(string value) { return "\"" + (value ?? "").Replace("\"", "\"\"") + "\""; }
@@ -70,7 +81,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             public string ControlNumber { get; set; }
             public string CustomerName { get; set; }
-            public string DestinationCity { get; set; }
+            public string BranchOrigin { get; set; }
+            public string RecipientAddress { get; set; }
             public string CurrentStatus { get; set; }
             public string RiderName { get; set; }
             public string IsOrderReceived { get; set; }

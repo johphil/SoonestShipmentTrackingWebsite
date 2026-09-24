@@ -23,7 +23,9 @@
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;">
                     <div>
                         <h2 class="mt-0" style="color:#07233d;margin-bottom:4px;"><asp:Literal ID="litControlNumber" runat="server" /></h2>
-                        <p style="color:#5c7186;margin:0;">To <asp:Literal ID="litRecipientName" runat="server" />, <asp:Literal ID="litDestinationCity" runat="server" /></p>
+                        <p style="color:#5c7186;margin:0;"><strong>Recipient:</strong> <asp:Literal ID="litRecipientName" runat="server" /></p>
+                        <p style="color:#5c7186;margin:6px 0 0;"><strong>Recipient Address:</strong> <asp:Literal ID="litDestinationCity" runat="server" /></p>
+                        <p style="color:#5c7186;margin:6px 0 0;"><strong>Branch Origin:</strong> <asp:Literal ID="litBranchOrigin" runat="server" /></p>
                     </div>
                     <asp:Literal ID="litStatusBadge" runat="server" />
                 </div>

@@ -25,7 +25,8 @@
             <Columns>
                 <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
                 <asp:BoundField DataField="CustomerName" HeaderText="Customer" />
-                <asp:BoundField DataField="DestinationCity" HeaderText="Destination" />
+                <asp:BoundField DataField="BranchOrigin" HeaderText="Branch Origin" />
+                <asp:BoundField DataField="RecipientAddress" HeaderText="Recipient Address" />
                 <asp:BoundField DataField="CurrentStatus" HeaderText="Status" />
                 <asp:BoundField DataField="RiderName" HeaderText="Rider" />
                 <asp:BoundField DataField="IsOrderReceived" HeaderText="Received" />

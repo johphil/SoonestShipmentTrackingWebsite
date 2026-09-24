@@ -27,7 +27,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     shipment.ControlNumber,
                     shipment.Customer.FullName,
                     shipment.RecipientName,
-                    shipment.SenderAddress,
+                    shipment.BranchOrigin,
                     shipment.RecipientAddress);
                 mail.IsBodyHtml = true;
 

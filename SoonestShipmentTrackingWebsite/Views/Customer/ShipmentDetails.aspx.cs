@@ -50,6 +50,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
                 litRecipientAddress1.Text = Server.HtmlEncode(shipment.RecipientAddress);
+                litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litSenderName.Text = Server.HtmlEncode(shipment.SenderName);
                 litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress);
