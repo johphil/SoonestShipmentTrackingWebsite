@@ -114,7 +114,6 @@
     <Content Include="Assets\icons\track.svg" />
     <Content Include="Assets\icons\user.svg" />
     <Content Include="Assets\soonesttruck_400.png" />
-    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Views\About.aspx" />
     <Content Include="Views\Account\Login.aspx" />

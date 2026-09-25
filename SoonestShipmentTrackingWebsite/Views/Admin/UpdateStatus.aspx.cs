@@ -160,7 +160,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 //Send SMS
                 if (newStatus == ShipmentStatus.OutForDelivery)
                 {
-                    await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber);
+                    await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber, shipment.RiderName);
                 }
 
                 string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);

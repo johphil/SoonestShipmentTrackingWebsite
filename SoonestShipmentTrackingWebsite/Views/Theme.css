@@ -1209,7 +1209,7 @@ table.data-grid {
 /* Role picker (Admin/UserRoleEdit.aspx) */
 .role-picker label {
     display: block;
-    margin: 6px 0 16px;
+    margin: 6px 0 8px;
     font-weight: 500;
     color: var(--ink);
     cursor: pointer;
@@ -1222,13 +1222,13 @@ table.data-grid {
 
 .role-list {
     display: flex;
-    gap: 24px;
+    gap: 12px;
 }
 
     .role-list label {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 0px;
         cursor: pointer;
         font-weight: 500;
     }
@@ -1568,3 +1568,209 @@ table.data-grid {
 .notif-viewall:hover { color: var(--navy-800); background: var(--surface-2); }
 
 /* ------------------------------ Utilities ------------------------------ */
+
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.text-center { text-align: center; }
+
+/* --------------------------- Responsive Layout --------------------------- */
+@media (max-width: 1100px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .hero .container,
+    .two-col,
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 26px;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-mini-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .site-header .container {
+        min-height: 70px;
+    }
+
+    .brand .brand-name {
+        font-size: 16px;
+    }
+
+    .brand .brand-sub {
+        letter-spacing: 2px;
+    }
+
+    .nav-toggle {
+        display: flex;
+        order: 2;
+    }
+
+    .navbar .container {
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .nav-links,
+    .nav-actions {
+        display: none;
+        width: 100%;
+    }
+
+    .navbar.nav-open .nav-links,
+    .navbar.nav-open .nav-actions {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 0 2px;
+    }
+
+    .nav-links li,
+    .nav-links li a {
+        width: 100%;
+    }
+
+    .nav-links li a {
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+    }
+
+    .nav-actions {
+        padding: 8px 0 12px;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .nav-actions .welcome-text {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .notif-dropdown {
+        right: auto;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero {
+        min-height: 0;
+        padding: 56px 0 62px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+        line-height: 1.15;
+    }
+
+    .hero-benefits {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section {
+        padding: 48px 0;
+    }
+
+    .app-section {
+        min-height: auto;
+    }
+
+    .card-panel,
+    .auth-card {
+        padding: 18px;
+    }
+
+    .reference-heading,
+    .section-title {
+        font-size: 28px;
+    }
+
+    .page-heading {
+        font-size: 24px;
+    }
+
+    /* Inline layout fixes for legacy page markup */
+    .app-section div[style*="display:grid"][style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .app-section div[style*="display:flex"][style*="justify-content:space-between"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    .app-section div[style*="display:flex"][style*="gap:10px"] {
+        flex-direction: column !important;
+    }
+
+    .app-section div[style*="display:flex"][style*="gap:10px"] > * {
+        width: 100% !important;
+    }
+
+    .btn,
+    input.btn,
+    a.btn {
+        min-height: 42px;
+    }
+
+    /* Make action buttons stack cleanly */
+    .card-panel > .btn,
+    .card-panel > a.btn,
+    .card-panel > input.btn,
+    .card-panel > button.btn,
+    .card-panel > span > .btn,
+    .card-panel > span > a.btn,
+    .card-panel > span > input.btn {
+        width: 100%;
+        margin: 6px 0 0;
+    }
+
+    /* Tables: keep intact with horizontal scroll on small screens */
+    .card-panel {
+        overflow-x: auto;
+    }
+
+    table.data-grid {
+        min-width: 760px;
+    }
+
+    .card-grid,
+    .stat-mini-grid,
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-benefits {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .btn {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+    }
+}

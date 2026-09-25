@@ -18,16 +18,16 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         private static string _apiKey;
         private static string _senderName;
 
-        public static async Task<string> SendDeliveryOnTheWaySMS(string contactNumber, string customerName, string shipmentControlNo)
+        public static async Task<string> SendDeliveryOnTheWaySMS(string contactNumber, string customerName, string shipmentControlNo, string rider)
         {
-            string apiToken =
-                ConfigurationManager.AppSettings["PhilSmsApiToken"];
+            _apiKey = ConfigurationManager.AppSettings["PhilSmsApiToken"];
+            _senderName = ConfigurationManager.AppSettings["PhilSmsSenderID"];
 
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.TryAddWithoutValidation(
                     "Authorization",
-                    "Bearer " + apiToken);
+                    "Bearer " + _apiKey);
 
                 client.DefaultRequestHeaders.TryAddWithoutValidation(
                     "Accept",
@@ -36,9 +36,9 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 var requestData = new
                 {
                     recipient = contactNumber,
-                    sender_id = "PhilSMS",
+                    sender_id = _senderName,
                     type = "plain",
-                    message = $"Hello {customerName}! Your package {shipmentControlNo} is out for delivery today!"
+                    message = $"Hello {customerName}! Your package {shipmentControlNo} is out for delivery today! Your rider is {rider}."
                 };
 
                 string json =

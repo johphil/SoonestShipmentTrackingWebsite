@@ -8,7 +8,6 @@
                 <div class="page-heading" style="margin:0;">All Shipments</div>
                 <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
             </div>
-
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                 EmptyDataText="No shipments yet. Create one to get started.">
                 <Columns>
@@ -31,11 +30,11 @@
                     <asp:TemplateField HeaderText="Rider">
                         <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RiderInfo(Eval("CurrentStatus"), Eval("RiderName")) %></ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="UpdatedDate" HeaderText="Last Update" DataFormatString="{0:MMM d, h:mm tt}" />
-                    <asp:TemplateField HeaderText="">
+                    <asp:TemplateField HeaderText="Last Update">
                         <ItemTemplate>
+                            <%# Eval("UpdatedDate", "{0:MMM d, h:mm tt}") %><br />
                             <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/UpdateStatus.aspx?id=" + Eval("Id") %>'
-                                CssClass="btn btn-outline" Text="Update Status" style="padding:5px 12px;font-size:11.5px;border-color:#07233d;color:#07233d;" />
+                                CssClass="btn btn-outline" Text="Update" style="padding:5px 12px;font-size:11.5px;border-color:#07233d;color:#07233d;" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

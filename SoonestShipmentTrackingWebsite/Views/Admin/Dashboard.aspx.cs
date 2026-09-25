@@ -29,6 +29,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litInTransit.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.InTransit).ToString();
                 litOutForDelivery.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.OutForDelivery).ToString();
                 litDelivered.Text = shipments.Count(s => s.CurrentStatus == ShipmentStatus.Delivered).ToString();
+                litIssues.Text = shipments.Count(s => s.IssueReported && !s.IsIssueResolved).ToString();
                 litCustomers.Text = GetCustomerCount().ToString();
 
                 var recent = shipments
