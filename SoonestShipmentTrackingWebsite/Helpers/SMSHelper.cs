@@ -33,6 +33,16 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     "Accept",
                     "application/json");
 
+                //reformat number
+                if (contactNumber.StartsWith("09"))
+                {
+                    contactNumber = "63" + contactNumber.Substring(1);
+                }
+                else if (contactNumber.StartsWith("9"))
+                {
+                    contactNumber = "63" + contactNumber;
+                }
+
                 var requestData = new
                 {
                     recipient = contactNumber,
