@@ -1,10 +1,12 @@
 ﻿using SoonestShipmentTrackingWebsite.Models;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
+using SoonestShipmentTrackingWebsite.Models;
 
 namespace SoonestShipmentTrackingWebsite.Helpers
 {
@@ -29,6 +31,33 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     shipment.RecipientName,
                     shipment.BranchOrigin,
                     shipment.RecipientAddress);
+                mail.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.EnableSsl = true;
+                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
+                    smtp.Send(mail);
+                }
+            }
+        }
+
+        public static void SendInquiryEmail(string adminEmails, string customerName, string customerEmail, string customerPhone, string subject, string message)
+        {
+            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
+            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
+
+            using (var mail = new MailMessage())
+            {
+                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
+
+                mail.To.Add(adminEmails);
+
+                if (!string.IsNullOrWhiteSpace(customerEmail))
+                    mail.ReplyToList.Add(new MailAddress(customerEmail.Trim(), Safe(customerName)));
+
+                mail.Subject = $"[Customer Inquiry] {subject}";
+                mail.Body = EmailFormatInquiry(customerName, customerEmail, customerPhone, subject, message);
                 mail.IsBodyHtml = true;
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -110,6 +139,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
+
         private static string EmailFormatShipmentCreated(string controlNumber, string customerName, string recipient, string origin, string destination)
         {
             var content = $@"
@@ -130,6 +160,28 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             return BuildEmailTemplate(
                 "Shipment Created",
                 $"Hello {Safe(customerName)}, your shipment has been created. Keep your tracking number for updates.",
+                content);
+        }
+
+        private static string EmailFormatInquiry(string customerName, string customerEmail, string customerPhone, string subject, string message)
+        {
+            var content = $@"
+<div style=""padding:14px 16px;background:#f7fafd;border:1px solid #e4ebf2;border-radius:10px;"">
+    <div style=""font-size:12px;color:#60758a;letter-spacing:.5px;"">NEW CUSTOMER INQUIRY</div>
+    <div style=""font-size:22px;color:#07233d;font-weight:800;margin-top:6px;"">{Encode(subject)}</div>
+</div>
+
+<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""margin-top:16px;border-collapse:collapse;"">
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;"">Customer Name</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-weight:600;font-size:13px;"">{Encode(Safe(customerName))}</td></tr>
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Email</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">{Encode(customerEmail)}</td></tr>
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Phone</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">{Encode(string.IsNullOrWhiteSpace(customerPhone) ? "(not provided)" : customerPhone)}</td></tr>
+</table>
+
+<div style=""margin-top:16px;padding:12px 14px;border-left:4px solid #1e7fd6;background:#f1f7ff;color:#3f566c;font-size:13px;line-height:1.6;border-radius:6px;white-space:pre-line;"">{Encode(message)}</div>";
+
+            return BuildEmailTemplate(
+                "Customer Inquiry",
+                $"A customer submitted a new inquiry through the website contact form.",
                 content);
         }
 

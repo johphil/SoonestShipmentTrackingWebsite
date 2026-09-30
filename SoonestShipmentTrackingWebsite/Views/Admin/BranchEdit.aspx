@@ -33,7 +33,7 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                 <div class="form-group">
                     <label>Contact Number</label>
-                    <asp:TextBox ID="txtContactNumber" runat="server" CssClass="form-control" placeholder="+63 900 000 0000" />
+                    <asp:TextBox ID="txtContactNumber" runat="server" CssClass="form-control" placeholder="0987 654 3210" />
                 </div>
                 <div class="form-group">
                     <label>Email</label>
