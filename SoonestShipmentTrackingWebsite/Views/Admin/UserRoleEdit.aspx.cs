@@ -13,7 +13,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 {
     public partial class UserRoleEdit : System.Web.UI.Page
     {
-        private static readonly string[] AssignableRoles = { "Admin", "Staff", "Customer" };
+        private static readonly string[] AssignableRoles = { "Admin", "Staff", "Rider", "Customer" };
 
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager =>
@@ -76,7 +76,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
         protected void valBranch_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            args.IsValid = rblRole.SelectedValue != "Staff" || int.TryParse(ddlBranch.SelectedValue, out _);
+            var role = rblRole.SelectedValue;
+            args.IsValid = (role != "Staff" && role != "Rider") || int.TryParse(ddlBranch.SelectedValue, out _);
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -100,19 +101,19 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
             var newRole = rblRole.SelectedValue;
             int branchId = 0;
-            if (newRole == "Staff" && !int.TryParse(ddlBranch.SelectedValue, out branchId))
+            if ((newRole == "Staff" || newRole == "Rider") && !int.TryParse(ddlBranch.SelectedValue, out branchId))
             {
-                Session["FlashMessage"] = "A designated branch is required for Staff users.";
+                Session["FlashMessage"] = "A designated branch is required for Staff and Rider users.";
                 return;
             }
-            if (newRole == "Staff")
+            if (newRole == "Staff" || newRole == "Rider")
             {
                 using (var db = new ApplicationDbContext())
                 {
                     if (!db.Branches.Any(b => b.Id == branchId && b.IsActive))
                     {
                         valBranch.IsValid = false;
-                        valBranch.ErrorMessage = "Select an active branch for this Staff user.";
+                        valBranch.ErrorMessage = "Select an active branch for this Staff/Rider user.";
                         return;
                     }
                 }
@@ -130,7 +131,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
             // Remove any existing roles this user has among the assignable
             // set, then add exactly the one selected — keeps a user in
-            // exactly one of Admin/Staff/Customer at a time.
+            // exactly one of Admin/Staff/Rider/Customer at a time.
             var currentRoles = UserManager.GetRoles(user.Id);
             foreach (var role in currentRoles.Where(r => AssignableRoles.Contains(r)))
             {

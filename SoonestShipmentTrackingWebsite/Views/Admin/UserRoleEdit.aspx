@@ -17,6 +17,7 @@
                     <asp:RadioButtonList ID="rblRole" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" class="role-list">
                         <asp:ListItem Text="Admin" Value="Admin" />
                         <asp:ListItem Text="Staff" Value="Staff" />
+                        <asp:ListItem Text="Rider" Value="Rider" />
                         <asp:ListItem Text="Customer" Value="Customer" />
                     </asp:RadioButtonList>
                 </div>
@@ -24,9 +25,9 @@
             </div>
 
             <div class="form-group">
-                <label>Designated Branch <span style="color:#c62828;">*</span> <small>(required for Staff)</small></label>
+                <label>Designated Branch <span style="color:#c62828;">*</span> <small>(required for Staff and Rider)</small></label>
                 <asp:DropDownList ID="ddlBranch" runat="server" CssClass="form-control" />
-                <asp:CustomValidator ID="valBranch" runat="server" Display="Dynamic" CssClass="field-error" ValidationGroup="Role" OnServerValidate="valBranch_ServerValidate" ErrorMessage="Select the branch where this Staff member is designated." />
+                <asp:CustomValidator ID="valBranch" runat="server" Display="Dynamic" CssClass="field-error" ValidationGroup="Role" OnServerValidate="valBranch_ServerValidate" ErrorMessage="Select the branch where this Staff/Rider member is designated." />
             </div>
 
             <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Access Level" OnClick="btnSave_Click" ValidationGroup="Role" />

@@ -5,7 +5,7 @@
     <div class="container">
         <div class="card-panel">
             <div class="page-heading">Manage User Accounts</div>
-            <div class="page-subheading">Assign each registered user an access level: Admin, Staff, or Customer.</div>
+            <div class="page-subheading">Assign each registered user an access level: Admin, Staff, Rider, or Customer.</div>
 
             <asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                 EmptyDataText="No user accounts found.">

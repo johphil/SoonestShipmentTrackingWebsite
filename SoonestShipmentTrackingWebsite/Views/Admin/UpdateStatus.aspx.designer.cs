@@ -168,13 +168,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.TextBox txtLocation;
 
         /// <summary>
-        /// txtRiderName control.
+        /// ddlRider control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtRiderName;
+        protected global::System.Web.UI.WebControls.DropDownList ddlRider;
 
         /// <summary>
         /// txtNotes control.

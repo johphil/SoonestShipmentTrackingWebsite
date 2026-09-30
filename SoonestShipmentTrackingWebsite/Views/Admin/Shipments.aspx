@@ -6,10 +6,12 @@
         <div class="card-panel">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
                 <div class="page-heading" style="margin:0;">All Shipments</div>
-                <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
+                <asp:PlaceHolder ID="pnlCreateShipment" runat="server">
+                    <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
+                </asp:PlaceHolder>
             </div>
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
-                EmptyDataText="No shipments yet. Create one to get started.">
+                EmptyDataText="No shipments yet.">
                 <Columns>
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
                     <asp:TemplateField HeaderText="Customer">

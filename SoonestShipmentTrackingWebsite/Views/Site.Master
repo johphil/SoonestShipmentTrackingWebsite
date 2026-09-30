@@ -27,7 +27,9 @@
                     <li><a runat="server" href="Customer/MyShipments.aspx">My Shipments</a></li>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlStaffNav" runat="server" Visible="false">
-                    <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
+                    <asp:PlaceHolder ID="pnlDashboardNav" runat="server" Visible="false">
+                        <li><a runat="server" href="~/Views/Admin/Dashboard.aspx">Admin Dashboard</a></li>
+                    </asp:PlaceHolder>
                     <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
@@ -48,7 +50,7 @@
                             <div class="notif-list">
                                 <asp:Repeater ID="rptNotifications" runat="server">
                                     <ItemTemplate>
-                                        <a class='notif-item <%# (bool)Eval("IsUnread") ? "unread" : "" %>' href='<%# ResolveUrl("~/Views/Customer/ShipmentDetails.aspx?id=" + Eval("ShipmentId")) %>'>
+                                        <a class='notif-item <%# (bool)Eval("IsUnread") ? "unread" : "" %>' href='<%# ResolveUrl(Eval("NavigateUrl").ToString()) %>'>
                                             <span class="notif-dot"></span>
                                             <span class="notif-body">
                                                 <span class="notif-msg"><%# Eval("Message") %></span>
@@ -59,7 +61,7 @@
                                 </asp:Repeater>
                                 <asp:Label ID="lblNoNotif" runat="server" CssClass="notif-empty" Text="No shipment updates yet." Visible="false" />
                             </div>
-                            <a class="notif-viewall" runat="server" href="~/Views/Customer/MyShipments.aspx">View all shipments</a>
+                            <asp:HyperLink ID="lnkNotifViewAll" runat="server" CssClass="notif-viewall" Text="View all shipments" NavigateUrl="~/Views/Customer/MyShipments.aspx" />
                         </div>
                     </div>
                 </asp:PlaceHolder>

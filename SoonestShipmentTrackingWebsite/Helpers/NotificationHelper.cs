@@ -16,6 +16,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         public string Location { get; set; }
         public DateTime Timestamp { get; set; }
         public bool IsUnread { get; set; }
+        public string NavigateUrl { get; set; }
 
         public string Message
         {
@@ -44,13 +45,14 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
     public static class NotificationHelper
     {
-        private const string SeenSessionKey = "NotifSeenAt";
+        private const string CustomerSeenSessionKey = "NotifSeenAt";
+        private const string RiderSeenSessionKey = "RiderNotifSeenAt";
 
         // Pulls the customer's latest shipment history events (newest first) and
         // flags any newer than the last time the customer opened the bell.
         public static List<ShipmentNotificationItem> GetNotifications(string userId, int take = 15)
         {
-            var seenAt = HttpContext.Current.Session[SeenSessionKey] as DateTime?;
+            var seenAt = HttpContext.Current.Session[CustomerSeenSessionKey] as DateTime?;
 
             using (var db = new ApplicationDbContext())
             {
@@ -75,7 +77,51 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     Status = e.Status,
                     Location = e.Location,
                     Timestamp = e.Timestamp,
-                    IsUnread = !seenAt.HasValue || e.Timestamp > seenAt.Value
+                    IsUnread = !seenAt.HasValue || e.Timestamp > seenAt.Value,
+                    NavigateUrl = "~/Views/Customer/ShipmentDetails.aspx?id=" + e.ShipmentId
+                }).ToList();
+            }
+        }
+
+        public static List<ShipmentNotificationItem> GetRiderOutForDeliveryNotifications(string userId, int take = 15)
+        {
+            var seenAt = HttpContext.Current.Session[RiderSeenSessionKey] as DateTime?;
+
+            using (var db = new ApplicationDbContext())
+            {
+                var rider = db.Users.AsNoTracking().FirstOrDefault(u => u.Id == userId);
+                if (rider == null)
+                    return new List<ShipmentNotificationItem>();
+
+                var riderKeys = new List<string>();
+                if (!string.IsNullOrWhiteSpace(rider.FullName)) riderKeys.Add(rider.FullName.Trim());
+                if (!string.IsNullOrWhiteSpace(rider.Email)) riderKeys.Add(rider.Email.Trim());
+
+                if (!riderKeys.Any())
+                    return new List<ShipmentNotificationItem>();
+
+                var shipments = db.Shipments
+                    .Where(s => s.CurrentStatus == ShipmentStatus.OutForDelivery && riderKeys.Contains(s.RiderName))
+                    .OrderByDescending(s => s.UpdatedDate)
+                    .Take(take)
+                    .Select(s => new
+                    {
+                        s.Id,
+                        s.ControlNumber,
+                        s.RecipientAddress,
+                        s.UpdatedDate
+                    })
+                    .ToList();
+
+                return shipments.Select(s => new ShipmentNotificationItem
+                {
+                    ShipmentId = s.Id,
+                    ControlNumber = s.ControlNumber,
+                    Status = ShipmentStatus.OutForDelivery,
+                    Location = s.RecipientAddress,
+                    Timestamp = s.UpdatedDate,
+                    IsUnread = !seenAt.HasValue || s.UpdatedDate > seenAt.Value,
+                    NavigateUrl = "~/Views/Admin/UpdateStatus.aspx?id=" + s.Id
                 }).ToList();
             }
         }
@@ -88,7 +134,12 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         // Called when the customer opens the bell so the badge count clears.
         public static void MarkAllSeen()
         {
-            HttpContext.Current.Session[SeenSessionKey] = DateTime.Now;
+            HttpContext.Current.Session[CustomerSeenSessionKey] = DateTime.Now;
+        }
+
+        public static void MarkRiderSeen()
+        {
+            HttpContext.Current.Session[RiderSeenSessionKey] = DateTime.Now;
         }
     }
 }

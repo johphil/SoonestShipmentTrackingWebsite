@@ -53,6 +53,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             {
                 case "Admin": return "badge-danger";
                 case "Staff": return "badge-info";
+                case "Rider": return "badge-warning";
                 case "Customer": return "badge-success";
                 default: return "badge-pending";
             }

@@ -21,8 +21,6 @@ namespace SoonestShipmentTrackingWebsite.Models
         public string SenderName { get; set; }
         [Required, StringLength(100)]
         public string BranchOrigin { get; set; }
-        [StringLength(250)]
-        public string SenderAddress { get; set; }
 
         [Required, StringLength(100)]
         public string RecipientName { get; set; }

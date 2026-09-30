@@ -42,7 +42,7 @@
 
             <div class="form-group">
                 <label>Rider Name <small>(required for Out for Delivery)</small></label>
-                <asp:TextBox ID="txtRiderName" runat="server" CssClass="form-control" MaxLength="100" placeholder="Enter the assigned rider's name" />
+                <asp:DropDownList ID="ddlRider" runat="server" CssClass="form-control" />
             </div>
 
             <div class="form-group">
@@ -73,4 +73,22 @@
 
     </div>
 </div>
+<script type="text/javascript">
+    (function () {
+        var ddl = document.getElementById('<%= ddlNewStatus.ClientID %>');
+        var locationGroup = document.getElementById('grpCurrentLocation');
+        var txtLocation = document.getElementById('<%= txtLocation.ClientID %>');
+
+        if (!ddl || !locationGroup) return;
+
+        function toggleLocation() {
+            var show = ddl.value === 'InTransit';
+            locationGroup.style.display = show ? '' : 'none';
+            if (!show && txtLocation) txtLocation.value = '';
+        }
+
+        ddl.addEventListener('change', toggleLocation);
+        toggleLocation();
+    })();
+</script>
 </asp:Content>

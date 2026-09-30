@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using SoonestShipmentTrackingWebsite.App_Start;
 using SoonestShipmentTrackingWebsite.Helpers;
@@ -32,13 +33,12 @@ namespace SoonestShipmentTrackingWebsite.Views
             {
                 litUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
                 pnlCustomerNav.Visible = Context.User.IsInRole("Customer");
-                pnlStaffNav.Visible = Context.User.IsInRole("Staff") || Context.User.IsInRole("Admin");
+                pnlStaffNav.Visible = Context.User.IsInRole("Staff") || Context.User.IsInRole("Rider") || Context.User.IsInRole("Admin");
+                pnlDashboardNav.Visible = Context.User.IsInRole("Staff") || Context.User.IsInRole("Admin");
                 pnlAdminNav.Visible = Context.User.IsInRole("Admin");
 
-                if (Context.User.IsInRole("Customer"))
-                {
+                if (Context.User.IsInRole("Customer") || Context.User.IsInRole("Rider"))
                     LoadNotifications();
-                }
             }
 
             // One-shot flash message set by a previous page via Session
@@ -56,15 +56,20 @@ namespace SoonestShipmentTrackingWebsite.Views
         private void LoadNotifications()
         {
             var userId = Context.User.Identity.GetUserId();
-            var items = NotificationHelper.GetNotifications(userId);
+            var isRider = Context.User.IsInRole("Rider");
+            var items = isRider
+                ? NotificationHelper.GetRiderOutForDeliveryNotifications(userId)
+                : NotificationHelper.GetNotifications(userId);
             int unread = NotificationHelper.UnreadCount(items);
 
             pnlCustomerNotif.Visible = true;
             notifBadge.Visible = unread > 0;
             litNotifCount.Text = unread > 9 ? "9+" : unread.ToString();
+            lnkNotifViewAll.NavigateUrl = isRider ? "~/Views/Admin/Shipments.aspx" : "~/Views/Customer/MyShipments.aspx";
 
             rptNotifications.DataSource = items;
             rptNotifications.DataBind();
+            lblNoNotif.Text = isRider ? "No out-for-delivery shipments assigned to you." : "No shipment updates yet.";
             lblNoNotif.Visible = !items.Any();
         }
 
