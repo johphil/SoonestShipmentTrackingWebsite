@@ -29,7 +29,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
             // The customer opened a shipment (e.g. via a notification), so
             // clear the unread state on the bell.
-            NotificationHelper.MarkAllSeen();
+            NotificationHelper.MarkAllSeen(User.Identity.GetUserId());
 
             using (var _db = new ApplicationDbContext())
             {

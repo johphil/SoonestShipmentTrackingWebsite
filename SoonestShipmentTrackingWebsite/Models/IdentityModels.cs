@@ -23,6 +23,8 @@ namespace SoonestShipmentTrackingWebsite.Models
         public string EmailVerificationCode { get; set; }
         public DateTime? EmailVerificationCodeExpiresAt { get; set; }
 
+        public DateTime? NotificationSeenAt { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);

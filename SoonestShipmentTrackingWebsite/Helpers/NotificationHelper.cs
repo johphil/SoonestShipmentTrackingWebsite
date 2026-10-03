@@ -45,17 +45,17 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
     public static class NotificationHelper
     {
-        private const string CustomerSeenSessionKey = "NotifSeenAt";
-        private const string RiderSeenSessionKey = "RiderNotifSeenAt";
+        //private const string CustomerSeenSessionKey = "NotifSeenAt";
+        //private const string RiderSeenSessionKey = "RiderNotifSeenAt";
 
         // Pulls the customer's latest shipment history events (newest first) and
         // flags any newer than the last time the customer opened the bell.
         public static List<ShipmentNotificationItem> GetNotifications(string userId, int take = 15)
         {
-            var seenAt = HttpContext.Current.Session[CustomerSeenSessionKey] as DateTime?;
-
             using (var db = new ApplicationDbContext())
             {
+                var seenAt = db.Users.First(e => e.Id == userId).NotificationSeenAt;
+
                 var events = db.ShipmentHistories
                     .Where(h => h.Shipment.CustomerId == userId)
                     .OrderByDescending(h => h.Timestamp)
@@ -85,10 +85,10 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
         public static List<ShipmentNotificationItem> GetRiderOutForDeliveryNotifications(string userId, int take = 15)
         {
-            var seenAt = HttpContext.Current.Session[RiderSeenSessionKey] as DateTime?;
-
             using (var db = new ApplicationDbContext())
             {
+                var seenAt = db.Users.First(e => e.Id == userId).NotificationSeenAt;
+
                 var rider = db.Users.AsNoTracking().FirstOrDefault(u => u.Id == userId);
                 if (rider == null)
                     return new List<ShipmentNotificationItem>();
@@ -132,14 +132,17 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         }
 
         // Called when the customer opens the bell so the badge count clears.
-        public static void MarkAllSeen()
+        public static void MarkAllSeen(string userId)
         {
-            HttpContext.Current.Session[CustomerSeenSessionKey] = DateTime.Now;
-        }
-
-        public static void MarkRiderSeen()
-        {
-            HttpContext.Current.Session[RiderSeenSessionKey] = DateTime.Now;
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Users.FirstOrDefault(e => e.Id == userId);
+                if (user != null)
+                {
+                    user.NotificationSeenAt = DateTime.Now;
+                    db.SaveChanges();
+                }
+            }
         }
     }
 }

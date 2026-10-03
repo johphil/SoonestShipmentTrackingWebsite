@@ -21,7 +21,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin", "Staff", "Rider")) return;
 
             if (User.IsInRole("Rider"))
-                NotificationHelper.MarkRiderSeen();
+                NotificationHelper.MarkAllSeen(User.Identity.GetUserId());
 
             if (!IsPostBack)
             {
