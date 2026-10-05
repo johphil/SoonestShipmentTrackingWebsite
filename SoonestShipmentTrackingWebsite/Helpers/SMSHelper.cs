@@ -59,14 +59,20 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     Encoding.UTF8,
                     "application/json"))
                 {
-                    var response = await client.PostAsync(
-                        "https://dashboard.philsms.com/api/v3/sms/send",
-                        content);
+                    try
+                    {
+                        var response = await client.PostAsync(
+                            "https://dashboard.philsms.com/api/v3/sms/send",
+                            content);
 
-                    string responseBody =
-                        await response.Content.ReadAsStringAsync();
+                        string responseBody = await response.Content.ReadAsStringAsync();
 
-                    return $"HTTP {(int)response.StatusCode}: {responseBody}";
+                        return $"HTTP {(int)response.StatusCode}: {responseBody}";
+                    }
+                    catch
+                    {
+                        return $"Error sending SMS";
+                    }
                 }
             }
         }

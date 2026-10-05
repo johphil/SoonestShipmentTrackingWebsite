@@ -37,7 +37,14 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 {
                     smtp.EnableSsl = true;
                     smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
-                    smtp.Send(mail);
+                    try
+                    {
+                        smtp.Send(mail);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
         }
