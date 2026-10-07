@@ -9,6 +9,27 @@
 </head>
 <body>
 <form id="mainForm" runat="server">
+    <asp:PlaceHolder ID="pnlAdminSidebar" runat="server" Visible="false">
+        <aside class="admin-sidebar">
+            <a class="admin-sidebar-brand" href="<%= ResolveUrl("~/Views/Admin/Shipments.aspx") %>">
+                <img class="brand-icon-img" src="<%= ResolveUrl("~/Assets/icons/logo.svg") %>" alt="Soonest Global Express" />
+                <span class="brand-name">Soonest Admin<span class="brand-sub">PANEL</span></span>
+            </a>
+            <nav class="admin-sidebar-nav">
+                <asp:PlaceHolder ID="pnlSidebarDashboard" runat="server" Visible="false">
+                    <a href="<%= ResolveUrl("~/Views/Admin/Dashboard.aspx") %>">Dashboard</a>
+                </asp:PlaceHolder>
+                <a href="<%= ResolveUrl("~/Views/Admin/Shipments.aspx") %>">Manage Shipments</a>
+                <asp:PlaceHolder ID="pnlSidebarAdminOnly" runat="server" Visible="false">
+                    <a href="<%= ResolveUrl("~/Views/Admin/UserAccounts.aspx") %>">Manage Staff</a>
+                    <a href="<%= ResolveUrl("~/Views/Admin/Branches.aspx") %>">Manage Branch</a>
+                    <a href="<%= ResolveUrl("~/Views/Admin/Reports.aspx") %>">Reports</a>
+                </asp:PlaceHolder>
+            </nav>
+            <div class="admin-sidebar-user">Signed in as <asp:Literal ID="litSidebarUserName" runat="server" /></div>
+            <asp:LinkButton ID="btnSidebarLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
+        </aside>
+    </asp:PlaceHolder>
     <header class="site-header">
         <div class="container">
             <a class="brand" runat="server" href="Default.aspx">
@@ -78,7 +99,7 @@
         </div>
     </nav>
     <asp:Panel ID="pnlFlashMessage" runat="server" Visible="false">
-        <div class="container" style="margin-top:18px;"><div class="alert-success"><asp:Literal ID="litFlashMessage" runat="server" /></div></div>
+        <div class="container flash-wrap" style="margin-top:18px;"><div class="alert-success"><asp:Literal ID="litFlashMessage" runat="server" /></div></div>
     </asp:Panel>
     <asp:ContentPlaceHolder ID="MainContent" runat="server" />
     <footer class="site-footer">
@@ -111,7 +132,7 @@
         var path = (location.pathname || '').toLowerCase();
         var current = path.substring(path.lastIndexOf('/') + 1);
         if (current === '' || current === 'default') { current = 'default.aspx'; }
-        var links = document.querySelectorAll('.nav-links a');
+        var links = document.querySelectorAll('.nav-links a, .admin-sidebar-nav a');
         for (var i = 0; i < links.length; i++) {
             var href = (links[i].getAttribute('href') || '').toLowerCase();
             var file = href.substring(href.lastIndexOf('/') + 1);

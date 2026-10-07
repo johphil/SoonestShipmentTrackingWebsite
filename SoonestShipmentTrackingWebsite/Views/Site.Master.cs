@@ -31,13 +31,27 @@ namespace SoonestShipmentTrackingWebsite.Views
 
             if (isAuthenticated)
             {
-                litUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
-                pnlCustomerNav.Visible = Context.User.IsInRole("Customer");
-                pnlStaffNav.Visible = Context.User.IsInRole("Staff") || Context.User.IsInRole("Rider") || Context.User.IsInRole("Admin");
-                pnlDashboardNav.Visible = Context.User.IsInRole("Staff") || Context.User.IsInRole("Admin");
-                pnlAdminNav.Visible = Context.User.IsInRole("Admin");
+                var isAdmin = Context.User.IsInRole("Admin");
+                var isStaff = Context.User.IsInRole("Staff");
+                var isRider = Context.User.IsInRole("Rider");
+                var isCustomer = Context.User.IsInRole("Customer");
+                var isAdminStaffShell = isAdmin || isStaff;
 
-                if (Context.User.IsInRole("Customer") || Context.User.IsInRole("Rider"))
+                litUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
+                pnlCustomerNav.Visible = isCustomer;
+                pnlStaffNav.Visible = isStaff || isRider || isAdmin;
+                pnlDashboardNav.Visible = isStaff || isAdmin;
+                pnlAdminNav.Visible = isAdmin;
+
+                pnlAdminSidebar.Visible = isAdminStaffShell;
+                pnlSidebarDashboard.Visible = isStaff || isAdmin;
+                pnlSidebarAdminOnly.Visible = isAdmin;
+                litSidebarUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
+
+                if (isAdminStaffShell)
+                    mainForm.Attributes["class"] = "admin-shell-mode";
+
+                if (isCustomer || isRider)
                     LoadNotifications();
             }
 

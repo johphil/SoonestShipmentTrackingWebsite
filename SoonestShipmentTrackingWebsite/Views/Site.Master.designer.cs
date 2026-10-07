@@ -33,6 +33,51 @@ namespace SoonestShipmentTrackingWebsite.Views
         protected global::System.Web.UI.HtmlControls.HtmlForm mainForm;
 
         /// <summary>
+        /// pnlAdminSidebar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder pnlAdminSidebar;
+
+        /// <summary>
+        /// pnlSidebarDashboard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder pnlSidebarDashboard;
+
+        /// <summary>
+        /// pnlSidebarAdminOnly control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder pnlSidebarAdminOnly;
+
+        /// <summary>
+        /// litSidebarUserName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSidebarUserName;
+
+        /// <summary>
+        /// btnSidebarLogOff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnSidebarLogOff;
+
+        /// <summary>
         /// pnlCustomerNav control.
         /// </summary>
         /// <remarks>
