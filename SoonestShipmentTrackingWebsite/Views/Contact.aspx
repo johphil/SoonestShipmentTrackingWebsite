@@ -71,7 +71,7 @@
                         </div>
                         <div class="form-group">
                             <label>Phone Number <span style="font-weight:400;color:#64748b;">(optional)</span></label>
-                            <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" placeholder="+63 900 000 0000" />
+                            <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" placeholder="0987 654 3210" />
                         </div>
                         <div class="form-group">
                             <label>Subject</label>
