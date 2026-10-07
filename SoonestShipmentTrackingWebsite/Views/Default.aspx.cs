@@ -12,9 +12,13 @@ namespace SoonestShipmentTrackingWebsite.Views
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (AccessControlHelper.EnsureRole(this, "Admin", "Staff"))
+            if (User.Identity.IsAuthenticated)
             {
-                Response.Redirect("~/Views/Admin/Dashboard.aspx");
+                if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                {
+                    Response.Redirect("~/Views/Admin/Dashboard.aspx");
+                    return;
+                }
             }
         }
 

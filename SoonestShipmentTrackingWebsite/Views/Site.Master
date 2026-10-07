@@ -14,7 +14,7 @@
         <aside class="admin-sidebar">
             <a class="admin-sidebar-brand" href="<%= ResolveUrl("~/Views/Admin/Shipments.aspx") %>">
                 <img class="brand-icon-img" src="<%= ResolveUrl("~/Assets/icons/logo.svg") %>" alt="Soonest Global Express" />
-                <span class="brand-name">Soonest Admin<span class="brand-sub">PANEL</span></span>
+                <span class="brand-name">Soonest Admin</span>
             </a>
             <nav class="admin-sidebar-nav">
                 <asp:PlaceHolder ID="pnlSidebarDashboard" runat="server" Visible="false">
@@ -121,8 +121,8 @@
 </form>
 <script type="text/javascript">
     (function () {
-        var nav = document.getElementById('siteNav');
-        var toggle = document.getElementById('navToggle');
+        const nav = document.getElementById('siteNav');
+        const toggle = document.getElementById('navToggle');
         if (nav && toggle) {
             toggle.addEventListener('click', function () {
                 var open = nav.className.indexOf('nav-open') !== -1;
@@ -142,21 +142,22 @@
             }
         }
 
-        var wrap = document.getElementById('notifWrap');
-        var bell = document.getElementById('notifBell');
+        const wrap = document.getElementById('notifWrap');
+        const bell = document.getElementById('notifBell');
         if (wrap && bell) {
             bell.addEventListener('click', function (e) {
                 e.stopPropagation();
-                var open = wrap.className.indexOf('open') !== -1;
-                wrap.className = open ? wrap.className.replace(/\s*open/g, '') : wrap.className + ' open';
-                bell.setAttribute('aria-expanded', open ? 'false' : 'true');
+                var open = wrap.classList.toggle('open');
+                bell.setAttribute('aria-expanded', open ? 'true' : 'false');
             });
             document.addEventListener('click', function (e) {
-                if (wrap.className.indexOf('open') !== -1 && !wrap.contains(e.target)) {
-                    wrap.className = wrap.className.replace(/\s*open/g, '');
+                if (!(e.target instanceof Node)) { return; }
+                if (wrap.classList.contains('open') && !wrap.contains(e.target)) {
+                    wrap.classList.remove('open');
                     bell.setAttribute('aria-expanded', 'false');
                 }
             });
         }
     })();
 </script>
+
