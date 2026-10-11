@@ -4,7 +4,10 @@
 <div class="section app-section" style="padding-top:44px;">
     <div class="container">
         <div class="card-panel">
-            <div class="page-heading">My Shipments</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div class="page-heading">My Shipments</div>
+                <a runat="server" href="~/Views/Customer/RequestShipment.aspx" class="btn btn-red">+ Request Shipment</a>
+            </div>
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                 EmptyDataText="You don't have any shipments yet. Once our team creates a shipment on your account, it will show up here.">
                 <Columns>
