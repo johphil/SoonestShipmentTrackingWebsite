@@ -24,6 +24,11 @@ namespace SoonestShipmentTrackingWebsite.Models
 
         public DateTime Timestamp { get; set; }
 
+        public byte[] ProofOfDelivery { get; set; }
+
+        [StringLength(100)]
+        public string ProofContentType { get; set; }
+
         public ShipmentHistory()
         {
             Timestamp = DateTime.Now;

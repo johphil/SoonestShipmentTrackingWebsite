@@ -35,16 +35,21 @@
                 <asp:DropDownList ID="ddlNewStatus" runat="server" CssClass="form-control" />
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="grpCurrentLocation">
                 <label>Current Location</label>
                 <asp:TextBox ID="txtLocation" runat="server" CssClass="form-control" placeholder="e.g. Las Piñas Sorting Hub" />
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="grpRider">
                 <label>Rider Name <small>(required for Out for Delivery)</small></label>
                 <asp:DropDownList ID="ddlRider" runat="server" CssClass="form-control" />
             </div>
 
+            <div class="form-group" id="grpProof">
+                <label>Proof of Delivery <small>(photo required for riders when Delivered)</small></label>
+                <asp:FileUpload ID="fileProof" runat="server" CssClass="form-control" accept="image/*" />
+            </div>
+            
             <div class="form-group">
                 <label>Notes</label>
                 <asp:TextBox ID="txtNotes" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2" />
@@ -62,7 +67,7 @@
                     <tr>
                         <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
                         <td><%# Eval("Location") %></td>
-                        <td><%# Eval("Notes") %></td>
+                        <td><%# Eval("Notes") %><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ProofImage(Eval("ProofOfDelivery"), Eval("ProofContentType")) %></td>
                         <td><%# Eval("Timestamp", "{0:MMM d, yyyy h:mm tt}") %></td>
                     </tr>
                 </ItemTemplate>
@@ -78,16 +83,21 @@
         var ddl = document.getElementById('<%= ddlNewStatus.ClientID %>');
         var locationGroup = document.getElementById('grpCurrentLocation');
         var txtLocation = document.getElementById('<%= txtLocation.ClientID %>');
+        var grpProof = document.getElementById('grpProof');
+        var grpRider = document.getElementById('grpRider');
 
-        if (!ddl || !locationGroup) return;
+        function toggleProof() { if (grpProof) grpProof.style.display = ddl.value === 'Delivered' ? '' : 'none'; }
+        ddl.addEventListener('change', toggleProof);
 
-        function toggleLocation() {
-            var show = ddl.value === 'InTransit';
-            locationGroup.style.display = show ? '' : 'none';
-            if (!show && txtLocation) txtLocation.value = '';
-        }
+        function toggleRider() { if (grpRider) grpRider.style.display = ddl.value === 'OutForDelivery' ? '' : 'none'; }
+        ddl.addEventListener('change', toggleRider);
 
+        function toggleLocation() { if (locationGroup) locationGroup.style.display = ddl.value === 'InTransit' ? '' : 'none'; }
         ddl.addEventListener('change', toggleLocation);
+
+
+        toggleProof();
+        toggleRider();
         toggleLocation();
     })();
 </script>

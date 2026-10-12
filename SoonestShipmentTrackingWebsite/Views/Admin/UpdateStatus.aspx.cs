@@ -197,14 +197,32 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             }
         }
 
-        protected async void btnSave_Click(object sender, EventArgs e)
+        protected void btnSave_Click(object sender, EventArgs e)
         {
+            RegisterAsyncTask(new PageAsyncTask(SaveStatusAsync));
+        }
+
+        private async System.Threading.Tasks.Task SaveStatusAsync()
+        {
+            try
+            {
+                await SaveStatusCoreAsync();
+            }
+            catch (Exception ex)
+            {
+                ShowError("Unable to save the status update: " + (ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        private async System.Threading.Tasks.Task SaveStatusCoreAsync()
+        {
+            string redirectTo = null;
             using (var _db = new ApplicationDbContext())
             {
                 var shipment = _db.Shipments.FirstOrDefault(s => s.Id == ShipmentId);
                 if (shipment == null)
                 {
-                    Response.Redirect("~/Views/Admin/Shipments.aspx");
+                    Response.Redirect("~/Views/Admin/Shipments.aspx", false);
                     return;
                 }
 
@@ -233,12 +251,38 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     }
                 }
 
+                byte[] proofBytes = null;
+                string proofType = null;
+                if (newStatus == ShipmentStatus.Delivered)
+                {
+                    if (fileProof.HasFile)
+                    {
+                        proofType = fileProof.PostedFile.ContentType;
+                        if (proofType == null || !proofType.StartsWith("image/"))
+                        {
+                            ShowError("Proof of delivery must be an image file.");
+                            return;
+                        }
+                        if (fileProof.PostedFile.ContentLength > 15 * 1024 * 1024)
+                        {
+                            ShowError("Proof of delivery photo must be 15 MB or smaller.");
+                            return;
+                        }
+                        proofBytes = fileProof.FileBytes;
+                    }
+                    else if (User.IsInRole("Rider"))
+                    {
+                        ShowError("Please take or upload a proof of delivery photo before marking as Delivered.");
+                        return;
+                    }
+                }
+
                 if (newStatus == ShipmentStatus.OutForDelivery && string.IsNullOrWhiteSpace(ddlRider.SelectedValue))
                 {
                     ShowError("Please select a rider when the shipment is marked Out for Delivery.");
                     return;
                 }
-                else
+                else if (!User.IsInRole("Rider"))
                 {
                     shipment.RiderName = string.Empty;
                 }
@@ -262,27 +306,35 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     ShipmentId = shipment.Id,
                     Status = newStatus,
                     Location = txtLocation.Text.Trim(),
-                    Notes = txtNotes.Text.Trim()
+                    Notes = txtNotes.Text.Trim(),
+                    ProofOfDelivery = proofBytes,
+                    ProofContentType = proofType
                 });
                 await _db.SaveChangesAsync();
 
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} updated to {StatusDisplayHelper.Label(newStatus)}.";
                 
-                //Send SMS
-                if (newStatus == ShipmentStatus.OutForDelivery)
+                //Send SMS / email (best effort: failures must not break the save)
+                try
                 {
-                    await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber, shipment.RiderName);
+                    if (newStatus == ShipmentStatus.OutForDelivery)
+                    {
+                        await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber, shipment.RiderName);
+                    }
+
+                    string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
+                    EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
+                }
+                catch (Exception)
+                {
                 }
 
-                string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
-                EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
-
-                Response.Redirect("~/Views/Admin/Shipments.aspx");
+                Response.Redirect("~/Views/Admin/Shipments.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
             }
         }
 
-        private void ShowError(string message)
-        {
+        private void ShowError(string message)        {
             litError.Text = HttpUtility.HtmlEncode(message);
             pnlError.Visible = true;
         }

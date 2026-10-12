@@ -29,9 +29,9 @@ namespace SoonestShipmentTrackingWebsite.Models
         [StringLength(100)]
         public string DestinationCity { get; set; }
 
-        [Phone]
+        [Required, Phone]
         public string RecipientPhone { get; set; }
-        [EmailAddress]
+        [Required, EmailAddress]
         public string RecipientEmail { get; set; }
 
         [StringLength(150)]

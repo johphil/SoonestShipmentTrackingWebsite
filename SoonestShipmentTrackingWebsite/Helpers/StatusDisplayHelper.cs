@@ -23,6 +23,16 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
+        public static string ProofImage(object bytesObj, object contentTypeObj)
+        {
+            var bytes = bytesObj as byte[];
+            if (bytes == null || bytes.Length == 0) return string.Empty;
+            var type = contentTypeObj as string;
+            if (string.IsNullOrWhiteSpace(type) || !type.StartsWith("image/")) type = "image/jpeg";
+            var src = "data:" + type + ";base64," + Convert.ToBase64String(bytes);
+            return "<div style=\"margin-top:6px;\"><strong>Proof of delivery:</strong><br /><a href=\"" + src + "\" target=\"_blank\"><img src=\"" + src + "\" alt=\"Proof of delivery\" style=\"max-width:140px;max-height:140px;border-radius:6px;border:1px solid #dbe6f0;\" /></a></div>";
+        }
+
         public static string Label(ShipmentStatus status)
         {
             switch (status)
