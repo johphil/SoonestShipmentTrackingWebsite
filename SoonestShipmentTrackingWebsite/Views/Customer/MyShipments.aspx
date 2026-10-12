@@ -6,8 +6,11 @@
         <div class="card-panel">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                 <div class="page-heading">My Shipments</div>
-                <a runat="server" href="~/Views/Customer/RequestShipment.aspx" class="btn btn-red">+ Request Shipment</a>
+                <asp:LinkButton ID="btnRequestShipment" runat="server" CssClass="btn btn-red" OnClick="btnRequestShipment_Click" CausesValidation="false">+ Request Shipment</asp:LinkButton>
             </div>
+            <asp:Panel ID="pnlVerifyError" runat="server" Visible="false">
+                <div class="validation-summary">You need to verify your email address first before requesting a shipment. Please check your inbox for the verification email.</div>
+            </asp:Panel>
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                 EmptyDataText="You don't have any shipments yet. Once our team creates a shipment on your account, it will show up here.">
                 <Columns>

@@ -12,8 +12,25 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         {
             if (!Helpers.AccessControlHelper.EnsureRole(this, "Customer")) return;
 
+            if (!IsEmailVerified())
+            {
+                litError.Text = "You need to verify your email address first before requesting a shipment. Please check your inbox for the verification email.";
+                pnlError.Visible = true;
+                btnRequest.Enabled = false;
+                return;
+            }
+
             if (!IsPostBack)
                 BindBranchOrigins();
+        }
+
+        private bool IsEmailVerified()
+        {
+            var userId = User.Identity.GetUserId();
+            using (var _db = new ApplicationDbContext())
+            {
+                return _db.Users.Any(u => u.Id == userId && u.EmailConfirmed);
+            }
         }
 
         private void BindBranchOrigins()
@@ -31,6 +48,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
         protected void btnRequest_Click(object sender, EventArgs e)
         {
+            if (!IsEmailVerified())
+            {
+                litError.Text = "You need to verify your email address first before requesting a shipment.";
+                pnlError.Visible = true;
+                return;
+            }
+
             if (!Page.IsValid) return;
 
             if (!decimal.TryParse(txtWeight.Text, out var weight) || weight <= 0)

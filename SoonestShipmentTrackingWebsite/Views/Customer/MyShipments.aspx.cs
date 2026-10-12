@@ -20,6 +20,25 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 LoadData();
         }
 
+        protected void btnRequestShipment_Click(object sender, EventArgs e)
+        {
+            var userId = User.Identity.GetUserId();
+            bool verified;
+            using (var _db = new ApplicationDbContext())
+            {
+                verified = _db.Users.Any(u => u.Id == userId && u.EmailConfirmed);
+            }
+
+            if (!verified)
+            {
+                pnlVerifyError.Visible = true;
+                LoadData();
+                return;
+            }
+
+            Response.Redirect("~/Views/Customer/RequestShipment.aspx");
+        }
+
         private void LoadData()
         {
             using (var _db = new ApplicationDbContext())
