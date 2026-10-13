@@ -273,8 +273,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                                 return;
                             }
                             proofBytes = fileProof.FileBytes;
-
-                            ShowError("Has File");
                         }
                         else if (User.IsInRole("Rider"))
                         {

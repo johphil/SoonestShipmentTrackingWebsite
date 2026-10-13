@@ -92,7 +92,12 @@
         function toggleRider() { if (grpRider) grpRider.style.display = ddl.value === 'OutForDelivery' ? '' : 'none'; }
         ddl.addEventListener('change', toggleRider);
 
-        function toggleLocation() { if (locationGroup) locationGroup.style.display = ddl.value === 'InTransit' ? '' : 'none'; }
+        function toggleLocation() {
+            if (locationGroup) {
+                locationGroup.style.display =
+                    (ddl.value === 'InTransit' || ddl.value === 'OutForDelivery') ? '' : 'none';
+            }
+        }
         ddl.addEventListener('change', toggleLocation);
 
         toggleProof();
