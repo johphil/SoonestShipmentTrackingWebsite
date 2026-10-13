@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.IO;
+using System.Linq.Expressions;
 
 namespace SoonestShipmentTrackingWebsite.Views.Admin
 {
@@ -255,25 +257,34 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 string proofType = null;
                 if (newStatus == ShipmentStatus.Delivered)
                 {
-                    if (fileProof.HasFile)
+                    try
                     {
-                        proofType = fileProof.PostedFile.ContentType;
-                        if (proofType == null || !proofType.StartsWith("image/"))
+                        if (fileProof.HasFile)
                         {
-                            ShowError("Proof of delivery must be an image file.");
+                            proofType = fileProof.PostedFile.ContentType;
+                            if (proofType == null || !proofType.StartsWith("image/"))
+                            {
+                                ShowError("Proof of delivery must be an image file.");
+                                return;
+                            }
+                            if (fileProof.PostedFile.ContentLength > 5 * 1024 * 1024)
+                            {
+                                ShowError("Proof of delivery photo must be 5 MB or smaller.");
+                                return;
+                            }
+                            proofBytes = fileProof.FileBytes;
+
+                            ShowError("Has File");
+                        }
+                        else if (User.IsInRole("Rider"))
+                        {
+                            ShowError("Please take or upload a proof of delivery photo before marking as Delivered.");
                             return;
                         }
-                        if (fileProof.PostedFile.ContentLength > 15 * 1024 * 1024)
-                        {
-                            ShowError("Proof of delivery photo must be 15 MB or smaller.");
-                            return;
-                        }
-                        proofBytes = fileProof.FileBytes;
                     }
-                    else if (User.IsInRole("Rider"))
+                    catch (Exception e)
                     {
-                        ShowError("Please take or upload a proof of delivery photo before marking as Delivered.");
-                        return;
+                        ShowError(e.Message);
                     }
                 }
 

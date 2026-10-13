@@ -1,7 +1,7 @@
 <%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" Async="true" AutoEventWireup="true" CodeBehind="UpdateStatus.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.UpdateStatus" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Update Status</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section app-section" style="padding-top:44px;">
+    <div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:760px;">
 
         <div class="card-panel" style="margin-bottom:20px;">
@@ -94,7 +94,6 @@
 
         function toggleLocation() { if (locationGroup) locationGroup.style.display = ddl.value === 'InTransit' ? '' : 'none'; }
         ddl.addEventListener('change', toggleLocation);
-
 
         toggleProof();
         toggleRider();
