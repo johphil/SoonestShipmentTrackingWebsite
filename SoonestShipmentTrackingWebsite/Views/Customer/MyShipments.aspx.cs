@@ -39,6 +39,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
             Response.Redirect("~/Views/Customer/RequestShipment.aspx");
         }
 
+        protected void gvShipments_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvShipments.PageIndex = e.NewPageIndex;
+            LoadData();
+        }
+
         private void LoadData()
         {
             using (var _db = new ApplicationDbContext())

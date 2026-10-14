@@ -12,6 +12,7 @@
                 <div class="validation-summary">You need to verify your email address first before requesting a shipment. Please check your inbox for the verification email.</div>
             </asp:Panel>
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
+                            AllowPaging="true" PageSize="10" OnPageIndexChanging="gvShipments_PageIndexChanging" PagerStyle-CssClass="grid-pager"
                 EmptyDataText="You don't have any shipments yet. Once our team creates a shipment on your account, it will show up here.">
                 <Columns>
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />

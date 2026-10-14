@@ -22,6 +22,7 @@
         <div class="card-panel">
             <h4 style="margin-top:0;color:#07233d;">Recent Shipments</h4>
             <asp:GridView ID="gvRecent" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
+                            AllowPaging="true" PageSize="10" OnPageIndexChanging="gvRecent_PageIndexChanging" PagerStyle-CssClass="grid-pager"
                 EmptyDataText="No shipments yet.">
                 <Columns>
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />

@@ -11,6 +11,7 @@
                 </asp:PlaceHolder>
             </div>
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
+                            AllowPaging="true" PageSize="10" OnPageIndexChanging="gvShipments_PageIndexChanging" PagerStyle-CssClass="grid-pager"
                 EmptyDataText="No shipments yet.">
                 <Columns>
                     <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />

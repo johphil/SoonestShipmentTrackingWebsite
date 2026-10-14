@@ -34,7 +34,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 var recent = shipments
                     .OrderByDescending(s => s.UpdatedDate)
-                    .Take(10)
                     .Select(s => new
                     {
                         s.Id,
@@ -54,6 +53,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 gvRecent.DataSource = recent;
                 gvRecent.DataBind();
             }
+        }
+
+        protected void gvRecent_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvRecent.PageIndex = e.NewPageIndex;
+            LoadData();
         }
 
         private int GetCustomerCount()

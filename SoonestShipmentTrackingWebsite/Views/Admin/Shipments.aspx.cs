@@ -23,6 +23,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 LoadData();
         }
 
+        protected void gvShipments_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvShipments.PageIndex = e.NewPageIndex;
+            LoadData();
+        }
+
         private void LoadData()
         {
             using (var _db = new ApplicationDbContext())
