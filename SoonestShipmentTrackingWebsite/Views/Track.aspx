@@ -41,7 +41,7 @@
                     <ItemTemplate>
                         <tr>
                             <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
-                            <td><%# Eval("Location") %></td>
+                            <td><%# Eval("Location") %><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ProofImage(Eval("ProofOfDelivery"), Eval("ProofContentType")) %></td>
                             <td><%# Eval("Timestamp", "{0:MMM d, yyyy h:mm tt}") %></td>
                         </tr>
                     </ItemTemplate>
