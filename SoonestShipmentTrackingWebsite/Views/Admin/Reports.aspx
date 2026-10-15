@@ -32,6 +32,7 @@
                 <asp:BoundField DataField="IsOrderReceived" HeaderText="Received" />
                 <asp:BoundField DataField="IssueReported" HeaderText="Issue" />
                 <asp:BoundField DataField="UpdatedDate" HeaderText="Last update" DataFormatString="{0:MMM d, yyyy h:mm tt}" />
+                <asp:BoundField DataField="ProofHtml" HeaderText="Proof of delivery" HtmlEncode="false" />
             </Columns>
         </asp:GridView>
     </div>
