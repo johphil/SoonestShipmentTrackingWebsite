@@ -19,6 +19,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 case ShipmentStatus.FailedDelivery: return "badge-danger";
                 case ShipmentStatus.Returned: return "badge-dark";
                 case ShipmentStatus.Cancelled: return "badge-danger";
+                case ShipmentStatus.Received: return "badge-success";
                 default: return "badge-pending";
             }
         }
@@ -37,6 +38,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             switch (status)
             {
+                case ShipmentStatus.Received: return "RECEIVED";
                 case ShipmentStatus.InTransit: return "In Transit";
                 case ShipmentStatus.OutForDelivery: return "Out for Delivery";
                 case ShipmentStatus.FailedDelivery: return "Failed Delivery";

@@ -59,9 +59,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 litEta.Text = shipment.EstimatedDeliveryDate.HasValue
                     ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy") : "TBD";
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
-                pnlFeedback.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered;
+                var deliveredOrReceived = shipment.CurrentStatus == ShipmentStatus.Delivered || shipment.CurrentStatus == ShipmentStatus.Received;
+                pnlFeedback.Visible = deliveredOrReceived;
                 btnOrderReceived.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IsOrderReceived;
-                btnReportIssue.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IssueReported;
+                btnReportIssue.Visible = deliveredOrReceived && !shipment.IssueReported;
                 litFeedback.Text = shipment.IsOrderReceived
                     ? "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Order received on " + shipment.OrderReceivedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>"
                     : "";
@@ -101,11 +102,19 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
             {
                 var cId = User.Identity.GetUserId();
                 var shipment = db.Shipments.FirstOrDefault(s => s.Id == id && s.CustomerId == cId);
-                if (shipment == null || shipment.CurrentStatus != ShipmentStatus.Delivered) return;
+                if (shipment == null || (shipment.CurrentStatus != ShipmentStatus.Delivered && shipment.CurrentStatus != ShipmentStatus.Received)) return;
                 if (received && !shipment.IsOrderReceived)
                 {
                     shipment.IsOrderReceived = true;
                     shipment.OrderReceivedDate = DateTime.Now;
+                    shipment.CurrentStatus = ShipmentStatus.Received;
+                    db.ShipmentHistories.Add(new ShipmentHistory
+                    {
+                        ShipmentId = shipment.Id,
+                        Status = ShipmentStatus.Received,
+                        Location = shipment.RecipientAddress,
+                        Notes = "Order received confirmed by customer."
+                    });
                 }
                 if (!received && !shipment.IssueReported)
                 {

@@ -17,6 +17,8 @@ namespace SoonestShipmentTrackingWebsite.Models
         Delivered = 3,
         FailedDelivery = 4,
         Returned = 5,
-        Cancelled = 6
+        Cancelled = 6,
+        PendingApproval = 7,
+        Received = 8
     }
 }

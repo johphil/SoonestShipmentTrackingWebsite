@@ -27,7 +27,7 @@ namespace SoonestShipmentTrackingWebsite.Views
                     return;
                 }
 
-                if (shipment.CurrentStatus != ShipmentStatus.Delivered)
+                if (shipment.CurrentStatus != ShipmentStatus.Delivered && shipment.CurrentStatus != ShipmentStatus.Received)
                 {
                     ShowMessage("This shipment has not been marked as delivered yet.", false);
                     return;
@@ -41,11 +41,12 @@ namespace SoonestShipmentTrackingWebsite.Views
                 {
                     shipment.IsOrderReceived = true;
                     shipment.OrderReceivedDate = DateTime.Now;
+                    shipment.CurrentStatus = ShipmentStatus.Received;
                     shipment.UpdatedDate = DateTime.Now;
                     db.ShipmentHistories.Add(new ShipmentHistory
                     {
                         ShipmentId = shipment.Id,
-                        Status = ShipmentStatus.Delivered,
+                        Status = ShipmentStatus.Received,
                         Location = shipment.RecipientAddress,
                         Notes = "Order received confirmed by recipient."
                     });

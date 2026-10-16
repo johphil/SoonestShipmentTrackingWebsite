@@ -93,7 +93,19 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
                 else
                 {
-                    allowedStatuses = Enum.GetValues(typeof(ShipmentStatus)).Cast<ShipmentStatus>();
+                    allowedStatuses = Enum.GetValues(typeof(ShipmentStatus)).Cast<ShipmentStatus>().Where(s => s != ShipmentStatus.Received);
+                }
+
+                if (shipment.CurrentStatus == ShipmentStatus.Received || shipment.IsOrderReceived)
+                {
+                    allowedStatuses = new[] { shipment.CurrentStatus };
+                    ddlNewStatus.Enabled = false;
+                    ddlRider.Enabled = false;
+                    txtLocation.Enabled = false;
+                    txtNotes.Enabled = false;
+                    fileProof.Enabled = false;
+                    btnSave.Enabled = false;
+                    ShowError("This shipment has been received by the recipient. Its status can no longer be changed.");
                 }
 
                 foreach (var status in allowedStatuses)
@@ -237,6 +249,17 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
 
+                if (shipment.CurrentStatus == ShipmentStatus.Received || shipment.IsOrderReceived)
+                {
+                    ShowError("This shipment has been received by the recipient. Its status can no longer be changed.");
+                    return;
+                }
+
+                if (newStatus == ShipmentStatus.Received)
+                {
+                    ShowError("Staff and admin cannot set the status to RECEIVED. It is set when the recipient confirms receipt.");
+                    return;
+                }
                 if (User.IsInRole("Rider"))
                 {
                     var riderAllowed = new[]
