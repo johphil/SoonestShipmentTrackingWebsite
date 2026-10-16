@@ -135,6 +135,7 @@
     <Content Include="Views\Default.aspx" />
     <Content Include="Views\Forbidden.aspx" />
     <Content Include="Views\NotFound.aspx" />
+    <Content Include="Views\OrderReceived.aspx" />
     <Content Include="Views\Theme.css" />
     <Content Include="Views\Track.aspx" />
     <Content Include="Web.config" />
@@ -298,6 +299,13 @@
     </Compile>
     <Compile Include="Views\NotFound.aspx.designer.cs">
       <DependentUpon>NotFound.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrderReceived.aspx.cs">
+      <DependentUpon>OrderReceived.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\OrderReceived.aspx.designer.cs">
+      <DependentUpon>OrderReceived.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

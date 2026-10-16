@@ -333,6 +333,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                     string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
                     EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
+
+                    if (newStatus == ShipmentStatus.Delivered)
+                    {
+                        var receivedUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/OrderReceived.aspx?controlNumber=" + Uri.EscapeDataString(shipment.ControlNumber) + "&token=" + EmailHelper.GenerateReceiptToken(shipment.ControlNumber));
+                        EmailHelper.SendOrderReceivedEmail(shipment, receivedUrl);
+                    }
                 }
                 catch (Exception)
                 {

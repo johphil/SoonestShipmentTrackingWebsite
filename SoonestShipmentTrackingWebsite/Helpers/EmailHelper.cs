@@ -147,8 +147,73 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         }
 
 
-        private static string EmailFormatShipmentCreated(string controlNumber, string customerName, string recipient, string origin, string destination)
+        public static string GenerateReceiptToken(string controlNumber)
         {
+            var secret = ConfigurationManager.AppSettings["ReceiptTokenSecret"]
+                         ?? ConfigurationManager.AppSettings["EmailSenderPassword"] ?? "soonest";
+            using (var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(secret)))
+            {
+                var hash = h.ComputeHash(System.Text.Encoding.UTF8.GetBytes("receipt:" + controlNumber));
+                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            }
+        }
+
+        public static bool VerifyReceiptToken(string controlNumber, string token)
+        {
+            return !string.IsNullOrEmpty(controlNumber) && !string.IsNullOrEmpty(token)
+                   && string.Equals(GenerateReceiptToken(controlNumber), token, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static void SendOrderReceivedEmail(Shipment shipment, string orderReceivedUrl)
+        {
+            if (string.IsNullOrWhiteSpace(shipment.RecipientEmail)) return;
+
+            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
+            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
+
+            using (var mail = new MailMessage())
+            {
+                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
+                mail.To.Add(shipment.RecipientEmail);
+                mail.Subject = $"Your Shipment Was Delivered - {shipment.ControlNumber}";
+                mail.Body = EmailFormatOrderReceived(shipment.RecipientName, shipment.ControlNumber, shipment.RecipientAddress, shipment.UpdatedDate.ToString("MMM dd, yyyy hh:mm tt"), orderReceivedUrl);
+                mail.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.EnableSsl = true;
+                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
+                    smtp.Send(mail);
+                }
+            }
+        }
+
+        private static string EmailFormatOrderReceived(string recipientName, string controlNumber, string address, string deliveredOn, string url)
+        {
+            var content = $@"
+<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""border:1px solid #e4ebf2;border-radius:10px;overflow:hidden;"">
+    <tr><td style=""padding:14px 16px;background:#f7fafd;font-size:12px;color:#557;letter-spacing:.5px;"">TRACKING NUMBER</td></tr>
+    <tr><td style=""padding:14px 16px;font-size:24px;color:#07233d;font-weight:800;letter-spacing:.6px;"">{Encode(controlNumber)}</td></tr>
+</table>
+
+<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""margin-top:16px;border-collapse:collapse;"">
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;"">Delivered To</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-weight:600;font-size:13px;"">{Encode(address)}</td></tr>
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Delivered On</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">{Encode(deliveredOn)}</td></tr>
+</table>
+
+<div style=""margin-top:16px;padding:12px 14px;background:#e9f7ef;color:#177245;border-radius:8px;font-size:13px;font-weight:600;"">Your shipment has been delivered. Please confirm that you received it.</div>
+
+<div style=""text-align:center;margin-top:22px;"">
+    <a href=""{EncodeUrl(url)}"" style=""display:inline-block;padding:13px 30px;background:#e63946;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:700;font-size:15px;"">Order Received</a>
+</div>";
+
+            return BuildEmailTemplate(
+                "Shipment Delivered",
+                $"Hello {Safe(recipientName)}, your shipment has been delivered. Click the button below once you have received your order.",
+                content);
+        }
+
+        private static string EmailFormatShipmentCreated(string controlNumber, string customerName, string recipient, string origin, string destination)        {
             var content = $@"
 <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""border:1px solid #e4ebf2;border-radius:10px;overflow:hidden;"">
     <tr><td style=""padding:14px 16px;background:#f7fafd;font-size:12px;color:#557;letter-spacing:.5px;"">TRACKING NUMBER</td></tr>
