@@ -26,7 +26,16 @@
 
     <section class="section about-reference">
         <div class="container two-col">
-            <div class="about-photo"><img src="../Assets/soonesttruck_400.png" alt="Warehouse logistics operations" /></div>
+            <div class="about-photo about-carousel" id="defaultAboutCarousel">
+                <img class="about-carousel-slide" src="../Assets/about-1.png" alt="Warehouse package handling" />
+                <img class="about-carousel-slide" src="../Assets/about-2.png" alt="Courier carrying parcel for delivery" />
+                <img class="about-carousel-slide" src="../Assets/about-3.png" alt="Logistics dispatch center operations" />
+                <div class="about-carousel-dots" aria-hidden="true">
+                    <span class="about-carousel-dot is-active"></span>
+                    <span class="about-carousel-dot"></span>
+                    <span class="about-carousel-dot"></span>
+                </div>
+            </div>
             <div>
                 <div class="reference-kicker">ABOUT US</div>
                 <h2 class="reference-heading">Moving Packages.<br /><span>Connecting People.</span></h2>
@@ -64,4 +73,29 @@
         <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red btn-sm">Get Started <img class="btn-arrow" src="../Assets/icons/arrow-right.svg" alt="" /></a>
         <a runat="server" href="~/Views/Track.aspx" class="btn btn-navy btn-sm">Track a Shipment</a>
     </div></section>
+
+<script type="text/javascript">
+    (function () {
+        var carousel = document.getElementById('defaultAboutCarousel');
+        if (!carousel) return;
+
+        var slides = carousel.querySelectorAll('.about-carousel-slide');
+        var dots = carousel.querySelectorAll('.about-carousel-dot');
+        if (!slides.length) return;
+
+        var index = 0;
+        function showSlide(nextIndex) {
+            for (var i = 0; i < slides.length; i++) {
+                var active = i === nextIndex;
+                slides[i].classList.toggle('is-active', active);
+                if (dots[i]) dots[i].classList.toggle('is-active', active);
+            }
+            index = nextIndex;
+        }
+
+        setInterval(function () {
+            showSlide((index + 1) % slides.length);
+        }, 3000);
+    })();
+</script>
 </asp:Content>

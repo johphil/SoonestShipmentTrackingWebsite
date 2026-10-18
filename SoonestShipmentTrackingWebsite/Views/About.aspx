@@ -13,7 +13,16 @@
 
     <section class="section">
         <div class="container two-col">
-            <div class="about-photo"><img src="../Assets/soonesttruck_400.png" alt="Warehouse logistics operations" /></div>
+            <div class="about-photo about-carousel" id="aboutCarousel">
+                <img class="about-carousel-slide" src="../Assets/about-1.png" alt="Warehouse package handling" />
+                <img class="about-carousel-slide" src="../Assets/about-2.png" alt="Courier carrying parcel for delivery" />
+                <img class="about-carousel-slide" src="../Assets/about-3.png" alt="Logistics dispatch center operations" />
+                <div class="about-carousel-dots" aria-hidden="true">
+                    <span class="about-carousel-dot is-active"></span>
+                    <span class="about-carousel-dot"></span>
+                    <span class="about-carousel-dot"></span>
+                </div>
+            </div>
             <div>
                 <div class="kicker"><span class="kicker-bar"></span>OUR STORY</div>
                 <h2 class="section-heading">Built on trust, <span>delivered on time.</span></h2>
@@ -52,7 +61,7 @@
                     <h4>25 Years of Trust</h4><p>A quarter century of experience keeping shipments safe from pickup to doorstep.</p>
                 </div>
                 <div class="speed-card">
-                    <div class="icon-round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18" /></svg></div>
+                    <div class="icon-round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18" /></svg></div>
                     <h4>30 Branches Nationwide</h4><p>A branch network across the Philippines means your shipment is never far from home.</p>
                 </div>
                 <div class="speed-card">
@@ -82,5 +91,30 @@
             <a runat="server" href="~/Views/Contact.aspx" class="btn btn-outline">Contact Us</a>
         </div>
     </div></section>
+
+<script type="text/javascript">
+    (function () {
+        var carousel = document.getElementById('aboutCarousel');
+        if (!carousel) return;
+
+        var slides = carousel.querySelectorAll('.about-carousel-slide');
+        var dots = carousel.querySelectorAll('.about-carousel-dot');
+        if (!slides.length) return;
+
+        var index = 0;
+        function showSlide(nextIndex) {
+            for (var i = 0; i < slides.length; i++) {
+                var active = i === nextIndex;
+                slides[i].classList.toggle('is-active', active);
+                if (dots[i]) dots[i].classList.toggle('is-active', active);
+            }
+            index = nextIndex;
+        }
+
+        setInterval(function () {
+            showSlide((index + 1) % slides.length);
+        }, 3000);
+    })();
+</script>
 
 </asp:Content>

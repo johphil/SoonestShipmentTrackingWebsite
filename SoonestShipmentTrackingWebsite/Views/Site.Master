@@ -28,7 +28,7 @@
                 </asp:PlaceHolder>
             </nav>
             <div class="admin-sidebar-user">Signed in as <asp:Literal ID="litSidebarUserName" runat="server" /></div>
-            <asp:LinkButton ID="btnSidebarLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
+            <asp:LinkButton ID="btnSidebarLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
         </aside>
     </asp:PlaceHolder>
     <header class="site-header">
@@ -89,7 +89,7 @@
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlLoggedIn" runat="server" Visible="false">
                     <span class="welcome-text">Signed in as <asp:Literal ID="litUserName" runat="server" /></span>
-                    <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Log off</asp:LinkButton>
+                    <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlLoggedOut" runat="server">
                     <a runat="server" href="~/Views/Account/Login.aspx" class="btn btn-outline"><img class="btn-icon" src="<%= ResolveUrl("~/Assets/icons/user.svg") %>" alt="" />Login</a>

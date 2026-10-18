@@ -15,11 +15,10 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 {
     public static class SMSHelper
     {
-        private static string _apiKey;
-        private static string _senderName;
-
         public static async Task<string> SendDeliveryOnTheWaySMS(string contactNumber, string customerName, string shipmentControlNo, string rider)
         {
+            string _apiKey, _senderName = "";
+
             _apiKey = ConfigurationManager.AppSettings["PhilSmsApiToken"];
             _senderName = ConfigurationManager.AppSettings["PhilSmsSenderID"];
 

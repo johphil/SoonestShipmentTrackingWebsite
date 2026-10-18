@@ -12,112 +12,55 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 {
     public static class EmailHelper
     {
-        private static string _emailSenderUsername;
-        private static string _emailSenderPassword;
+        private const string SenderAddress = "noreply@yourdomain.com";
+        private const string SenderName = "Soonest Global Express";
+        private const string SmtpHost = "smtp.gmail.com";
+        private const int SmtpPort = 587;
 
         public static void SendShipmentCreatedEmail(Shipment shipment)
         {
-            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
-            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
-
-            using (var mail = new MailMessage())
+            using (var mail = CreateMailMessage($"Shipment Created - {shipment.ControlNumber}", EmailFormatShipmentCreated(
+                shipment.ControlNumber,
+                shipment.Customer.FullName,
+                shipment.RecipientName,
+                shipment.BranchOrigin,
+                shipment.RecipientAddress)))
             {
-                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
                 mail.To.Add(shipment.Customer.Email);
-                mail.Subject = $"Shipment Created - {shipment.ControlNumber}";
-                mail.Body = EmailFormatShipmentCreated(
-                    shipment.ControlNumber,
-                    shipment.Customer.FullName,
-                    shipment.RecipientName,
-                    shipment.BranchOrigin,
-                    shipment.RecipientAddress);
-                mail.IsBodyHtml = true;
-
-                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
-                    try
-                    {
-                        smtp.Send(mail);
-                    }
-                    catch
-                    {
-
-                    }
-                }
+                SendMail(mail, swallowErrors: true);
             }
         }
 
         public static void SendInquiryEmail(string adminEmails, string customerName, string customerEmail, string customerPhone, string subject, string message)
         {
-            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
-            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
-
-            using (var mail = new MailMessage())
+            using (var mail = CreateMailMessage($"[Customer Inquiry] {subject}", EmailFormatInquiry(customerName, customerEmail, customerPhone, subject, message)))
             {
-                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
-
                 mail.To.Add(adminEmails);
 
                 if (!string.IsNullOrWhiteSpace(customerEmail))
                     mail.ReplyToList.Add(new MailAddress(customerEmail.Trim(), Safe(customerName)));
 
-                mail.Subject = $"[Customer Inquiry] {subject}";
-                mail.Body = EmailFormatInquiry(customerName, customerEmail, customerPhone, subject, message);
-                mail.IsBodyHtml = true;
-
-                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
-                    smtp.Send(mail);
-                }
+                SendMail(mail);
             }
         }
 
         public static void SendEmailVerification(string emailRecipient, string customerName, string verificationCode, DateTime? expirationDateTime, string redirectUrl)
         {
-            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
-            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
-
-            using (var mail = new MailMessage())
+            using (var mail = CreateMailMessage(
+                "Email Verification Required",
+                EmailFormatAccountEmailVerification(customerName, verificationCode, expirationDateTime?.ToString("MMM dd, yyyy HH:mm tt") ?? "Soon", redirectUrl)))
             {
-                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
                 mail.To.Add(emailRecipient);
-                mail.Subject = "Email Verification Required";
-                mail.Body = EmailFormatAccountEmailVerification(
-                    customerName,
-                    verificationCode,
-                    expirationDateTime?.ToString("MMM dd, yyyy HH:mm tt") ?? "Soon",
-                    redirectUrl);
-                mail.IsBodyHtml = true;
-
-                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
-                    smtp.Send(mail);
-                }
+                SendMail(mail);
             }
         }
 
         public static void SendShipmentUpdateEmail(Shipment shipment, string shipmentTrackUrl)
         {
-            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
-            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
-
-            using (var mail = new MailMessage())
+            using (var mail = CreateMailMessage($"Shipment Status Update - {StatusDisplayHelper.Label(shipment.CurrentStatus)}", string.Empty))
             {
-                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
-
-                if (!string.IsNullOrWhiteSpace(shipment.RecipientEmail))
-                    mail.To.Add(shipment.RecipientEmail);
-
-                if (!string.IsNullOrWhiteSpace(shipment.Customer?.Email))
-                    mail.To.Add(shipment.Customer.Email);
-
-                mail.Subject = $"Shipment Status Update - {StatusDisplayHelper.Label(shipment.CurrentStatus)}";
+                AddRecipientIfNotEmpty(mail, shipment.RecipientEmail);
+                AddRecipientIfNotEmpty(mail, shipment.Customer?.Email);
 
                 var lastHistory = shipment.History
                     .OrderByDescending(e => e.Timestamp)
@@ -135,17 +78,9 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     lastHistory?.Notes,
                     shipment.RiderName);
 
-                mail.IsBodyHtml = true;
-
-                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
-                    smtp.Send(mail);
-                }
+                SendMail(mail);
             }
         }
-
 
         public static string GenerateReceiptToken(string controlNumber)
         {
@@ -168,24 +103,68 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             if (string.IsNullOrWhiteSpace(shipment.RecipientEmail)) return;
 
-            _emailSenderUsername = ConfigurationManager.AppSettings["EmailSenderUsername"];
-            _emailSenderPassword = ConfigurationManager.AppSettings["EmailSenderPassword"];
-
-            using (var mail = new MailMessage())
+            using (var mail = CreateMailMessage(
+                $"Your Shipment Was Delivered - {shipment.ControlNumber}",
+                EmailFormatOrderReceived(
+                    shipment.RecipientName,
+                    shipment.ControlNumber,
+                    shipment.RecipientAddress,
+                    shipment.UpdatedDate.ToString("MMM dd, yyyy hh:mm tt"),
+                    orderReceivedUrl)))
             {
-                mail.From = new MailAddress("noreply@yourdomain.com", "Soonest Global Express");
                 mail.To.Add(shipment.RecipientEmail);
-                mail.Subject = $"Your Shipment Was Delivered - {shipment.ControlNumber}";
-                mail.Body = EmailFormatOrderReceived(shipment.RecipientName, shipment.ControlNumber, shipment.RecipientAddress, shipment.UpdatedDate.ToString("MMM dd, yyyy hh:mm tt"), orderReceivedUrl);
-                mail.IsBodyHtml = true;
-
-                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential(_emailSenderUsername, _emailSenderPassword);
-                    smtp.Send(mail);
-                }
+                SendMail(mail);
             }
+        }
+
+        private static MailMessage CreateMailMessage(string subject, string body)
+        {
+            return new MailMessage
+            {
+                From = new MailAddress(SenderAddress, SenderName),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+        }
+
+        private static void AddRecipientIfNotEmpty(MailMessage mail, string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return;
+
+            var normalized = email.Trim();
+            if (mail.To.All(t => !string.Equals(t.Address, normalized, StringComparison.OrdinalIgnoreCase)))
+                mail.To.Add(normalized);
+        }
+
+        private static void SendMail(MailMessage mail, bool swallowErrors = false)
+        {
+            using (var smtp = new SmtpClient(SmtpHost, SmtpPort))
+            {
+                smtp.EnableSsl = true;
+                smtp.Credentials = GetEmailCredentials();
+
+                if (swallowErrors)
+                {
+                    try
+                    {
+                        smtp.Send(mail);
+                    }
+                    catch
+                    {
+                    }
+                    return;
+                }
+
+                smtp.Send(mail);
+            }
+        }
+
+        private static NetworkCredential GetEmailCredentials()
+        {
+            var username = ConfigurationManager.AppSettings["EmailSenderUsername"];
+            var password = ConfigurationManager.AppSettings["EmailSenderPassword"];
+            return new NetworkCredential(username, password);
         }
 
         private static string EmailFormatOrderReceived(string recipientName, string controlNumber, string address, string deliveredOn, string url)
@@ -213,7 +192,8 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 content);
         }
 
-        private static string EmailFormatShipmentCreated(string controlNumber, string customerName, string recipient, string origin, string destination)        {
+        private static string EmailFormatShipmentCreated(string controlNumber, string customerName, string recipient, string origin, string destination)
+        {
             var content = $@"
 <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""border:1px solid #e4ebf2;border-radius:10px;overflow:hidden;"">
     <tr><td style=""padding:14px 16px;background:#f7fafd;font-size:12px;color:#557;letter-spacing:.5px;"">TRACKING NUMBER</td></tr>
