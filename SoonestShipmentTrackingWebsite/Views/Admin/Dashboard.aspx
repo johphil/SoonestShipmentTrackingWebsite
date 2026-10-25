@@ -5,12 +5,12 @@
     <div class="container">
 
         <div class="stat-mini-grid">
-            <div class="stat-mini"><div class="num"><asp:Literal ID="litTotal" runat="server" /></div><div class="lbl">Total Shipments</div></div>
-            <div class="stat-mini"><div class="num"><asp:Literal ID="litPending" runat="server" /></div><div class="lbl">Pending</div></div>
-            <div class="stat-mini"><div class="num"><asp:Literal ID="litInTransit" runat="server" /></div><div class="lbl">In Transit</div></div>
-            <div class="stat-mini"><div class="num"><asp:Literal ID="litOutForDelivery" runat="server" /></div><div class="lbl">Out for Delivery</div></div>
-            <div class="stat-mini"><div class="num"><asp:Literal ID="litDelivered" runat="server" /></div><div class="lbl">Delivered</div></div>
-            <div class="stat-mini"><div class="num"><asp:Literal ID="litIssues" runat="server" /></div><div class="lbl">Open Issues</div></div>
+            <a class="stat-mini" runat="server" href="~/Views/Admin/Shipments.aspx"><div class="num"><asp:Literal ID="litTotal" runat="server" /></div><div class="lbl">Total Shipments</div></a>
+            <a class="stat-mini" runat="server" href="~/Views/Admin/Shipments.aspx?status=Pending"><div class="num"><asp:Literal ID="litPending" runat="server" /></div><div class="lbl">Pending</div></a>
+            <a class="stat-mini" runat="server" href="~/Views/Admin/Shipments.aspx?status=InTransit"><div class="num"><asp:Literal ID="litInTransit" runat="server" /></div><div class="lbl">In Transit</div></a>
+            <a class="stat-mini" runat="server" href="~/Views/Admin/Shipments.aspx?status=OutForDelivery"><div class="num"><asp:Literal ID="litOutForDelivery" runat="server" /></div><div class="lbl">Out for Delivery</div></a>
+            <a class="stat-mini" runat="server" href="~/Views/Admin/Shipments.aspx?status=Delivered"><div class="num"><asp:Literal ID="litDelivered" runat="server" /></div><div class="lbl">Delivered</div></a>
+            <a class="stat-mini" runat="server" href="~/Views/Admin/Shipments.aspx?issues=1"><div class="num"><asp:Literal ID="litIssues" runat="server" /></div><div class="lbl">Open Issues</div></a>
             <div class="stat-mini"><div class="num"><asp:Literal ID="litCustomers" runat="server" /></div><div class="lbl">Customers</div></div>
         </div>
 

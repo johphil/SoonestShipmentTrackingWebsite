@@ -20,7 +20,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             pnlCreateShipment.Visible = !User.IsInRole("Rider") && !User.IsInRole("Customer");
 
             if (!IsPostBack)
+            {
+                ShowFilterNotice();
                 LoadData();
+            }
         }
 
         protected void gvShipments_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -29,11 +32,39 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             LoadData();
         }
 
+        private void ShowFilterNotice()
+        {
+            var statusFilter = Request.QueryString["status"];
+            var issuesFilter = string.Equals(Request.QueryString["issues"], "1", StringComparison.OrdinalIgnoreCase);
+
+            if (issuesFilter)
+            {
+                litFilterLabel.Text = "Shipments with open issues";
+                pnlFilterNotice.Visible = true;
+            }
+            else if (!string.IsNullOrWhiteSpace(statusFilter) && Enum.TryParse(statusFilter, out ShipmentStatus parsedStatus))
+            {
+                litFilterLabel.Text = Server.HtmlEncode(Helpers.StatusDisplayHelper.Label(parsedStatus));
+                pnlFilterNotice.Visible = true;
+            }
+        }
+
         private void LoadData()
         {
             using (var _db = new ApplicationDbContext())
             {
                 var query = _db.Shipments.AsNoTracking().AsQueryable();
+
+                var statusFilter = Request.QueryString["status"];
+                if (!string.IsNullOrWhiteSpace(statusFilter) && Enum.TryParse(statusFilter, out ShipmentStatus parsedStatus))
+                {
+                    query = query.Where(s => s.CurrentStatus == parsedStatus);
+                }
+
+                if (string.Equals(Request.QueryString["issues"], "1", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = query.Where(s => s.IssueReported && !s.IsIssueResolved);
+                }
 
                 if (User.IsInRole("Rider"))
                 {

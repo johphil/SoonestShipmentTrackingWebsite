@@ -10,6 +10,10 @@
                     <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
                 </asp:PlaceHolder>
             </div>
+            <asp:Panel ID="pnlFilterNotice" runat="server" Visible="false" style="margin-bottom:14px;padding:10px 14px;background:#eef4fa;border-radius:8px;color:#07233d;font-size:13px;">
+                Showing: <asp:Literal ID="litFilterLabel" runat="server" />
+                <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline btn-sm" style="margin-left:10px;border-color:#07233d;color:#07233d;">Clear filter</a>
+            </asp:Panel>
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
                             AllowPaging="true" PageSize="10" OnPageIndexChanging="gvShipments_PageIndexChanging" PagerStyle-CssClass="grid-pager"
                 EmptyDataText="No shipments yet.">

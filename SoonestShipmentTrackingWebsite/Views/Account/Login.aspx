@@ -5,7 +5,7 @@
     <div class="container" style="max-width:480px;">
         <div class="auth-card">
             <div class="page-heading">Log In</div>
-            <div class="page-subheading">Access your customer account or the admin panel.</div>
+            <div class="page-subheading">Access your account.</div>
 
             <asp:Panel ID="pnlError" runat="server" Visible="false">
                 <div class="validation-summary"><asp:Literal ID="litError" runat="server" /></div>

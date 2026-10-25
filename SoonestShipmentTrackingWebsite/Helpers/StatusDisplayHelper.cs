@@ -62,7 +62,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             else if (!Enum.TryParse(Convert.ToString(statusValue), out status))
                 return "-";
 
-            if (status != ShipmentStatus.OutForDelivery && status != ShipmentStatus.Delivered && status != ShipmentStatus.Returned && status != ShipmentStatus.FailedDelivery)
+            if (status != ShipmentStatus.OutForDelivery && status != ShipmentStatus.Delivered && status != ShipmentStatus.Returned && status != ShipmentStatus.FailedDelivery && status != ShipmentStatus.Received)
                 return "-";
 
             var riderName = Convert.ToString(riderNameValue);

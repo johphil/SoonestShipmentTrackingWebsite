@@ -24,6 +24,24 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.PlaceHolder pnlCreateShipment;
 
         /// <summary>
+        /// pnlFilterNotice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterNotice;
+
+        /// <summary>
+        /// litFilterLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litFilterLabel;
+
+        /// <summary>
         /// gvShipments control.
         /// </summary>
         /// <remarks>
