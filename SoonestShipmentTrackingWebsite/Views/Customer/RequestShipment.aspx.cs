@@ -1,4 +1,5 @@
 using Microsoft.AspNet.Identity;
+using SoonestShipmentTrackingWebsite.Helpers;
 using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Linq;
@@ -101,6 +102,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     Notes = "Shipment requested by customer; awaiting staff approval."
                 });
                 _db.SaveChanges();
+
+                string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
+                EmailHelper.SendShipmentCreatedEmail(shipment);
 
                 Session["FlashMessage"] = $"Shipment request {shipment.ControlNumber} submitted and is awaiting staff approval.";
             }

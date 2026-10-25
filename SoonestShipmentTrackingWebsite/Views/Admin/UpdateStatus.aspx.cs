@@ -233,7 +233,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             string redirectTo = null;
             using (var _db = new ApplicationDbContext())
             {
-                var shipment = _db.Shipments.FirstOrDefault(s => s.Id == ShipmentId);
+                var shipment = _db.Shipments
+                    .Include(s => s.Customer)
+                    .Include(s => s.History)
+                    .FirstOrDefault(s => s.Id == ShipmentId);
                 if (shipment == null)
                 {
                     Response.Redirect("~/Views/Admin/Shipments.aspx", false);
@@ -329,6 +332,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 //    return;
                 //}
 
+                var previousStatus = shipment.CurrentStatus;
                 shipment.CurrentStatus = newStatus;
                 shipment.UpdatedDate = DateTime.Now;
                 await _db.SaveChangesAsync();
@@ -337,7 +341,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     ShipmentId = shipment.Id,
                     Status = newStatus,
-                    Location = txtLocation.Text.Trim(),
+                    Location = newStatus == ShipmentStatus.Delivered ? shipment.RecipientAddress : txtLocation.Text.Trim(),
                     Notes = txtNotes.Text.Trim(),
                     ProofOfDelivery = proofBytes,
                     ProofContentType = proofType

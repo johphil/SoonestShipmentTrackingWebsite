@@ -1,56 +1,75 @@
 <%@ Page Language="C#" MasterPageFile="Site.Master" AutoEventWireup="true" CodeBehind="Track.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Track" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Track Shipment</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section app-section" style="padding-top:44px;">
-    <div class="container">
+    <div class="section app-section" style="padding-top: 44px;">
+        <div class="container">
 
-        <div class="card-panel" style="margin-bottom:20px;">
-            <div class="page-heading">Track Your Shipment</div>
-            <div class="page-subheading">Enter your Control No. to see the current status and full history.</div>
+            <div class="card-panel" style="margin-bottom: 20px;">
+                <div class="page-heading">Track Your Shipment</div>
+                <div class="page-subheading">Enter your Control No. to see the current status and full history.</div>
 
-            <div style="display:flex;gap:10px;">
-                <asp:TextBox ID="txtControlNumber" runat="server" CssClass="form-control" placeholder="Enter Control No." />
-                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-red" Text="Track" OnClick="btnSearch_Click" style="white-space:nowrap;" />
-            </div>
-
-            <asp:Panel ID="pnlNotFound" runat="server" Visible="false">
-                <div class="alert-warning" style="margin-top:16px;">No shipment found for that Control No. Please check the number and try again.</div>
-            </asp:Panel>
-        </div>
-
-        <asp:Panel ID="pnlResult" runat="server" Visible="false">
-            <div class="card-panel" style="margin-bottom:20px;">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-                    <div>
-                        <h2 class="mt-0" style="color:#07233d;margin-bottom:4px;"><asp:Literal ID="litControlNumber" runat="server" /></h2>
-                        <p style="color:#5c7186;margin:0;"><strong>Recipient:</strong> <asp:Literal ID="litRecipientName" runat="server" /></p>
-                        <p style="color:#5c7186;margin:6px 0 0;"><strong>Recipient Address:</strong> <asp:Literal ID="litDestinationCity" runat="server" /></p>
-                        <p style="color:#5c7186;margin:6px 0 0;"><strong>Branch Origin:</strong> <asp:Literal ID="litBranchOrigin" runat="server" /></p>
-                    </div>
-                    <asp:Literal ID="litStatusBadge" runat="server" />
+                <div style="display: flex; gap: 10px;">
+                    <asp:TextBox ID="txtControlNumber" runat="server" CssClass="form-control" placeholder="Enter Control No." />
+                    <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-red" Text="Track" OnClick="btnSearch_Click" Style="white-space: nowrap;" />
                 </div>
-                <hr style="border:none;border-top:1px solid #dbe6f0;margin:16px 0;" />
-                <p class="mb-0"><strong>Estimated Delivery:</strong> <asp:Literal ID="litEta" runat="server" /></p>
-                <p style="margin-top:8px;"><strong>Rider:</strong> <asp:Literal ID="litRiderInfo" runat="server" /></p>
+
+                <asp:Panel ID="pnlNotFound" runat="server" Visible="false">
+                    <div class="alert-warning" style="margin-top: 16px;">No shipment found for that Control No. Please check the number and try again.</div>
+                </asp:Panel>
             </div>
 
-            <div class="card-panel">
-                <h4 style="color:#07233d;margin-top:0;">Shipment History</h4>
-                <asp:Repeater ID="rptHistory" runat="server">
-                    <HeaderTemplate><table class="data-grid"><thead><tr><th>Status</th><th>Location</th><th>Date</th></tr></thead><tbody></HeaderTemplate>
-                    <ItemTemplate>
-                        <tr>
-                            <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
-                            <td><%# Eval("Location") %><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ProofImage(Eval("ProofOfDelivery"), Eval("ProofContentType")) %></td>
-                            <td><%# Eval("Timestamp", "{0:MMM d, yyyy h:mm tt}") %></td>
-                        </tr>
-                    </ItemTemplate>
-                    <FooterTemplate></tbody></table></FooterTemplate>
-                </asp:Repeater>
-                <asp:Label ID="lblNoHistory" runat="server" Text="No tracking events recorded yet." Visible="false" style="color:#5c7186;" />
-            </div>
-        </asp:Panel>
+            <asp:Panel ID="pnlResult" runat="server" Visible="false">
+                <div class="card-panel" style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h2 class="mt-0" style="color: #07233d; margin-bottom: 4px;">
+                                <asp:Literal ID="litControlNumber" runat="server" /></h2>
+                            <p style="color: #5c7186; margin: 0;"><strong>Recipient:</strong>
+                                <asp:Literal ID="litRecipientName" runat="server" /></p>
+                            <p style="color: #5c7186; margin: 6px 0 0;"><strong>Recipient Address:</strong>
+                                <asp:Literal ID="litDestinationCity" runat="server" /></p>
+                            <p style="color: #5c7186; margin: 6px 0 0;"><strong>Branch Origin:</strong>
+                                <asp:Literal ID="litBranchOrigin" runat="server" /></p>
+                        </div>
+                        <asp:Literal ID="litStatusBadge" runat="server" />
+                    </div>
+                    <hr style="border: none; border-top: 1px solid #dbe6f0; margin: 16px 0;" />
+                    <p class="mb-0"><strong>Estimated Delivery:</strong>
+                        <asp:Literal ID="litEta" runat="server" /></p>
+                    <p style="margin-top: 8px;"><strong>Rider:</strong>
+                        <asp:Literal ID="litRiderInfo" runat="server" /></p>
+                </div>
 
+                <div class="card-panel">
+                    <h4 style="color: #07233d; margin-top: 0;">Shipment History</h4>
+                    <asp:Repeater ID="rptHistory" runat="server">
+                        <HeaderTemplate>
+                            <table class="data-grid">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Location</th>
+                                        <th>Notes</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <tr>
+                                <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
+                                <td><%# Eval("Location") %><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ProofImage(Eval("ProofOfDelivery"), Eval("ProofContentType")) %></td>
+                                <td><%# Eval("Notes") %><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ProofImage(Eval("ProofOfDelivery"), Eval("ProofContentType")) %></td>
+                                <td><%# Eval("Timestamp", "{0:MMM d, yyyy h:mm tt}") %></td>
+                            </tr>
+                        </ItemTemplate>
+                        <FooterTemplate></tbody></table></FooterTemplate>
+                    </asp:Repeater>
+                    <asp:Label ID="lblNoHistory" runat="server" Text="No tracking events recorded yet." Visible="false" Style="color: #5c7186;" />
+                </div>
+            </asp:Panel>
+
+        </div>
     </div>
-</div>
 </asp:Content>
