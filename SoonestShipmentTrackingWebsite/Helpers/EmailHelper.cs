@@ -117,6 +117,19 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
+        public static void SendShipmentRequestReceivedEmail(string customerEmail, string customerName, string controlNumber, string recipientName, string branchOrigin)
+        {
+            if (string.IsNullOrWhiteSpace(customerEmail)) return;
+
+            using (var mail = CreateMailMessage(
+                $"Shipment Request Received - {controlNumber}",
+                EmailFormatShipmentRequestReceived(customerName, controlNumber, recipientName, branchOrigin)))
+            {
+                mail.To.Add(customerEmail.Trim());
+                SendMail(mail, swallowErrors: true);
+            }
+        }
+
         private static MailMessage CreateMailMessage(string subject, string body)
         {
             return new MailMessage
@@ -298,6 +311,28 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             return BuildEmailTemplate(
                 "Shipment Status Update",
                 $"Hello {Safe(customerName)}, your shipment has a new update.",
+                content);
+        }
+
+        private static string EmailFormatShipmentRequestReceived(string customerName, string controlNumber, string recipientName, string branchOrigin)
+        {
+            var content = $@"
+<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""border:1px solid #e4ebf2;border-radius:10px;overflow:hidden;"">
+    <tr><td style=""padding:14px 16px;background:#f7fafd;font-size:12px;color:#557;letter-spacing:.5px;"">REQUEST REFERENCE</td></tr>
+    <tr><td style=""padding:14px 16px;font-size:24px;color:#07233d;font-weight:800;letter-spacing:.6px;"">{Encode(controlNumber)}</td></tr>
+</table>
+
+<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""margin-top:16px;border-collapse:collapse;"">
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;"">Recipient</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-weight:600;font-size:13px;"">{Encode(recipientName)}</td></tr>
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Branch Origin</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">{Encode(branchOrigin)}</td></tr>
+    <tr><td style=""padding:9px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Status</td><td align=""right"" style=""padding:9px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">Pending Review</td></tr>
+</table>
+
+<div style=""margin-top:16px;padding:12px 14px;background:#fff4de;color:#8a5a08;border-radius:8px;font-size:13px;font-weight:600;"">Your shipment request is subject to review and approval by our staff. We will notify you once it is approved.</div>";
+
+            return BuildEmailTemplate(
+                "Shipment Request Submitted",
+                $"Hello {Safe(customerName)}, we received your shipment request.",
                 content);
         }
 

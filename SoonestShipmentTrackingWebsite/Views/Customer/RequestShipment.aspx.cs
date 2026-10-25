@@ -74,10 +74,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
             using (var _db = new ApplicationDbContext())
             {
+                var customerId = User.Identity.GetUserId();
+                var customer = _db.Users.FirstOrDefault(u => u.Id == customerId);
+
                 var shipment = new Shipment
                 {
                     ControlNumber = "SGE" + DateTime.UtcNow.ToString("yyyyMMdd") + Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper(),
-                    CustomerId = User.Identity.GetUserId(),
+                    CustomerId = customerId,
                     SenderName = txtSenderName.Text.Trim(),
                     BranchOrigin = ddlBranchOrigin.SelectedValue,
                     RecipientName = txtRecipientName.Text.Trim(),
@@ -103,8 +106,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 });
                 _db.SaveChanges();
 
-                string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
-                EmailHelper.SendShipmentCreatedEmail(shipment);
+                EmailHelper.SendShipmentRequestReceivedEmail(
+                    customer?.Email,
+                    customer?.FullName,
+                    shipment.ControlNumber,
+                    shipment.RecipientName,
+                    shipment.BranchOrigin);
 
                 Session["FlashMessage"] = $"Shipment request {shipment.ControlNumber} submitted and is awaiting staff approval.";
             }
