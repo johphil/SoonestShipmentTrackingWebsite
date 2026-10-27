@@ -24,8 +24,8 @@
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="rblRole" Display="Dynamic" CssClass="field-error" ErrorMessage="Select an access level." ValidationGroup="Role" />
             </div>
 
-            <div class="form-group">
-                <label>Designated Branch <span style="color:#c62828;">*</span> <small>(required for Staff and Rider)</small></label>
+            <div class="form-group" id="branchGroup">
+                <label>Designated Branch
                 <asp:DropDownList ID="ddlBranch" runat="server" CssClass="form-control" />
                 <asp:CustomValidator ID="valBranch" runat="server" Display="Dynamic" CssClass="field-error" ValidationGroup="Role" OnServerValidate="valBranch_ServerValidate" ErrorMessage="Select the branch where this Staff/Rider member is designated." />
             </div>
@@ -35,4 +35,17 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    (function () {
+        var radios = document.querySelectorAll('#<%= rblRole.ClientID %> input[type=radio]');
+        var group = document.getElementById('branchGroup');
+        function update() {
+            var role = '';
+            for (var i = 0; i < radios.length; i++) { if (radios[i].checked) { role = radios[i].value; } }
+            group.style.display = (role === 'Staff' || role === 'Rider') ? '' : 'none';
+        }
+        for (var i = 0; i < radios.length; i++) { radios[i].addEventListener('click', update); radios[i].addEventListener('change', update); }
+        update();
+    })();
+</script>
 </asp:Content>

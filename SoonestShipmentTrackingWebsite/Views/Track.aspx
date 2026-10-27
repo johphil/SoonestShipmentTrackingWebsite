@@ -69,7 +69,6 @@
                     <asp:Label ID="lblNoHistory" runat="server" Text="No tracking events recorded yet." Visible="false" Style="color: #5c7186;" />
                 </div>
             </asp:Panel>
-
         </div>
     </div>
 </asp:Content>

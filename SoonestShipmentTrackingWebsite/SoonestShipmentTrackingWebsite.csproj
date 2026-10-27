@@ -325,6 +325,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\Site.Master" />
+    <None Include="Properties\PublishProfiles\site102397-WebDeploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
