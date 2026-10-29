@@ -40,9 +40,9 @@ namespace SoonestShipmentTrackingWebsite.Views
                 else
                 {
                     shipment.IsOrderReceived = true;
-                    shipment.OrderReceivedDate = DateTime.Now;
+                    shipment.OrderReceivedDate = Helpers.TimeHelper.Now;
                     shipment.CurrentStatus = ShipmentStatus.Received;
-                    shipment.UpdatedDate = DateTime.Now;
+                    shipment.UpdatedDate = Helpers.TimeHelper.Now;
                     db.ShipmentHistories.Add(new ShipmentHistory
                     {
                         ShipmentId = shipment.Id,

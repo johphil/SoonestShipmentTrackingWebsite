@@ -106,7 +106,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 if (received && !shipment.IsOrderReceived)
                 {
                     shipment.IsOrderReceived = true;
-                    shipment.OrderReceivedDate = DateTime.Now;
+                    shipment.OrderReceivedDate = Helpers.TimeHelper.Now;
                     shipment.CurrentStatus = ShipmentStatus.Received;
                     db.ShipmentHistories.Add(new ShipmentHistory
                     {
@@ -121,10 +121,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     shipment.IssueReported = true;
                     shipment.IsIssueResolved = false;
                     shipment.IssueReport = issue;
-                    shipment.IssueReportedDate = DateTime.Now;
+                    shipment.IssueReportedDate = Helpers.TimeHelper.Now;
                     shipment.IssueResolvedDate = null;
                 }
-                shipment.UpdatedDate = DateTime.Now;
+                shipment.UpdatedDate = Helpers.TimeHelper.Now;
                 db.SaveChanges();
             }
             Response.Redirect(Request.RawUrl);

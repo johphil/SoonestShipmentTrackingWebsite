@@ -79,7 +79,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
                 var shipment = new Shipment
                 {
-                    ControlNumber = "SGE" + DateTime.UtcNow.ToString("yyyyMMdd") + Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper(),
+                    ControlNumber = "SGE" + Helpers.TimeHelper.Now.ToString("yyyyMMdd") + Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper(),
                     CustomerId = customerId,
                     SenderName = txtSenderName.Text.Trim(),
                     BranchOrigin = ddlBranchOrigin.SelectedValue,

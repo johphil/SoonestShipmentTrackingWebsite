@@ -193,8 +193,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
 
                 shipment.IsIssueResolved = true;
-                shipment.IssueResolvedDate = DateTime.Now;
-                shipment.UpdatedDate = DateTime.Now;
+                shipment.IssueResolvedDate = Helpers.TimeHelper.Now;
+                shipment.UpdatedDate = Helpers.TimeHelper.Now;
 
                 db.ShipmentHistories.Add(new ShipmentHistory
                 {
@@ -334,7 +334,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 var previousStatus = shipment.CurrentStatus;
                 shipment.CurrentStatus = newStatus;
-                shipment.UpdatedDate = DateTime.Now;
+                shipment.UpdatedDate = Helpers.TimeHelper.Now;
                 await _db.SaveChangesAsync();
 
                 _db.ShipmentHistories.Add(new ShipmentHistory

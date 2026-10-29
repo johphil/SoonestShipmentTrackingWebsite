@@ -33,8 +33,8 @@ namespace SoonestShipmentTrackingWebsite.Models
         public Branch()
         {
             IsActive = true;
-            CreatedDate = DateTime.Now;
-            UpdatedDate = DateTime.Now;
+            CreatedDate = Helpers.TimeHelper.Now;
+            UpdatedDate = Helpers.TimeHelper.Now;
         }
     }
 }

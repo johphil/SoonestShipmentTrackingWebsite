@@ -81,7 +81,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             branch.ContactNumber = txtContactNumber.Text.Trim();
             branch.Email = txtEmail.Text.Trim();
             branch.IsActive = chkIsActive.Checked;
-            branch.UpdatedDate = DateTime.Now;
+            branch.UpdatedDate = Helpers.TimeHelper.Now;
 
             if (isNew)
                 _db.Branches.Add(branch);

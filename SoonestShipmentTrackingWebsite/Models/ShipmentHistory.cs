@@ -31,7 +31,7 @@ namespace SoonestShipmentTrackingWebsite.Models
 
         public ShipmentHistory()
         {
-            Timestamp = DateTime.Now;
+            Timestamp = Helpers.TimeHelper.Now;
         }
     }
 }

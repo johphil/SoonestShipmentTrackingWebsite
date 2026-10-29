@@ -33,7 +33,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             get
             {
-                var span = DateTime.Now - Timestamp;
+                var span = TimeHelper.Now - Timestamp;
                 if (span.TotalMinutes < 1) return "Just now";
                 if (span.TotalMinutes < 60) return (int)span.TotalMinutes + "m ago";
                 if (span.TotalHours < 24) return (int)span.TotalHours + "h ago";
@@ -139,7 +139,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 var user = db.Users.FirstOrDefault(e => e.Id == userId);
                 if (user != null)
                 {
-                    user.NotificationSeenAt = DateTime.Now;
+                    user.NotificationSeenAt = TimeHelper.Now;
                     db.SaveChanges();
                 }
             }
