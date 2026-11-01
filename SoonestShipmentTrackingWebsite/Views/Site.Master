@@ -10,7 +10,7 @@
     <link rel="icon" type="image/svg+xml" href="<%= ResolveUrl("~/Assets/icons/logo.svg") %>" />
 </head>
 <body>
-<form id="mainForm" runat="server">
+<form id="mainForm" runat="server" class="site-layout">
     <asp:PlaceHolder ID="pnlAdminSidebar" runat="server" Visible="false">
         <aside class="admin-sidebar">
             <a class="admin-sidebar-brand" href="<%= ResolveUrl("~/Views/Admin/Shipments.aspx") %>">
@@ -106,7 +106,9 @@
     <asp:Panel ID="pnlFlashMessage" runat="server" Visible="false">
         <div class="container flash-wrap" style="margin-top:18px;"><div class="alert-success"><asp:Literal ID="litFlashMessage" runat="server" /></div></div>
     </asp:Panel>
-    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    <main class="site-main">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </main>
     <footer class="site-footer">
         <div class="container"><div class="footer-grid">
             <div class="footer-brand">
@@ -114,7 +116,7 @@
                     <img class="brand-icon-img" src="<%= ResolveUrl("~/Assets/icons/logo.svg") %>" alt="Soonest Global Express" />
                     <span class="brand-name">Soonest Global Express<span class="brand-sub">CORPORATION</span></span>
                 </a>
-                <p>Dependable local and international logistics with real-time tracking, secure handling, and people who care about every parcel.</p>
+                <p style="margin-top: 10px;">Dependable local and international logistics with real-time tracking, secure handling, and people who care about every parcel.</p>
             </div>
             <div><h5>Get In Touch</h5><p>Las Pi&ntilde;as City (Main Office and Warehouse)<br />Jerusalem Street, BF Martinville Manuyo Dos,<br />Las Pi&ntilde;as City, Philippines</p><p>Tel: +632 249 8970<br />Email: info@soonestglobal.com</p></div>
             <div><h5>Quick Links</h5><ul><li><a runat="server" href="Default.aspx">Home</a></li><li><a runat="server" href="Track.aspx">Track Shipment</a></li><li><a runat="server" href="~/Views/Account/Register.aspx">Create Account</a></li><li><a runat="server" href="~/Views/Account/Login.aspx">Log In</a></li></ul></div>
