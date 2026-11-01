@@ -895,7 +895,7 @@ a {
 
 /* ------------------------------ App pages ------------------------------ */
 .app-section {
-    background: var(--surface);
+    background: var(--white);
     min-height: 62vh;
 }
 
