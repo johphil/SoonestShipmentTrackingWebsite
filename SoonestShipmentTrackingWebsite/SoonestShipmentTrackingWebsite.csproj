@@ -107,20 +107,29 @@
   <ItemGroup>
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Views\About.aspx" />
     <Content Include="Views\Account\Login.aspx" />
     <Content Include="Views\Account\Register.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
+    <Content Include="Views\Admin\BranchEdit.aspx" />
+    <Content Include="Views\Admin\Branches.aspx" />
     <Content Include="Views\Admin\CreateShipment.aspx" />
     <Content Include="Views\Admin\Dashboard.aspx" />
+    <Content Include="Views\Admin\Reports.aspx" />
     <Content Include="Views\Admin\Shipments.aspx" />
     <Content Include="Views\Admin\UpdateStatus.aspx" />
     <Content Include="Views\Admin\UserAccounts.aspx" />
     <Content Include="Views\Admin\UserRoleEdit.aspx" />
+    <Content Include="Views\Compact.css" />
+    <Content Include="Views\Contact.aspx" />
     <Content Include="Views\Customer\MyShipments.aspx" />
+    <Content Include="Views\Customer\RequestShipment.aspx" />
     <Content Include="Views\Customer\ShipmentDetails.aspx" />
     <Content Include="Views\Default.aspx" />
     <Content Include="Views\Forbidden.aspx" />
     <Content Include="Views\NotFound.aspx" />
+    <Content Include="Views\OrderReceived.aspx" />
+    <Content Include="Views\Theme.css" />
     <Content Include="Views\Track.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -131,10 +140,13 @@
     </Compile>
     <Compile Include="Helpers\AccessControlHelper.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\SMSHelper.cs" />
     <Compile Include="Helpers\StatusDisplayHelper.cs" />
+    <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Helpers\VerificationCodeHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipmentHistory.cs" />
@@ -142,6 +154,13 @@
     <Compile Include="Models\UserAccountRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Views\About.aspx.cs">
+      <DependentUpon>About.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\About.aspx.designer.cs">
+      <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Account\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -163,6 +182,20 @@
     <Compile Include="Views\Account\VerifyEmail.aspx.designer.cs">
       <DependentUpon>VerifyEmail.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Admin\BranchEdit.aspx.cs">
+      <DependentUpon>BranchEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\BranchEdit.aspx.designer.cs">
+      <DependentUpon>BranchEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Branches.aspx.cs">
+      <DependentUpon>Branches.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Branches.aspx.designer.cs">
+      <DependentUpon>Branches.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Admin\CreateShipment.aspx.cs">
       <DependentUpon>CreateShipment.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -176,6 +209,13 @@
     </Compile>
     <Compile Include="Views\Admin\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Admin\Shipments.aspx.cs">
       <DependentUpon>Shipments.aspx</DependentUpon>
@@ -205,12 +245,26 @@
     <Compile Include="Views\Admin\UserRoleEdit.aspx.designer.cs">
       <DependentUpon>UserRoleEdit.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Contact.aspx.cs">
+      <DependentUpon>Contact.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Contact.aspx.designer.cs">
+      <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Customer\MyShipments.aspx.cs">
       <DependentUpon>MyShipments.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Views\Customer\MyShipments.aspx.designer.cs">
       <DependentUpon>MyShipments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Customer\RequestShipment.aspx.cs">
+      <DependentUpon>RequestShipment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Customer\RequestShipment.aspx.designer.cs">
+      <DependentUpon>RequestShipment.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Customer\ShipmentDetails.aspx.cs">
       <DependentUpon>ShipmentDetails.aspx</DependentUpon>
@@ -239,6 +293,13 @@
     </Compile>
     <Compile Include="Views\NotFound.aspx.designer.cs">
       <DependentUpon>NotFound.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrderReceived.aspx.cs">
+      <DependentUpon>OrderReceived.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\OrderReceived.aspx.designer.cs">
+      <DependentUpon>OrderReceived.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

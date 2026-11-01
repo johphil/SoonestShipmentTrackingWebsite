@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoonestShipmentTrackingWebsite.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,14 @@ namespace SoonestShipmentTrackingWebsite.Views
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                {
+                    Response.Redirect("~/Views/Admin/Dashboard.aspx");
+                    return;
+                }
+            }
         }
 
         protected void btnTrack_Click(object sender, EventArgs e)

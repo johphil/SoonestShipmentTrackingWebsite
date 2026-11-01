@@ -1,37 +1,81 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Shipments.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Shipments" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Shipments.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Shipments" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Manage Shipments</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section">
     <div class="container">
         <div class="card-panel">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                <div class="page-heading" style="margin:0;">All Shipments</div>
-                <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
+            <div class="page-head">
+                <div>
+                    <div class="page-heading">All Shipments</div>
+                    <div class="page-subheading">Filter by status using the chips below. Newest activity first.</div>
+                </div>
+                <asp:PlaceHolder ID="pnlCreateShipment" runat="server">
+                    <div class="page-head-actions"><a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a></div>
+                </asp:PlaceHolder>
             </div>
-
+            <asp:Literal ID="litStatusChips" runat="server" />
+            <div class="table-scroll">
             <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
-                EmptyDataText="No shipments yet. Create one to get started.">
+                            AllowPaging="true" PageSize="20" OnPageIndexChanging="gvShipments_PageIndexChanging" PagerStyle-CssClass="grid-pager"
+                EmptyDataText="No shipments match this view.">
                 <Columns>
-                    <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
-                    <asp:TemplateField HeaderText="Customer">
+                    <asp:TemplateField HeaderText="Control No.">
                         <ItemTemplate>
-                            <%# Eval("CustomerName") %><br />
-                            <span style="color:#6b7684;font-size:12px;"><%# Eval("CustomerEmail") %></span>
+                            <span class="cell-main mono"><%# Eval("ControlNumber") %></span>
+                            <span class="cell-sub">Created <%# Eval("CreatedDate", "{0:MMM d, yyyy}") %></span>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="RecipientName" HeaderText="Recipient" />
+                    <asp:TemplateField HeaderText="Customer">
+                        <ItemTemplate>
+                            <span class="cell-main"><%# Server.HtmlEncode(Convert.ToString(Eval("CustomerName"))) %></span>
+                            <span class="cell-sub"><%# Server.HtmlEncode(Convert.ToString(Eval("CustomerEmail"))) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Recipient">
+                        <ItemTemplate>
+                            <span class="cell-main"><%# Server.HtmlEncode(Convert.ToString(Eval("RecipientName"))) %></span>
+                            <span class="cell-sub"><%# Server.HtmlEncode(Convert.ToString(Eval("RecipientPhone"))) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Route">
+                        <ItemTemplate>
+                            <span class="cell-main"><%# Server.HtmlEncode(Convert.ToString(Eval("BranchOrigin"))) %></span>
+                            <span class="cell-sub ellipsis" title='<%# Server.HtmlEncode(Convert.ToString(Eval("RecipientAddress"))) %>'>&rarr; <%# Server.HtmlEncode(Convert.ToString(Eval("RecipientAddress"))) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Package">
+                        <ItemTemplate>
+                            <span class="cell-main ellipsis"><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Enc(Convert.ToString(Eval("PackageDescription"))) %></span>
+                            <span class="cell-sub"><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.WeightText(Eval("WeightKg") as decimal?) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="UpdatedDate" HeaderText="Last Update" DataFormatString="{0:MMM d, h:mm tt}" />
+                    <asp:TemplateField HeaderText="Issue">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.IssueIndicator(Eval("IssueReported"), Eval("IsIssueResolved")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Rider">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RiderInfo(Eval("CurrentStatus"), Eval("RiderName")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Est. Delivery">
+                        <ItemTemplate><span class="nowrap"><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.EtaText(Eval("EstimatedDeliveryDate") as DateTime?, (SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></span></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Last Update">
+                        <ItemTemplate>
+                            <span class="nowrap"><%# Eval("UpdatedDate", "{0:MMM d, yyyy}") %></span>
+                            <span class="cell-sub"><%# Eval("UpdatedDate", "{0:h:mm tt}") %></span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="">
                         <ItemTemplate>
                             <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/UpdateStatus.aspx?id=" + Eval("Id") %>'
-                                CssClass="btn btn-outline" Text="Update Status" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
+                                CssClass="btn btn-outline" Text="Update" style="border-color:#07233d;color:#07233d;" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+            </div>
         </div>
     </div>
 </div>

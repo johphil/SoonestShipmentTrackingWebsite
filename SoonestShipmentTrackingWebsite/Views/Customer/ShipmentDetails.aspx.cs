@@ -27,6 +27,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
             var userId = User.Identity.GetUserId();
 
+            // The customer opened a shipment (e.g. via a notification), so
+            // clear the unread state on the bell.
+            NotificationHelper.MarkAllSeen(User.Identity.GetUserId());
+
             using (var _db = new ApplicationDbContext())
             {
                 var shipment = _db.Shipments
@@ -45,18 +49,91 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
+                litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
+                litSenderName.Text = Server.HtmlEncode(shipment.SenderName);
                 litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress);
                 litPackageDescription.Text = string.IsNullOrWhiteSpace(shipment.PackageDescription)
                     ? "-" : Server.HtmlEncode(shipment.PackageDescription);
-                litEta.Text = shipment.EstimatedDeliveryDate.HasValue
-                    ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy") : "TBD";
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
+                litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus) + "</div>";
+                litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
+                litRecipientEmail.Text = StatusDisplayHelper.Enc(shipment.RecipientEmail);
+                litWeight.Text = StatusDisplayHelper.WeightText(shipment.WeightKg);
+                litCreated.Text = shipment.CreatedDate.ToString("MMM d, yyyy h:mm tt");
+                litUpdated.Text = shipment.UpdatedDate.ToString("MMM d, yyyy h:mm tt");
+                litElapsed.Text = StatusDisplayHelper.Elapsed(shipment.CreatedDate,
+                    StatusDisplayHelper.IsClosed(shipment.CurrentStatus) ? shipment.UpdatedDate : TimeHelper.Now);
+                var deliveredOrReceived = shipment.CurrentStatus == ShipmentStatus.Delivered || shipment.CurrentStatus == ShipmentStatus.Received;
+                pnlFeedback.Visible = deliveredOrReceived;
+                btnOrderReceived.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IsOrderReceived;
+                btnReportIssue.Visible = deliveredOrReceived && !shipment.IssueReported;
+                litFeedback.Text = shipment.IsOrderReceived
+                    ? "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Order received on " + shipment.OrderReceivedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>"
+                    : "";
+                if (shipment.IssueReported)
+                    litFeedback.Text += "<div class=\"validation-summary\">Issue report submitted on " + shipment.IssueReportedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>";
+                if (shipment.IsIssueResolved)
+                    litFeedback.Text += "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Issue resolved on " + (shipment.IssueResolvedDate.HasValue ? shipment.IssueResolvedDate.Value.ToString("MMM d, yyyy h:mm tt") : "-") + ".</div>";
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
                 rptHistory.DataSource = history;
                 rptHistory.DataBind();
                 lblNoHistory.Visible = !history.Any();
             }
+        }
+
+        protected void btnOrderReceived_Click(object sender, EventArgs e)
+        {
+            UpdateCustomerFeedback(true, null);
+        }
+
+        protected void btnReportIssue_Click(object sender, EventArgs e)
+        {
+            var issue = (txtIssueReport.Text ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(issue))
+            {
+                litFeedback.Text = "<div class=\"validation-summary\">Please describe the issue before submitting.</div>";
+                pnlFeedback.Visible = true;
+                return;
+            }
+            UpdateCustomerFeedback(false, issue);
+        }
+
+        private void UpdateCustomerFeedback(bool received, string issue)
+        {
+            if (!int.TryParse(Request.QueryString["id"], out var id)) return;
+            using (var db = new ApplicationDbContext())
+            {
+                var cId = User.Identity.GetUserId();
+                var shipment = db.Shipments.FirstOrDefault(s => s.Id == id && s.CustomerId == cId);
+                if (shipment == null || (shipment.CurrentStatus != ShipmentStatus.Delivered && shipment.CurrentStatus != ShipmentStatus.Received)) return;
+                if (received && !shipment.IsOrderReceived)
+                {
+                    shipment.IsOrderReceived = true;
+                    shipment.OrderReceivedDate = Helpers.TimeHelper.Now;
+                    shipment.CurrentStatus = ShipmentStatus.Received;
+                    db.ShipmentHistories.Add(new ShipmentHistory
+                    {
+                        ShipmentId = shipment.Id,
+                        Status = ShipmentStatus.Received,
+                        Location = shipment.RecipientAddress,
+                        Notes = "Order received confirmed by customer."
+                    });
+                }
+                if (!received && !shipment.IssueReported)
+                {
+                    shipment.IssueReported = true;
+                    shipment.IsIssueResolved = false;
+                    shipment.IssueReport = issue;
+                    shipment.IssueReportedDate = Helpers.TimeHelper.Now;
+                    shipment.IssueResolvedDate = null;
+                }
+                shipment.UpdatedDate = Helpers.TimeHelper.Now;
+                db.SaveChanges();
+            }
+            Response.Redirect(Request.RawUrl);
         }
     }
 }

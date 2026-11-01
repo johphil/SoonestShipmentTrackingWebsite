@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="NotFound.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.NotFound" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="NotFound.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.NotFound" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Page Not Found</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container">

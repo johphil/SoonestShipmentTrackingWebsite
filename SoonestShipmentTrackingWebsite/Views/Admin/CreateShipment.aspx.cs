@@ -16,9 +16,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin")) return;
 
             if (!IsPostBack)
+            {
                 BindCustomers();
-
-            txtEstDelivery.Text = DateTime.Today.ToString("yyyy-MM-dd");
+                BindBranchOrigins();
+            }
         }
 
         private void BindCustomers()
@@ -37,6 +38,25 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             }
         }
 
+        private void BindBranchOrigins()
+        {
+            using (var _db = new ApplicationDbContext())
+            {
+                var branches = _db.Branches
+                    .Where(b => b.IsActive)
+                    .OrderBy(b => b.BranchName)
+                    .ToList();
+
+                ddlBranchOrigin.Items.Clear();
+                ddlBranchOrigin.Items.Add(new ListItem("-- Select branch origin --", ""));
+
+                foreach (var b in branches)
+                {
+                    ddlBranchOrigin.Items.Add(new ListItem($"{b.BranchName} ({b.City})", b.BranchName));
+                }
+            }
+        }
+
         protected void btnCreate_Click(object sender, EventArgs e)
         {
             using (var _db = new ApplicationDbContext())
@@ -50,25 +70,48 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     litError.Text = "Selected customer was not found.";
                     pnlError.Visible = true;
                     BindCustomers();
+                    BindBranchOrigins();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(ddlBranchOrigin.SelectedValue))
+                {
+                    litError.Text = "Please select a branch origin.";
+                    pnlError.Visible = true;
                     return;
                 }
 
                 decimal? weight = null;
-                if (decimal.TryParse(txtWeight.Text, out var parsedWeight))
+                if (decimal.TryParse(txtWeight.Text, out var parsedWeight) && parsedWeight > 0)
                     weight = parsedWeight;
+                else
+                {
+                    litError.Text = "Weight must be a valid number greater than zero.";
+                    pnlError.Visible = true;
+                    return;
+                }
 
                 DateTime? estDelivery = null;
                 if (DateTime.TryParse(txtEstDelivery.Text, out var parsedDate))
                     estDelivery = parsedDate;
+                else
+                {
+                    litError.Text = "Please enter a valid delivery date.";
+                    pnlError.Visible = true;
+                    return;
+                }
 
                 var shipment = new Shipment
                 {
                     ControlNumber = GenerateControlNumber(),
                     CustomerId = customer.Id,
+                    SenderName = txtSenderName.Text.Trim(),
+                    BranchOrigin = ddlBranchOrigin.SelectedValue,
                     RecipientName = txtRecipientName.Text.Trim(),
                     RecipientAddress = txtRecipientAddress.Text.Trim(),
-                    RecipientPhone = string.IsNullOrWhiteSpace(txtRecipientPhone.Text) ? customer.PhoneNumber : txtRecipientPhone.Text.Trim(),
-                    RecipientEmail = string.IsNullOrWhiteSpace(txtRecipientEmail.Text) ? customer.Email : txtRecipientEmail.Text.Trim(),
+                    DestinationCity = txtRecipientAddress.Text.Trim(),
+                    RecipientPhone = txtRecipientPhone.Text.Trim(),
+                    RecipientEmail = txtRecipientEmail.Text.Trim(),
                     PackageDescription = txtPackageDescription.Text.Trim(),
                     WeightKg = weight,
                     EstimatedDeliveryDate = estDelivery,
@@ -82,12 +125,14 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     ShipmentId = shipment.Id,
                     Status = ShipmentStatus.Pending,
+                    Location = ddlBranchOrigin.SelectedValue,
                     Notes = "Shipment created."
                 });
                 int result = _db.SaveChanges();
 
                 if (result > 0)
                 {
+                    shipment.Customer = customer;
                     EmailHelper.SendShipmentCreatedEmail(shipment);
                 }
 
@@ -99,33 +144,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         private static string GenerateControlNumber()
         {
             var suffix = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpperInvariant();
-            return $"SGE{DateTime.Now:yyyyMMdd}{suffix}";
-        }
-
-        protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ddlCustomer.SelectedIndex > 0)
-            {
-                using (var _db = new ApplicationDbContext())
-                {
-                    var customer = _db.Users.FirstOrDefault(u => u.Id == ddlCustomer.SelectedValue);
-
-                    if (customer != null)
-                    {
-                        txtRecipientName.Text = customer.FullName;
-                        txtRecipientPhone.Text = customer.PhoneNumber;
-                        txtRecipientEmail.Text = customer.Email;
-                        txtRecipientAddress.Text = customer.Address;
-                    }
-                }
-            }
-            else
-            {
-                txtRecipientName.Text = "";
-                txtRecipientPhone.Text = "";
-                txtRecipientEmail.Text = "";
-                txtRecipientAddress.Text = "";
-            }
+            return $"SGE{Helpers.TimeHelper.Now:yyyyMMdd}{suffix}";
         }
     }
 }

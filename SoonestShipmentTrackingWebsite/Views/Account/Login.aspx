@@ -1,14 +1,15 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.Login" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.Login" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Log In</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
-    <div class="container" style="max-width:480px;">
-        <div class="card-panel">
+    <div class="section auth-section">
+        <div class="auth-card">
             <div class="page-heading">Log In</div>
-            <div class="page-subheading">Access your customer account or the admin panel.</div>
+            <div class="page-subheading">Access your account.</div>
 
             <asp:Panel ID="pnlError" runat="server" Visible="false">
-                <div class="validation-summary"><asp:Literal ID="litError" runat="server" /></div>
+                <div class="validation-summary">
+                    <asp:Literal ID="litError" runat="server" /></div>
             </asp:Panel>
 
             <div class="form-group">
@@ -24,17 +25,18 @@
             </div>
 
             <div class="form-group">
-                <label style="font-weight:normal;display:inline-flex;align-items:center;gap:6px;">
-                    <asp:CheckBox ID="chkRememberMe" runat="server" /> Remember me
+                <label style="font-weight: normal; display: inline-flex; align-items: center; gap: 6px; color: #808080;">
+                    <asp:CheckBox ID="chkRememberMe" runat="server" />
+                    Remember me
                 </label>
             </div>
 
             <asp:Button ID="btnLogin" runat="server" CssClass="btn btn-red btn-block" Text="Log In" OnClick="btnLogin_Click" ValidationGroup="Login" />
 
-            <p style="text-align:center;margin-top:16px;font-size:13.5px;">
+            <p style="text-align: center; margin-top: 24px; color: #93aac3;">
                 No account yet? <a runat="server" href="~/Views/Account/Register.aspx">Register</a>
             </p>
         </div>
     </div>
-</div>
+    </div>
 </asp:Content>
