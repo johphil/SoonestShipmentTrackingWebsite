@@ -24,24 +24,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         protected global::System.Web.UI.WebControls.Literal litControlNumber;
 
         /// <summary>
-        /// litRecipientName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litRecipientName;
-
-        /// <summary>
-        /// litRecipientAddress1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litRecipientAddress1;
-
-        /// <summary>
         /// litStatusBadge control.
         /// </summary>
         /// <remarks>
@@ -49,6 +31,24 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litStatusBadge;
+
+        /// <summary>
+        /// litProgress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litProgress;
+
+        /// <summary>
+        /// litSenderName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSenderName;
 
         /// <summary>
         /// litBranchOrigin control.
@@ -60,13 +60,40 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         protected global::System.Web.UI.WebControls.Literal litBranchOrigin;
 
         /// <summary>
-        /// litSenderName control.
+        /// litRecipientName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litSenderName;
+        protected global::System.Web.UI.WebControls.Literal litRecipientName;
+
+        /// <summary>
+        /// litRecipientPhone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litRecipientPhone;
+
+        /// <summary>
+        /// litRecipientEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litRecipientEmail;
+
+        /// <summary>
+        /// litEta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litEta;
 
         /// <summary>
         /// litRecipientAddress control.
@@ -87,13 +114,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         protected global::System.Web.UI.WebControls.Literal litPackageDescription;
 
         /// <summary>
-        /// litEta control.
+        /// litWeight control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litEta;
+        protected global::System.Web.UI.WebControls.Literal litWeight;
 
         /// <summary>
         /// litRiderInfo control.
@@ -103,6 +130,33 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litRiderInfo;
+
+        /// <summary>
+        /// litCreated control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litCreated;
+
+        /// <summary>
+        /// litElapsed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litElapsed;
+
+        /// <summary>
+        /// litUpdated control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litUpdated;
 
         /// <summary>
         /// pnlFeedback control.
@@ -166,68 +220,5 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblNoHistory;
-
-        /// <summary>
-        /// litProgress control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litProgress;
-
-        /// <summary>
-        /// litRecipientPhone control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litRecipientPhone;
-
-        /// <summary>
-        /// litRecipientEmail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litRecipientEmail;
-
-        /// <summary>
-        /// litWeight control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litWeight;
-
-        /// <summary>
-        /// litCreated control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litCreated;
-
-        /// <summary>
-        /// litUpdated control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litUpdated;
-
-        /// <summary>
-        /// litElapsed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litElapsed;
     }
 }

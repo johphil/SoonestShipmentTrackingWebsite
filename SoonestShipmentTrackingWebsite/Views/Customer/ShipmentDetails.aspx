@@ -4,7 +4,7 @@
 <div class="section app-section">
     <div class="container">
 
-        <div class="card-panel">
+        <div class="card-panel" >
             <div class="ship-head">
                 <div class="ship-head-main">
                     <h2 class="ship-no"><asp:Literal ID="litControlNumber" runat="server" /></h2>
@@ -17,7 +17,7 @@
 
         <div class="split">
             <div class="split-col">
-                <div class="card-panel">
+                <div class="card-panel" style="margin-top: 10px;>
                     <h4 class="panel-title">Shipment Details</h4>
                     <div class="kv-grid cols-2">
                         <div class="kv"><div class="kv-label">Sender</div><div class="kv-value"><asp:Literal ID="litSenderName" runat="server" /></div></div>
@@ -50,7 +50,7 @@
             </div>
 
             <div class="split-col">
-                <div class="card-panel">
+                <div class="card-panel" style="margin-top: 10px;>
                     <h4 class="panel-title">Shipment History</h4>
                     <div class="table-scroll">
                     <asp:Repeater ID="rptHistory" runat="server">
