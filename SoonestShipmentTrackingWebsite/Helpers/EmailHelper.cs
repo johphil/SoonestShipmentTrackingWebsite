@@ -46,12 +46,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
         public static void SendPasswordResetEmail(string emailRecipient, string customerName, string resetUrl)
         {
-            var body = $"<p>Hello {WebUtility.HtmlEncode(customerName)},</p>" +
-                "<p>We received a request to reset your password. Click the link below to choose a new one:</p>" +
-                $"<p><a href=\"{WebUtility.HtmlEncode(resetUrl)}\">Reset password</a></p>" +
-                "<p>If you did not request this, you can ignore this email.</p>";
-
-            using (var mail = CreateMailMessage("Reset Your Password", body))
+            using (var mail = CreateMailMessage("Reset Your Password", EmailFormatPasswordReset(customerName, resetUrl)))
             {
                 mail.To.Add(emailRecipient);
                 SendMail(mail);
@@ -261,6 +256,31 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             return BuildEmailTemplate(
                 "Customer Inquiry",
                 $"A customer submitted a new inquiry through the website contact form.",
+                content);
+        }
+
+        private static string EmailFormatPasswordReset(string customerName, string resetUrl)
+        {
+            var content = $@"
+<div style=""padding:16px;border:1px solid #e4ebf2;border-radius:10px;background:#f7fafd;"">
+    <div style=""font-size:12px;color:#60758a;letter-spacing:.5px;"">PASSWORD RESET REQUEST</div>
+    <div style=""font-size:14px;color:#1b2d3d;margin-top:8px;line-height:1.6;"">Click the button below to choose a new password for your account.</div>
+</div>
+
+<div style=""margin-top:22px;text-align:center;"">
+    <a href=""{EncodeUrl(resetUrl)}"" style=""display:inline-block;background:#e63946;color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;padding:13px 30px;border-radius:8px;"">Reset Password</a>
+</div>
+
+<div style=""margin-top:16px;padding:12px 14px;background:#fff7e6;color:#8a5a00;border-radius:8px;font-size:13px;line-height:1.6;"">If you did not request a password reset, you can safely ignore this email. Your password will not change.</div>
+
+<div style=""margin-top:16px;font-size:12px;color:#60758a;line-height:1.7;"">
+    If the button does not work, open this link:<br>
+    <a href=""{EncodeUrl(resetUrl)}"" style=""color:#1e7fd6;word-break:break-all;"">{Encode(resetUrl)}</a>
+</div>";
+
+            return BuildEmailTemplate(
+                "Reset Your Password",
+                $"Hello {Safe(customerName)}, we received a request to reset your password.",
                 content);
         }
 
