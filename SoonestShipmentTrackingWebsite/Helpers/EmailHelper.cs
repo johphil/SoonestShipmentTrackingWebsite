@@ -44,6 +44,20 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
+        public static void SendPasswordResetEmail(string emailRecipient, string customerName, string resetUrl)
+        {
+            var body = $"<p>Hello {WebUtility.HtmlEncode(customerName)},</p>" +
+                "<p>We received a request to reset your password. Click the link below to choose a new one:</p>" +
+                $"<p><a href=\"{WebUtility.HtmlEncode(resetUrl)}\">Reset password</a></p>" +
+                "<p>If you did not request this, you can ignore this email.</p>";
+
+            using (var mail = CreateMailMessage("Reset Your Password", body))
+            {
+                mail.To.Add(emailRecipient);
+                SendMail(mail);
+            }
+        }
+
         public static void SendEmailVerification(string emailRecipient, string customerName, string verificationCode, DateTime? expirationDateTime, string redirectUrl)
         {
             using (var mail = CreateMailMessage(

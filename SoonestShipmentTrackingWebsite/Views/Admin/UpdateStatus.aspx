@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="split">
+        <div class="split" style="margin-top: 10px;">
             <div class="split-col">
                 <asp:Panel ID="pnlIssue" runat="server" Visible="false" CssClass="alert-warning">
                     <div><strong>Reported Issue:</strong> <asp:Literal ID="litIssueReport" runat="server" /></div>

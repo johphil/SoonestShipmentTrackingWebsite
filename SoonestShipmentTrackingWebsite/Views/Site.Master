@@ -89,7 +89,10 @@
                     </div>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlLoggedIn" runat="server" Visible="false">
-                    <span class="welcome-text">Signed in as <asp:Literal ID="litUserName" runat="server" /></span>
+                    <div style="color: whitesmoke">
+                        <asp:Literal ID="litUserName" runat="server" />
+                    </div>
+                    <a runat="server" href="~/Views/Account/Profile.aspx" class="btn btn-outline">Profile</a>
                     <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlLoggedOut" runat="server">

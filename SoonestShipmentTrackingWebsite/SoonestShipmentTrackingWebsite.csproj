@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -107,8 +107,12 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Views\About.aspx" />
+    <Content Include="Views\Account\ChangePassword.aspx" />
+    <Content Include="Views\Account\ForgotPassword.aspx" />
     <Content Include="Views\Account\Login.aspx" />
+    <Content Include="Views\Account\Profile.aspx" />
     <Content Include="Views\Account\Register.aspx" />
+    <Content Include="Views\Account\ResetPassword.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
     <Content Include="Views\Admin\BranchEdit.aspx" />
     <Content Include="Views\Admin\Branches.aspx" />
@@ -318,6 +322,10 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\Site.Master" />
+    <Content Include="Views\Account\Profile.aspx" />
+    <Content Include="Views\Account\ChangePassword.aspx" />
+    <Content Include="Views\Account\ForgotPassword.aspx" />
+    <Content Include="Views\Account\ResetPassword.aspx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
