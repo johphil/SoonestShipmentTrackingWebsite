@@ -14,6 +14,8 @@ namespace SoonestShipmentTrackingWebsite.Models
     {
         public string FullName { get; set; }
         public string Address { get; set; }
+        public int? BranchId { get; set; }
+        public virtual Branch Branch { get; set; }
 
         // Backs the code-input email verification flow (Account/VerifyEmail.aspx).
         // IdentityUser.EmailConfirmed is the actual "is verified" flag; these
@@ -21,6 +23,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         public string EmailVerificationCode { get; set; }
         public DateTime? EmailVerificationCodeExpiresAt { get; set; }
 
+        public DateTime? NotificationSeenAt { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -36,6 +39,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         {
         }
 
+        public DbSet<Branch> Branches { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<ShipmentHistory> ShipmentHistories { get; set; }
 
@@ -48,6 +52,12 @@ namespace SoonestShipmentTrackingWebsite.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOptional(u => u.Branch)
+                .WithMany()
+                .HasForeignKey(u => u.BranchId)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Shipment>()
                 .HasMany(s => s.History)
                 .WithRequired(h => h.Shipment)
@@ -56,6 +66,10 @@ namespace SoonestShipmentTrackingWebsite.Models
 
             modelBuilder.Entity<Shipment>()
                 .Property(s => s.ControlNumber)
+                .IsRequired();
+
+            modelBuilder.Entity<Branch>()
+                .Property(b => b.BranchName)
                 .IsRequired();
         }
     }

@@ -12,9 +12,12 @@ namespace SoonestShipmentTrackingWebsite.Models
 {    public enum ShipmentStatus
     {
         Pending = 0,
-        OutForDelivery = 1,
-        Delivered = 2,
-        FailedDelivery = 3,
-        Returned = 4
+        InTransit = 1,
+        OutForDelivery = 2,
+        Delivered = 3,
+        FailedDelivery = 4,
+        Returned = 5,
+        Cancelled = 6,
+        Received = 7
     }
 }

@@ -18,23 +18,37 @@ namespace SoonestShipmentTrackingWebsite.Models
         public virtual ApplicationUser Customer { get; set; }
 
         [Required, StringLength(100)]
+        public string SenderName { get; set; }
+        [Required, StringLength(100)]
+        public string BranchOrigin { get; set; }
+
+        [Required, StringLength(100)]
         public string RecipientName { get; set; }
         [Required, StringLength(250)]
         public string RecipientAddress { get; set; }
-
-        [Phone]
-        public string RecipientPhone { get; set; }
-        [EmailAddress]
-        public string RecipientEmail { get; set; }
-
         [StringLength(100)]
-        public string RiderName { get; set; }
+        public string DestinationCity { get; set; }
+
+        [Required, Phone]
+        public string RecipientPhone { get; set; }
+        [Required, EmailAddress]
+        public string RecipientEmail { get; set; }
 
         [StringLength(150)]
         public string PackageDescription { get; set; }
         public decimal? WeightKg { get; set; }
 
         public ShipmentStatus CurrentStatus { get; set; }
+        [StringLength(100)]
+        public string RiderName { get; set; }
+        public bool IsOrderReceived { get; set; }
+        public DateTime? OrderReceivedDate { get; set; }
+        public bool IssueReported { get; set; }
+        public bool IsIssueResolved { get; set; }
+        [StringLength(1000)]
+        public string IssueReport { get; set; }
+        public DateTime? IssueReportedDate { get; set; }
+        public DateTime? IssueResolvedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }
@@ -45,8 +59,8 @@ namespace SoonestShipmentTrackingWebsite.Models
         public Shipment()
         {
             History = new List<ShipmentHistory>();
-            CreatedDate = DateTime.Now;
-            UpdatedDate = DateTime.Now;
+            CreatedDate = Helpers.TimeHelper.Now;
+            UpdatedDate = Helpers.TimeHelper.Now;
             CurrentStatus = ShipmentStatus.Pending;
         }
     }

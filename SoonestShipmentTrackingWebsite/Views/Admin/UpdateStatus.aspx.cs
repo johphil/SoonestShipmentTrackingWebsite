@@ -1,5 +1,7 @@
 ﻿using SoonestShipmentTrackingWebsite.Helpers;
 using SoonestShipmentTrackingWebsite.Models;
+using SoonestShipmentTrackingWebsite.Helpers;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.IO;
+using System.Linq.Expressions;
 
 namespace SoonestShipmentTrackingWebsite.Views.Admin
 {
@@ -16,7 +20,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin")) return;
+            if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin", "Staff", "Rider")) return;
+
+            if (User.IsInRole("Rider"))
+                NotificationHelper.MarkAllSeen(User.Identity.GetUserId());
 
             if (!IsPostBack)
             {
@@ -43,14 +50,86 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     return;
                 }
 
+                var currentRiderKeys = GetCurrentRiderKeys(_db);
+                if (User.IsInRole("Rider") && !IsShipmentAssignedToRider(shipment, currentRiderKeys))
+                {
+                    Response.Redirect("~/Views/Forbidden.aspx");
+                    return;
+                }
+
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
+                litDestinationCity.Text = Server.HtmlEncode(shipment.RecipientAddress);
+                litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
+                litIssueIndicator.Text = StatusDisplayHelper.IssueIndicator(shipment.IssueReported, shipment.IsIssueResolved);
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus) + "</div>";
+                litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
+                litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
+                litPackage.Text = StatusDisplayHelper.Enc(shipment.PackageDescription);
+                litWeight.Text = StatusDisplayHelper.WeightText(shipment.WeightKg);
+                litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
+                litCreated.Text = shipment.CreatedDate.ToString("MMM d, yyyy h:mm tt");
+                litUpdated.Text = shipment.UpdatedDate.ToString("MMM d, yyyy h:mm tt");
+                litElapsed.Text = StatusDisplayHelper.Elapsed(shipment.CreatedDate,
+                    StatusDisplayHelper.IsClosed(shipment.CurrentStatus) ? shipment.UpdatedDate : TimeHelper.Now);
+                var customerUser = _db.Users.AsNoTracking().FirstOrDefault(u => u.Id == shipment.CustomerId);
+                litCustomer.Text = customerUser == null
+                    ? "-"
+                    : Server.HtmlEncode(customerUser.FullName ?? customerUser.Email ?? "-");
+                BindRiders(shipment.RiderName);
+
+                pnlIssue.Visible = shipment.IssueReported;
+                if (shipment.IssueReported)
+                {
+                    litIssueReport.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.IssueReport) ? "No additional details provided." : shipment.IssueReport);
+                    litIssueDate.Text = shipment.IssueReportedDate.HasValue
+                        ? shipment.IssueReportedDate.Value.ToString("MMM d, yyyy h:mm tt")
+                        : "-";
+                    pnlIssueResolvedInfo.Visible = shipment.IsIssueResolved;
+                    litIssueResolvedDate.Text = shipment.IssueResolvedDate.HasValue
+                        ? shipment.IssueResolvedDate.Value.ToString("MMM d, yyyy h:mm tt")
+                        : "-";
+                    btnResolveIssue.Visible = !shipment.IsIssueResolved;
+                }
 
                 ddlNewStatus.Items.Clear();
-                foreach (ShipmentStatus status in Enum.GetValues(typeof(ShipmentStatus)))
+                IEnumerable<ShipmentStatus> allowedStatuses;
+                if (User.IsInRole("Rider"))
+                {
+                    allowedStatuses = new[]
+                    {
+                        ShipmentStatus.Delivered,
+                        ShipmentStatus.FailedDelivery,
+                        ShipmentStatus.Returned
+                    };
+                }
+                else
+                {
+                    allowedStatuses = Enum.GetValues(typeof(ShipmentStatus)).Cast<ShipmentStatus>().Where(s => s != ShipmentStatus.Received);
+                }
+
+                if (shipment.CurrentStatus == ShipmentStatus.Received || shipment.IsOrderReceived)
+                {
+                    allowedStatuses = new[] { shipment.CurrentStatus };
+                    ddlNewStatus.Enabled = false;
+                    ddlRider.Enabled = false;
+                    txtLocation.Enabled = false;
+                    txtNotes.Enabled = false;
+                    fileProof.Enabled = false;
+                    btnSave.Enabled = false;
+                    ShowError("This shipment has been received by the recipient. Its status can no longer be changed.");
+                }
+
+                foreach (var status in allowedStatuses)
                     ddlNewStatus.Items.Add(new System.Web.UI.WebControls.ListItem(StatusDisplayHelper.Label(status), status.ToString()));
-                ddlNewStatus.SelectedValue = shipment.CurrentStatus.ToString();
+
+                if (ddlNewStatus.Items.FindByValue(shipment.CurrentStatus.ToString()) != null)
+                    ddlNewStatus.SelectedValue = shipment.CurrentStatus.ToString();
+
+                if (User.IsInRole("Rider"))
+                    ddlRider.Enabled = false;
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
                 rptHistory.DataSource = history;
@@ -59,18 +138,206 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             }
         }
 
-        protected async void btnSave_Click(object sender, EventArgs e)
+        private static bool IsShipmentAssignedToRider(Shipment shipment, IEnumerable<string> riderKeys)
         {
-            using (var _db = new ApplicationDbContext())
+            if (shipment == null || string.IsNullOrWhiteSpace(shipment.RiderName) || riderKeys == null)
+                return false;
+
+            return riderKeys.Any(k => string.Equals(k, shipment.RiderName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private IEnumerable<string> GetCurrentRiderKeys(ApplicationDbContext db)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.AsNoTracking().FirstOrDefault(u => u.Id == userId);
+            if (user == null) return Enumerable.Empty<string>();
+
+            var keys = new List<string>();
+            if (!string.IsNullOrWhiteSpace(user.FullName)) keys.Add(user.FullName.Trim());
+            if (!string.IsNullOrWhiteSpace(user.Email)) keys.Add(user.Email.Trim());
+            return keys.Distinct(StringComparer.OrdinalIgnoreCase);
+        }
+
+        private void BindRiders(string selectedRiderName)
+        {
+            using (var db = new ApplicationDbContext())
             {
-                var shipment = _db.Shipments.FirstOrDefault(s => s.Id == ShipmentId);
+                var riderRoleId = db.Roles
+                    .Where(r => r.Name == "Rider")
+                    .Select(r => r.Id)
+                    .FirstOrDefault();
+
+                var riders = riderRoleId == null
+                    ? new List<ApplicationUser>()
+                    : db.Users
+                        .Where(u => u.Roles.Any(ur => ur.RoleId == riderRoleId))
+                        .OrderBy(u => u.FullName)
+                        .ToList();
+
+                ddlRider.Items.Clear();
+                ddlRider.Items.Add(new ListItem("-- Select rider --", ""));
+
+                foreach (var rider in riders)
+                {
+                    var riderName = string.IsNullOrWhiteSpace(rider.FullName) ? rider.Email : rider.FullName;
+                    ddlRider.Items.Add(new ListItem(riderName, riderName));
+                }
+
+                if (!string.IsNullOrWhiteSpace(selectedRiderName) && ddlRider.Items.FindByValue(selectedRiderName) != null)
+                    ddlRider.SelectedValue = selectedRiderName;
+            }
+        }
+
+        protected void btnResolveIssue_Click(object sender, EventArgs e)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var shipment = db.Shipments.FirstOrDefault(s => s.Id == ShipmentId);
                 if (shipment == null)
                 {
                     Response.Redirect("~/Views/Admin/Shipments.aspx");
                     return;
                 }
 
+                if (!shipment.IssueReported || shipment.IsIssueResolved)
+                {
+                    Session["FlashMessage"] = "No unresolved issue found for this shipment.";
+                    Response.Redirect(Request.RawUrl);
+                    return;
+                }
+
+                shipment.IsIssueResolved = true;
+                shipment.IssueResolvedDate = Helpers.TimeHelper.Now;
+                shipment.UpdatedDate = Helpers.TimeHelper.Now;
+
+                db.ShipmentHistories.Add(new ShipmentHistory
+                {
+                    ShipmentId = shipment.Id,
+                    Status = shipment.CurrentStatus,
+                    Location = string.IsNullOrWhiteSpace(txtLocation.Text) ? shipment.BranchOrigin : txtLocation.Text.Trim(),
+                    Notes = "Customer-reported issue has been resolved."
+                });
+
+                db.SaveChanges();
+
+                Session["FlashMessage"] = $"Issue for shipment {shipment.ControlNumber} has been marked as resolved.";
+                Response.Redirect(Request.RawUrl);
+            }
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            RegisterAsyncTask(new PageAsyncTask(SaveStatusAsync));
+        }
+
+        private async System.Threading.Tasks.Task SaveStatusAsync()
+        {
+            try
+            {
+                await SaveStatusCoreAsync();
+            }
+            catch (Exception ex)
+            {
+                ShowError("Unable to save the status update: " + (ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        private async System.Threading.Tasks.Task SaveStatusCoreAsync()
+        {
+            string redirectTo = null;
+            using (var _db = new ApplicationDbContext())
+            {
+                var shipment = _db.Shipments
+                    .Include(s => s.Customer)
+                    .Include(s => s.History)
+                    .FirstOrDefault(s => s.Id == ShipmentId);
+                if (shipment == null)
+                {
+                    Response.Redirect("~/Views/Admin/Shipments.aspx", false);
+                    return;
+                }
+
+                var currentRiderKeys = GetCurrentRiderKeys(_db);
+                if (User.IsInRole("Rider") && !IsShipmentAssignedToRider(shipment, currentRiderKeys))
+                {
+                    ShowError("You can only update shipments assigned to you.");
+                    return;
+                }
+
                 var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
+
+                if (shipment.CurrentStatus == ShipmentStatus.Received || shipment.IsOrderReceived)
+                {
+                    ShowError("This shipment has been received by the recipient. Its status can no longer be changed.");
+                    return;
+                }
+
+                if (newStatus == ShipmentStatus.Received)
+                {
+                    ShowError("Staff and admin cannot set the status to RECEIVED. It is set when the recipient confirms receipt.");
+                    return;
+                }
+                if (User.IsInRole("Rider"))
+                {
+                    var riderAllowed = new[]
+                    {
+                        ShipmentStatus.Delivered,
+                        ShipmentStatus.FailedDelivery,
+                        ShipmentStatus.Returned
+                    };
+
+                    if (!riderAllowed.Contains(newStatus))
+                    {
+                        ShowError("Rider accounts can only update status to Delivered, Failed Delivery, or Returned.");
+                        return;
+                    }
+                }
+
+                byte[] proofBytes = null;
+                string proofType = null;
+                if (newStatus == ShipmentStatus.Delivered)
+                {
+                    try
+                    {
+                        if (fileProof.HasFile)
+                        {
+                            proofType = fileProof.PostedFile.ContentType;
+                            if (proofType == null || !proofType.StartsWith("image/"))
+                            {
+                                ShowError("Proof of delivery must be an image file.");
+                                return;
+                            }
+                            if (fileProof.PostedFile.ContentLength > 5 * 1024 * 1024)
+                            {
+                                ShowError("Proof of delivery photo must be 5 MB or smaller.");
+                                return;
+                            }
+                            proofBytes = fileProof.FileBytes;
+                        }
+                        else if (User.IsInRole("Rider"))
+                        {
+                            ShowError("Please take or upload a proof of delivery photo before marking as Delivered.");
+                            return;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ShowError(e.Message);
+                    }
+                }
+
+                if (newStatus == ShipmentStatus.OutForDelivery && string.IsNullOrWhiteSpace(ddlRider.SelectedValue))
+                {
+                    ShowError("Please select a rider when the shipment is marked Out for Delivery.");
+                    return;
+                }
+                else if (!User.IsInRole("Rider"))
+                {
+                    shipment.RiderName = string.Empty;
+                }
+
+                if (!User.IsInRole("Rider") && !string.IsNullOrWhiteSpace(ddlRider.SelectedValue))
+                    shipment.RiderName = ddlRider.SelectedValue;
 
                 //Prevent duplicate status na magkasunod
                 //if (shipment.CurrentStatus == newStatus)
@@ -79,54 +346,53 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 //    return;
                 //}
 
+                var previousStatus = shipment.CurrentStatus;
                 shipment.CurrentStatus = newStatus;
-                shipment.UpdatedDate = DateTime.Now;
-                
-                if (newStatus == ShipmentStatus.OutForDelivery)
-                    shipment.RiderName = txtRiderName.Text.Trim();
-
+                shipment.UpdatedDate = Helpers.TimeHelper.Now;
                 await _db.SaveChangesAsync();
 
                 _db.ShipmentHistories.Add(new ShipmentHistory
                 {
                     ShipmentId = shipment.Id,
                     Status = newStatus,
-                    Notes = txtNotes.Text.Trim()
+                    Location = newStatus == ShipmentStatus.Delivered ? shipment.RecipientAddress : txtLocation.Text.Trim(),
+                    Notes = txtNotes.Text.Trim(),
+                    ProofOfDelivery = proofBytes,
+                    ProofContentType = proofType
                 });
                 await _db.SaveChangesAsync();
 
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} updated to {StatusDisplayHelper.Label(newStatus)}.";
                 
-                //Send SMS
-                if (newStatus == ShipmentStatus.OutForDelivery)
+                //Send SMS / email (best effort: failures must not break the save)
+                try
                 {
-                    await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber);
-                }
-                else
-                {                                                                                    
+                    if (newStatus == ShipmentStatus.OutForDelivery)
+                    {
+                        await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber, shipment.RiderName);
+                    }
+
                     string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);
                     EmailHelper.SendShipmentUpdateEmail(shipment, redirectUrl);
+
+                    if (newStatus == ShipmentStatus.Delivered)
+                    {
+                        var receivedUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/OrderReceived.aspx?controlNumber=" + Uri.EscapeDataString(shipment.ControlNumber) + "&token=" + EmailHelper.GenerateReceiptToken(shipment.ControlNumber));
+                        EmailHelper.SendOrderReceivedEmail(shipment, receivedUrl);
+                    }
+                }
+                catch (Exception)
+                {
                 }
 
-                Response.Redirect("~/Views/Admin/Shipments.aspx");
+                Response.Redirect("~/Views/Admin/Shipments.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
             }
         }
 
-        private void ShowError(string message)
-        {
+        private void ShowError(string message)        {
             litError.Text = HttpUtility.HtmlEncode(message);
             pnlError.Visible = true;
-        }
-
-        protected void ddlNewStatus_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var newStatus = (ShipmentStatus)Enum.Parse(typeof(ShipmentStatus), ddlNewStatus.SelectedValue);
-            if (newStatus == ShipmentStatus.OutForDelivery)
-            {
-                txtRiderName.Visible = true;
-            }
-            else 
-                txtRiderName.Visible = false;
         }
     }
 }

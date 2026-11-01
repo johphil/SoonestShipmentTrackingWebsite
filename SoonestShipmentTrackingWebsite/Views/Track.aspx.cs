@@ -53,12 +53,23 @@ namespace SoonestShipmentTrackingWebsite.Views
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
+                litDestinationCity.Text = Server.HtmlEncode(shipment.RecipientAddress);
+                litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
-                litEta.Text = shipment.EstimatedDeliveryDate.HasValue
-                    ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy")
-                    : "TBD";
+                litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus) + "</div>";
+                litPackage.Text = StatusDisplayHelper.Enc(shipment.PackageDescription);
+                litWeight.Text = StatusDisplayHelper.WeightText(shipment.WeightKg);
+                litCreated.Text = shipment.CreatedDate.ToString("MMM d, yyyy h:mm tt");
+                litUpdated.Text = shipment.UpdatedDate.ToString("MMM d, yyyy h:mm tt");
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
+                var latest = history.FirstOrDefault();
+                litLastLocation.Text = StatusDisplayHelper.Enc(latest != null ? latest.Location : null);
+                var endTime = StatusDisplayHelper.IsClosed(shipment.CurrentStatus) ? shipment.UpdatedDate : TimeHelper.Now;
+                litElapsed.Text = StatusDisplayHelper.Elapsed(shipment.CreatedDate, endTime);
+                litEventCount.Text = history.Count.ToString();
                 rptHistory.DataSource = history;
                 rptHistory.DataBind();
                 lblNoHistory.Visible = !history.Any();
@@ -68,3 +79,4 @@ namespace SoonestShipmentTrackingWebsite.Views
         }
     }
 }
+
