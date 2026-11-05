@@ -60,9 +60,9 @@ div[style*="grid-template-columns"] { gap: 10px !important; }
 .card-panel[style*="margin-bottom"] { margin-bottom: 10px !important; }
 .card-panel + .card-panel { margin-top: 10px; }
 .card-panel h2 { font-size: 18px; margin: 0 0 4px; }
-.card-panel h4, .panel-title { font-size: 13px; font-weight: 800; margin: 0 0 8px !important; color: var(--navy-900); }
+.card-panel h4, .panel-title { font-size: 18px; font-weight: 800; margin: 0 0 8px !important; color: var(--navy-900); }
 .card-panel p { margin: 0 0 6px; }
-.page-heading { font-size: 18px; letter-spacing: -.2px; margin: 0 0 2px; }
+.page-heading { font-size: 24px; letter-spacing: -.2px; margin: 0 0 2px; }
 .page-subheading { font-size: 12px; margin: 0 0 8px; line-height: 1.4; }
 .page-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
 .page-head .page-heading { margin: 0; }
