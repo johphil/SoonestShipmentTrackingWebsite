@@ -35,7 +35,7 @@ namespace SoonestShipmentTrackingWebsite.Views
                 var isStaff = Context.User.IsInRole("Staff");
                 var isRider = Context.User.IsInRole("Rider");
                 var isCustomer = Context.User.IsInRole("Customer");
-                var isAdminStaffShell = isAdmin || isStaff;
+                var isAdminStaffRiderShell = isAdmin || isStaff || isRider;
 
                 litUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
                 pnlCustomerNav.Visible = isCustomer;
@@ -43,12 +43,12 @@ namespace SoonestShipmentTrackingWebsite.Views
                 pnlDashboardNav.Visible = isStaff || isAdmin;
                 pnlAdminNav.Visible = isAdmin;
 
-                pnlAdminSidebar.Visible = isAdminStaffShell;
+                pnlAdminSidebar.Visible = isAdminStaffRiderShell;
                 pnlSidebarDashboard.Visible = isStaff || isAdmin;
                 pnlSidebarAdminOnly.Visible = isAdmin;
                 litSidebarUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
 
-                if (isAdminStaffShell)
+                if (isAdminStaffRiderShell)
                     mainForm.Attributes["class"] = "admin-shell-mode";
 
                 if (isCustomer || isRider)
