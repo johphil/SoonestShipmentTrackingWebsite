@@ -17,8 +17,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin", "Staff", "Rider")) return;
 
-            pnlCreateShipment.Visible = !User.IsInRole("Rider") && !User.IsInRole("Customer");
-
             if (!IsPostBack)
             {
                 LoadData();

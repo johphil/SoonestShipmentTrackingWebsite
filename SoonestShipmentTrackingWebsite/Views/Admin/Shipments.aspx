@@ -9,9 +9,6 @@
                     <div class="page-heading">All Shipments</div>
                     <div class="page-subheading">Filter by status using the chips below. Newest activity first.</div>
                 </div>
-                <asp:PlaceHolder ID="pnlCreateShipment" runat="server">
-                    <div class="page-head-actions"><a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a></div>
-                </asp:PlaceHolder>
             </div>
             <asp:Literal ID="litStatusChips" runat="server" />
             <div class="table-scroll">

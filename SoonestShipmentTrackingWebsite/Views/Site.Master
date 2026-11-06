@@ -1,4 +1,4 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Site" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Site" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -29,7 +29,7 @@
                 </asp:PlaceHolder>
             </nav>
             <div class="admin-sidebar-user">Signed in as <asp:Literal ID="litSidebarUserName" runat="server" /></div>
-            <asp:LinkButton ID="btnSidebarLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
+            <asp:LinkButton ID="btnSidebarLogOff" runat="server" CssClass="btn btn-outline" OnClientClick="return confirm('Log out of your account?');" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
         </aside>
     </asp:PlaceHolder>
     <header class="site-header">
@@ -93,7 +93,7 @@
                         <asp:Literal ID="litUserName" runat="server" />
                     </div>
                     <a runat="server" href="~/Views/Account/Profile.aspx" class="btn btn-outline">Profile</a>
-                    <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
+                    <asp:LinkButton ID="btnLogOff" runat="server" CssClass="btn btn-outline" OnClientClick="return confirm('Log out of your account?');" OnClick="btnLogOff_Click">Logout</asp:LinkButton>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlLoggedOut" runat="server">
                     <a runat="server" href="~/Views/Account/Login.aspx" class="btn btn-outline"><img class="btn-icon" src="<%= ResolveUrl("~/Assets/icons/user.svg") %>" alt="" />Login</a>
