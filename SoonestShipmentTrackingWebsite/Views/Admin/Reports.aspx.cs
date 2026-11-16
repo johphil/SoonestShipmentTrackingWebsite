@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNet.Identity;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using SoonestShipmentTrackingWebsite.Helpers;
 using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
 namespace SoonestShipmentTrackingWebsite.Views.Admin
 {
     public partial class Reports : Page
     {
         private List<ReportRow> CurrentRows;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Helpers.AccessControlHelper.EnsureRole(this, "Admin")) return;
@@ -27,6 +34,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             foreach (ShipmentStatus s in Enum.GetValues(typeof(ShipmentStatus)))
                 ddlStatus.Items.Add(new ListItem(Helpers.StatusDisplayHelper.Label(s), s.ToString()));
         }
+
         private void ServeProof(string idText)
         {
             int id;
@@ -48,6 +56,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         }
 
         protected void btnGenerate_Click(object sender, EventArgs e) { Generate(); }
+
         private void Generate()
         {
             DateTime from, to;
@@ -75,7 +84,21 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     .ToDictionary(g => g.Key, g => g.OrderByDescending(x => x.Timestamp).First().Id);
                 CurrentRows = shipments.Select(s => new ReportRow
                 {
+                    Id = s.Id,
                     ControlNumber = s.ControlNumber,
+                    CreatedDate = s.CreatedDate,
+                    ShipmentType = s.ShipmentType,
+                    ContainerNumber = s.ContainerNumber,
+                    PackingList = s.PackingList,
+                    DestinationCity = s.DestinationCity,
+                    RecipientName = s.RecipientName,
+                    RecipientPhone = s.RecipientPhone,
+                    PackageDescription = s.PackageDescription,
+                    WeightKg = s.WeightKg,
+                    EstimatedDeliveryDate = s.EstimatedDeliveryDate,
+                    StatusValue = s.CurrentStatus,
+                    IssueFlag = s.IssueReported,
+                    IssueResolved = s.IsIssueResolved,
                     CustomerName = names.ContainsKey(s.CustomerId) ? names[s.CustomerId] : "(unknown)",
                     BranchOrigin = s.BranchOrigin,
                     RecipientAddress = s.RecipientAddress,
@@ -94,20 +117,266 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 ViewState["ReportRows"] = SerializeRows(CurrentRows);
             }
         }
+
         protected void btnExport_Click(object sender, EventArgs e)
         {
             Generate();
+
             var rows = CurrentRows ?? new List<ReportRow>();
-            var csv = new StringBuilder("Control Number,Customer,Branch Origin,Recipient Address,Status,Rider,Order Received,Issue Reported,Last Update,Proof of Delivery (link)\r\n");
-            var baseUrl = Request.Url.GetLeftPart(UriPartial.Authority);
-            foreach (var r in rows) csv.AppendLine(string.Join(",", new[] { r.ControlNumber, r.CustomerName, r.BranchOrigin, r.RecipientAddress, r.CurrentStatus, r.RiderName, r.IsOrderReceived, r.IssueReported, r.UpdatedDate.ToString("yyyy-MM-dd HH:mm"), string.IsNullOrEmpty(r.ProofPath) ? "" : baseUrl + r.ProofPath }.Select(CsvField)));
-            Response.Clear(); Response.ContentType = "text/csv"; Response.AddHeader("Content-Disposition", "attachment;filename=shipment-report.csv"); Response.Write(csv.ToString()); Response.End();
+            var pdfBytes = GeneratePDF(rows);//BuildPdfReport(rows);
+            var filename = "shipment-report-" + DateTime.Now.ToString("yyyyMMdd-HHmm") + ".pdf";
+
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+            Response.BinaryWrite(pdfBytes);
+            Response.End();
         }
-        private static string CsvField(string value) { return "\"" + (value ?? "").Replace("\"", "\"\"") + "\""; }
+
+        protected void btnExportCSV_Click(object sender, EventArgs e)
+        {
+            Generate();
+
+            var rows = CurrentRows ?? new List<ReportRow>();
+            var pdfBytes = GeneratePDF(rows);//BuildPdfReport(rows);
+            var filename = "shipment-report-" + DateTime.Now.ToString("yyyyMMdd-HHmm") + ".pdf";
+
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+            Response.BinaryWrite(pdfBytes);
+            Response.End();
+        }
+
+        private static string FormatTableRow(int[] widths, params string[] values)
+        {
+            var cells = new List<string>();
+            for (var i = 0; i < widths.Length; i++)
+                cells.Add(FitCell(i < values.Length ? values[i] : string.Empty, widths[i]));
+            return string.Join(" | ", cells);
+        }
+
+        private static string FitCell(string value, int width)
+        {
+            var text = (value ?? string.Empty).Replace("\r", " ").Replace("\n", " ").Trim();
+            if (text.Length > width)
+                text = text.Substring(0, width - 1) + "~";
+            return text.PadRight(width);
+        }
+
+
+        private byte[] GeneratePDF(IEnumerable<ReportRow> shipments)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var data = shipments?.ToList() ?? new List<ReportRow>();
+
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4.Landscape());
+                    page.Margin(20);
+
+                    page.DefaultTextStyle(x => x.FontSize(7));
+
+                    // HEADER
+                    page.Header().Column(column =>
+                    {
+                        column.Item()
+                            .Text("SHIPMENT TRACKING REPORT")
+                            .FontSize(16)
+                            .Bold()
+                            .FontColor("#26364A");
+
+                        column.Item().PaddingTop(5).Row(row =>
+                        {
+                            row.RelativeItem().Text(
+                                $"Total Shipments: {data.Count}")
+                                .FontSize(9);
+
+                            row.AutoItem().Text(
+                                $"Generated: {DateTime.Now:MMM dd, yyyy hh:mm tt}")
+                                .FontSize(8)
+                                .FontColor("#666666");
+                        });
+
+                        column.Item()
+                            .PaddingTop(8)
+                            .LineHorizontal(1)
+                            .LineColor("#CCCCCC");
+                    });
+
+                    // CONTENT
+                    page.Content()
+                        .PaddingTop(10)
+                        .Table(table =>
+                        {
+                            // COLUMN DEFINITIONS
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.ConstantColumn(65);   // Control No.
+                                columns.RelativeColumn(1.2f); // Customer
+                                columns.RelativeColumn(1.2f); // Origin
+                                columns.RelativeColumn(1.5f); // Recipient
+                                columns.RelativeColumn(0.9f); // Status
+                                columns.RelativeColumn(0.9f); // Rider
+                                columns.ConstantColumn(42);   // Received
+                                columns.RelativeColumn(1.0f); // Issue
+                                columns.ConstantColumn(65);   // Updated
+                                columns.RelativeColumn(1.2f); // Proof
+                            });
+
+                            // TABLE HEADER
+                            table.Header(header =>
+                            {
+                                string[] headers =
+                                {
+                            "Control No.",
+                            "Customer Name",
+                            "Branch Origin",
+                            "Recipient Address",
+                            "Shipment Status",
+                            "Rider Name",
+                            "Received",
+                            "Issue Reported",
+                            "Last Updated",
+                            "Proof of Delivery"
+                                };
+
+                                foreach (var title in headers)
+                                {
+                                    header.Cell()
+                                        .Background("#26364A")
+                                        .Padding(5)
+                                        .AlignMiddle()
+                                        .Text(title)
+                                        .FontColor("#FFFFFF")
+                                        .Bold()
+                                        .FontSize(7);
+                                }
+                            });
+
+                            // TABLE ROWS
+                            int index = 0;
+
+                            foreach (var shipment in data)
+                            {
+                                var background = index++ % 2 == 0
+                                    ? "#FFFFFF"
+                                    : "#F2F5F8";
+
+                                // REUSABLE CELL
+                                void AddCell(string value)
+                                {
+                                    table.Cell()
+                                        .Background(background)
+                                        .BorderBottom(0.5f)
+                                        .BorderColor("#DDDDDD")
+                                        .Padding(5)
+                                        .AlignMiddle()
+                                        .Text(string.IsNullOrWhiteSpace(value)
+                                            ? "-"
+                                            : value)
+                                        .FontSize(7);
+                                }
+
+                                AddCell(shipment.ControlNumber);
+                                AddCell(shipment.CustomerName);
+                                AddCell(shipment.BranchOrigin);
+                                AddCell(shipment.RecipientAddress);
+                                AddCell(shipment.CurrentStatus);
+                                AddCell(shipment.RiderName);
+                                AddCell(shipment.IsOrderReceived);
+                                AddCell(shipment.IssueReported);
+
+                                AddCell(
+                                    shipment.UpdatedDate.ToString("MMM dd, yyyy")
+                                );
+
+                                // PROOF OF DELIVERY
+                                var proofLink = Request.Url.GetLeftPart(UriPartial.Authority) + shipment.ProofPath;
+
+                                var cell = table.Cell()
+                                    .Background(background)
+                                    .BorderBottom(0.5f)
+                                    .BorderColor("#DDDDDD")
+                                    .Padding(5)
+                                    .AlignMiddle();
+
+                                if (!string.IsNullOrWhiteSpace(shipment.ProofPath) &&
+                                    Uri.TryCreate(
+                                        proofLink,
+                                        UriKind.Absolute,
+                                        out Uri uri) &&
+                                    (uri.Scheme == Uri.UriSchemeHttp ||
+                                     uri.Scheme == Uri.UriSchemeHttps))
+                                {
+                                    cell.Hyperlink(proofLink)
+                                        .Text("View Proof")
+                                        .FontSize(7)
+                                        .FontColor("#1677C8")
+                                        .Underline();
+                                }
+                                else
+                                {
+                                    cell.Text("-").FontSize(7);
+                                }
+                            }
+                        });
+
+                    // FOOTER
+                    page.Footer()
+                        .PaddingTop(8)
+                        .Row(row =>
+                        {
+                            row.RelativeItem().Text(
+                                "Shipment Tracking System")
+                                .FontSize(7)
+                                .FontColor("#888888");
+
+                            row.AutoItem().Text(text =>
+                            {
+                                text.Span("Page ").FontSize(7);
+                                text.CurrentPageNumber().FontSize(7);
+                                text.Span(" of ").FontSize(7);
+                                text.TotalPages().FontSize(7);
+                            });
+                        });
+                });
+            });
+
+            return document.GeneratePdf();
+        }
+
+        private static string PdfEscape(string value)
+        {
+            return (value ?? string.Empty)
+                .Replace("\\", "\\\\")
+                .Replace("(", "\\(")
+                .Replace(")", "\\)");
+        }
+        
         private static string SerializeRows(List<ReportRow> rows) { return rows.Count.ToString(); }
+        
         private void ShowError(string message) { lblError.Text = HttpUtility.HtmlEncode(message); lblError.Visible = true; }
+        
         private class ReportRow
         {
+            public int Id { get; set; }
+            public DateTime CreatedDate { get; set; }
+            public ShipmentType ShipmentType { get; set; }
+            public string ContainerNumber { get; set; }
+            public string PackingList { get; set; }
+            public string DestinationCity { get; set; }
+            public string RecipientName { get; set; }
+            public string RecipientPhone { get; set; }
+            public string PackageDescription { get; set; }
+            public decimal? WeightKg { get; set; }
+            public DateTime? EstimatedDeliveryDate { get; set; }
+            public ShipmentStatus StatusValue { get; set; }
+            public bool IssueFlag { get; set; }
+            public bool IssueResolved { get; set; }
             public string ControlNumber { get; set; }
             public string CustomerName { get; set; }
             public string BranchOrigin { get; set; }
@@ -122,7 +391,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             {
                 get
                 {
-                    return string.IsNullOrEmpty(ProofPath) ? "-" : "<a href=\"" + ProofPath + "\" target=\"_blank\"><img src=\"" + ProofPath + "\" alt=\"Proof of delivery\" style=\"max-width:90px;max-height:90px;border-radius:6px;border:1px solid #dbe6f0;\" /></a>";
+                    return string.IsNullOrEmpty(ProofPath) ? "-" : "<a href=\"" + ProofPath + "\" target=\"_blank\"><img src=\"" + ProofPath + "\" alt=\"Proof of delivery\" style=\"max-width:44px;max-height:44px;border-radius:6px;border:1px solid #dbe6f0;\" /></a>";
                 }
             }
         }

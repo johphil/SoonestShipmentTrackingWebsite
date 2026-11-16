@@ -16,7 +16,8 @@
                         <label>To date</label><asp:TextBox ID="txtToDate" runat="server" CssClass="form-control" TextMode="Date" /></div>
                 </div>
                 <asp:Button ID="btnGenerate" runat="server" Text="Generate Report" CssClass="btn btn-red" OnClick="btnGenerate_Click" />
-                <asp:Button ID="btnExport" runat="server" Text="Export CSV" CssClass="btn btn-outline" OnClick="btnExport_Click" />
+                <asp:Button ID="btnExport" runat="server" Text="Export PDF" CssClass="btn btn-outline" OnClick="btnExport_Click" />
+                <asp:Button ID="btnExportCSV" runat="server" Text="Export CSV" CssClass="btn btn-outline" OnClick="btnExportCSV_Click" />
                 <asp:Label ID="lblError" runat="server" CssClass="field-error" Visible="false" />
             </div>
             <div style="display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px;">
@@ -34,20 +35,23 @@
                 </div>
             </div>
             <div class="card-panel">
-                <asp:GridView ID="gvReport" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None" EmptyDataText="No shipments match the selected filters.">
+                <div class="table-scroll">
+                <asp:GridView ID="gvReport" runat="server" AutoGenerateColumns="false" CssClass="data-grid data-grid-shipments" GridLines="None" EmptyDataText="No shipments match the selected filters.">
                     <Columns>
-                        <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
-                        <asp:BoundField DataField="CustomerName" HeaderText="Customer" />
-                        <asp:BoundField DataField="BranchOrigin" HeaderText="Branch Origin" />
-                        <asp:BoundField DataField="RecipientAddress" HeaderText="Recipient Address" />
-                        <asp:BoundField DataField="CurrentStatus" HeaderText="Status" />
-                        <asp:BoundField DataField="RiderName" HeaderText="Rider" />
-                        <asp:BoundField DataField="IsOrderReceived" HeaderText="Received" />
-                        <asp:BoundField DataField="IssueReported" HeaderText="Issue" />
-                        <asp:BoundField DataField="UpdatedDate" HeaderText="Last update" DataFormatString="{0:MMM d, yyyy h:mm tt}" />
-                        <asp:BoundField DataField="ProofHtml" HeaderText="Proof of delivery" HtmlEncode="false" />
+                        <asp:TemplateField HeaderText="Shipment"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ShipmentCell(Eval("ControlNumber"), Eval("ShipmentType"), Eval("CreatedDate")) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Customer"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Enc(Convert.ToString(Eval("CustomerName"))) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Recipient"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RecipientCell(Eval("RecipientName"), Eval("RecipientPhone")) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Route / Container"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RouteCell(Eval("ShipmentType"), Eval("BranchOrigin"), Eval("ContainerNumber"), Eval("PackingList"), Eval("DestinationCity"), Eval("RecipientAddress")) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Cargo"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.CargoCell(Eval("PackageDescription"), Eval("WeightKg")) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Status"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.StatusCell(Eval("StatusValue"), Eval("IssueFlag"), Eval("IssueResolved")) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Rider"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Enc(Convert.ToString(Eval("RiderName"))) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Est. Delivery"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.EtaCell(Eval("EstimatedDeliveryDate"), Eval("StatusValue")) %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Received"><ItemTemplate><%# Convert.ToString(Eval("IsOrderReceived")) == "Yes" ? "<span class=\"status-badge badge-success\">Yes</span>" : "<span class=\"muted\">No</span>" %></ItemTemplate></asp:TemplateField>
+                        <asp:TemplateField HeaderText="Updated"><ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.UpdatedCell(Eval("UpdatedDate")) %></ItemTemplate></asp:TemplateField>
+                        <asp:BoundField DataField="ProofHtml" HeaderText="Proof" HtmlEncode="false" />
                     </Columns>
                 </asp:GridView>
+                </div>
             </div>
         </div>
     </div>

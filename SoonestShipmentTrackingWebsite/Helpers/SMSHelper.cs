@@ -47,7 +47,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     recipient = contactNumber,
                     sender_id = _senderName,
                     type = "plain",
-                    message = $"Hello {customerName}! Your package {shipmentControlNo} is out for delivery today! Your rider is {rider}."
+                    message = $"Hello {customerName}! Your package {shipmentControlNo} is scheduled to be delivered today! Your rider is {rider}. Please prepare your identification document for validation."
                 };
 
                 string json =

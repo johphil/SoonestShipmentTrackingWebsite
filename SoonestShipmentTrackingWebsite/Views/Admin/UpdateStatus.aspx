@@ -16,8 +16,23 @@
             <div class="kv-grid">
                 <div class="kv"><div class="kv-label">Recipient</div><div class="kv-value"><asp:Literal ID="litRecipientName" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Recipient Phone</div><div class="kv-value"><asp:Literal ID="litRecipientPhone" runat="server" /></div></div>
-                <div class="kv"><div class="kv-label">Branch Origin</div><div class="kv-value"><asp:Literal ID="litBranchOrigin" runat="server" /></div></div>
+                <div class="kv"><div class="kv-label">Shipment Type</div><div class="kv-value"><asp:Literal ID="litShipmentType" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Rider</div><div class="kv-value"><asp:Literal ID="litRiderInfo" runat="server" /></div></div>
+
+                <asp:Panel ID="pnlDomesticShipmentDetails" runat="server" CssClass="kv" Visible="false">
+                    <div class="kv-label">Branch Origin</div>
+                    <div class="kv-value"><asp:Literal ID="litBranchOrigin" runat="server" /></div>
+                </asp:Panel>
+
+                <asp:Panel ID="pnlInternationalShipmentDetails" runat="server" CssClass="kv" Visible="false">
+                    <div class="kv-label">Container Number</div>
+                    <div class="kv-value"><asp:Literal ID="litContainerNumber" runat="server" /></div>
+                </asp:Panel>
+
+                <asp:Panel ID="pnlInternationalPackingList" runat="server" CssClass="kv kv-wide" Visible="false">
+                    <div class="kv-label">Packing List</div>
+                    <div class="kv-value"><asp:Literal ID="litPackingListImage" runat="server" /></div>
+                </asp:Panel>
 
                 <div class="kv kv-wide"><div class="kv-label">Recipient Address</div><div class="kv-value"><asp:Literal ID="litDestinationCity" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Customer</div><div class="kv-value"><asp:Literal ID="litCustomer" runat="server" /></div></div>

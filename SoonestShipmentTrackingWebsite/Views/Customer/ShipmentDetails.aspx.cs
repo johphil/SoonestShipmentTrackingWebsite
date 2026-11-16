@@ -49,7 +49,32 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
+                litBranchOrigin.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.BranchOrigin) ? "-" : shipment.BranchOrigin);
+                litContainerNumber.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.ContainerNumber) ? "-" : shipment.ContainerNumber);
+                litShipmentType.Text = shipment.ShipmentType == ShipmentType.INTERNATIONAL ? "International" : "Domestic";
+
+                pnlDomesticShipmentDetails.Visible = shipment.ShipmentType == ShipmentType.DOMESTIC;
+                pnlInternationalShipmentDetails.Visible = shipment.ShipmentType == ShipmentType.INTERNATIONAL;
+                pnlInternationalPackingList.Visible = shipment.ShipmentType == ShipmentType.INTERNATIONAL;
+
+                if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
+                {
+                    if (!string.IsNullOrWhiteSpace(shipment.PackingList))
+                    {
+                        var imageUrl = ResolveUrl(shipment.PackingList.Trim());
+                        var encodedUrl = HttpUtility.HtmlAttributeEncode(imageUrl);
+                        litPackingListImage.Text = "<a href=\"" + encodedUrl + "\" target=\"_blank\" rel=\"noopener\"> View Packing List Image </a>";
+                    }
+                    else
+                    {
+                        litPackingListImage.Text = "No uploaded image.";
+                    }
+                }
+                else
+                {
+                    litPackingListImage.Text = string.Empty;
+                }
+
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litSenderName.Text = Server.HtmlEncode(shipment.SenderName);
                 litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress);
@@ -67,8 +92,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     StatusDisplayHelper.IsClosed(shipment.CurrentStatus) ? shipment.UpdatedDate : TimeHelper.Now);
                 var deliveredOrReceived = shipment.CurrentStatus == ShipmentStatus.Delivered || shipment.CurrentStatus == ShipmentStatus.Received;
                 pnlFeedback.Visible = deliveredOrReceived;
-                btnOrderReceived.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IsOrderReceived;
+                //btnOrderReceived.Visible = shipment.CurrentStatus == ShipmentStatus.Delivered && !shipment.IsOrderReceived;
                 btnReportIssue.Visible = deliveredOrReceived && !shipment.IssueReported;
+                txtIssueReport.Visible = deliveredOrReceived && !shipment.IssueReported;
                 litFeedback.Text = shipment.IsOrderReceived
                     ? "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Order received on " + shipment.OrderReceivedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>"
                     : "";
@@ -84,10 +110,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
             }
         }
 
-        protected void btnOrderReceived_Click(object sender, EventArgs e)
-        {
-            UpdateCustomerFeedback(true, null);
-        }
+        //protected void btnOrderReceived_Click(object sender, EventArgs e)
+        //{
+        //    UpdateCustomerFeedback(true, null);
+        //}
 
         protected void btnReportIssue_Click(object sender, EventArgs e)
         {

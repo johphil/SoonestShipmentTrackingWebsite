@@ -48,8 +48,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         CustomerName = users.ContainsKey(s.CustomerId) ? (users[s.CustomerId].FullName ?? "(unknown)") : "(unknown)",
                         s.RecipientName,
                         s.RecipientPhone,
+                        s.ShipmentType,
                         s.BranchOrigin,
+                        s.ContainerNumber,
+                        s.PackingList,
                         s.RecipientAddress,
+                        s.DestinationCity,
                         s.EstimatedDeliveryDate,
                         s.CurrentStatus,
                         s.IssueReported,
@@ -182,6 +186,41 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 if (customerRoleId == null) return 0;
                 return _db.Users.Count(u => u.Roles.Any(r => r.RoleId == customerRoleId));
             }
+        }
+
+        protected string ShipmentTypeLabel(object type)
+        {
+            if (type == null) return "-";
+            if (!(type is ShipmentType)) return type.ToString();
+
+            var shipmentType = (ShipmentType)type;
+            return shipmentType == ShipmentType.DOMESTIC ? "Domestic" : "International";
+        }
+
+        protected string ShipmentRouteMain(object type, object branchOrigin, object containerNumber)
+        {
+            var shipmentType = type is ShipmentType ? (ShipmentType)type : ShipmentType.DOMESTIC;
+            if (shipmentType == ShipmentType.INTERNATIONAL)
+            {
+                var container = Convert.ToString(containerNumber);
+                return string.IsNullOrWhiteSpace(container) ? "(No container number)" : container;
+            }
+
+            var branch = Convert.ToString(branchOrigin);
+            return string.IsNullOrWhiteSpace(branch) ? "(No branch origin)" : branch;
+        }
+
+        protected string ShipmentRouteSub(object type, object recipientAddress, object packingList)
+        {
+            var shipmentType = type is ShipmentType ? (ShipmentType)type : ShipmentType.DOMESTIC;
+            if (shipmentType == ShipmentType.INTERNATIONAL)
+            {
+                var list = Convert.ToString(packingList);
+                return string.IsNullOrWhiteSpace(list) ? "Packing list: -" : "Packing list: " + list;
+            }
+
+            var address = Convert.ToString(recipientAddress);
+            return string.IsNullOrWhiteSpace(address) ? "" : "→ " + address;
         }
     }
 }

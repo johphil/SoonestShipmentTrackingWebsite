@@ -1,6 +1,7 @@
 ﻿using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -38,7 +39,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             switch (status)
             {
-                case ShipmentStatus.Received: return "RECEIVED";
+                case ShipmentStatus.Received: return "Received";
                 case ShipmentStatus.InTransit: return "In Transit";
                 case ShipmentStatus.OutForDelivery: return "Out for Delivery";
                 case ShipmentStatus.FailedDelivery: return "Failed Delivery";
@@ -172,6 +173,153 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             if (string.IsNullOrWhiteSpace(valueHtml)) valueHtml = "-";
             return "<div class=\"kv\"><div class=\"kv-label\">" + label + "</div><div class=\"kv-value\">" + valueHtml + "</div></div>";
+        }
+
+        // ---- Dense shipment-table cell builders (shared by every shipment table) ----
+
+        private static ShipmentType AsType(object v)
+        {
+            if (v is ShipmentType) return (ShipmentType)v;
+            ShipmentType t;
+            return Enum.TryParse(Convert.ToString(v), out t) ? t : ShipmentType.DOMESTIC;
+        }
+
+        private static ShipmentStatus AsStatus(object v)
+        {
+            if (v is ShipmentStatus) return (ShipmentStatus)v;
+            ShipmentStatus s;
+            return Enum.TryParse(Convert.ToString(v), out s) ? s : ShipmentStatus.Pending;
+        }
+
+        private static string Txt(object v)
+        {
+            var s = Convert.ToString(v);
+            return string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+        }
+
+        private static string Cell(string main, string sub, string subTitle = null)
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append("<span class=\"cell-main\">" + main + "</span>");
+            if (!string.IsNullOrEmpty(sub))
+                sb.Append("<span class=\"cell-sub ellipsis\"" + (subTitle != null ? " title=\"" + HttpUtility.HtmlAttributeEncode(subTitle) + "\"" : "") + ">" + sub + "</span>");
+            return sb.ToString();
+        }
+
+        public static string TypeTag(object type)
+        {
+            return AsType(type) == ShipmentType.INTERNATIONAL
+                ? "<span class=\"type-tag type-intl\">INTL</span>"
+                : "<span class=\"type-tag type-dom\">DOM</span>";
+        }
+
+        // Control number + shipment type tag, with creation date underneath.
+        public static string ShipmentCell(object control, object type, object created)
+        {
+            var date = created is DateTime ? ((DateTime)created).ToString("MMM d, yyyy") : "-";
+            return "<span class=\"cell-main mono\">" + Enc(Convert.ToString(control)) + " " + TypeTag(type) + "</span>"
+                 + "<span class=\"cell-sub\">" + date + "</span>";
+        }
+
+        // Customer (account holder) with e-mail underneath.
+        public static string PartyCell(object name, object email)
+        {
+            return Cell(Enc(Convert.ToString(name)), Txt(email) == null ? null : Enc(Convert.ToString(email)), Txt(email));
+        }
+
+        // Recipient with phone underneath.
+        public static string RecipientCell(object name, object phone)
+        {
+            return Cell(Enc(Convert.ToString(name)), Txt(phone) == null ? null : Enc(Convert.ToString(phone)));
+        }
+
+        // Region area
+        public static string RegionAreaCell(object region)
+        {
+            return  $"<span class=\"cell-main nowrap\">{Enc(region.ToString())}</span>";
+        }
+
+        // Domestic: origin branch -> destination city, address underneath.
+        // International: container number, packing list / destination underneath.
+        public static string RouteCell(object type, object branch, object container, object packingList, object destCity, object address)
+        {
+            var city = Txt(destCity);
+
+            if (AsType(type) == ShipmentType.INTERNATIONAL)
+            {
+                var c = Txt(container);
+                var dest = Txt(destCity);
+                var main = "Customs <span class=\"route-arrow\">&rarr;</span> " + HttpUtility.HtmlEncode(city);
+                //var sub = pl != null ? "Packing: " + HttpUtility.HtmlEncode(pl) : (dest != null ? "&rarr; " + HttpUtility.HtmlEncode(dest) : null);
+                return Cell(main, $"Container No. {c}");
+            }
+
+            var origin = Txt(branch);
+            var addr = Txt(address);
+            var head = (origin == null ? "<span class=\"muted\">Origin n/a</span>" : HttpUtility.HtmlEncode(origin))
+                     + (city != null ? " <span class=\"route-arrow\">&rarr;</span> " + HttpUtility.HtmlEncode(city) : "");
+            return $"<span class=\"cell-main nowrap\">{head}</span>";
+        }
+
+        // Customer over "To: recipient" for narrow tables.
+        public static string PartiesCell(object customer, object recipient, object phone)
+        {
+            var sub = "To: " + HttpUtility.HtmlEncode(Convert.ToString(recipient)) + (Txt(phone) != null ? " &middot; " + HttpUtility.HtmlEncode(Txt(phone)) : "");
+            return Cell(Enc(Convert.ToString(customer)), sub);
+        }
+
+        // Package description with weight underneath.
+        public static string CargoCell(object description, object weightKg)
+        {
+            return Cell(Enc(Convert.ToString(description)), WeightText(weightKg as decimal?));
+        }
+
+        // Status badge, with an issue flag stacked beneath when an issue was reported.
+        public static string StatusCell(object status, object issueReported, object issueResolved)
+        {
+            var html = Badge(AsStatus(status));
+            bool reported = false, resolved = false;
+            if (issueReported != null) bool.TryParse(Convert.ToString(issueReported), out reported);
+            if (issueResolved != null) bool.TryParse(Convert.ToString(issueResolved), out resolved);
+            if (reported)
+                html += resolved
+                    ? "<span class=\"issue-flag resolved\">&#10003; Issue resolved</span>"
+                    : "<span class=\"issue-flag open\">&#9873; Issue open</span>";
+            return html;
+        }
+
+        // Rider name (compact), "Unassigned" once the shipment is at a rider stage.
+        public static string RiderCell(object status, object riderName)
+        {
+            var s = AsStatus(status);
+            var name = Txt(riderName);
+            if (name != null) return "<span class=\"cell-main\">" + HttpUtility.HtmlEncode(name) + "</span>";
+            if (s == ShipmentStatus.OutForDelivery || s == ShipmentStatus.FailedDelivery)
+                return "<span class=\"muted\">Unassigned</span>";
+            return "<span class=\"muted\">&ndash;</span>";
+        }
+
+        // ETA with overdue marker; delivered/received shipments show the received date when known.
+        public static string EtaCell(object eta, object status)
+        {
+            var st = AsStatus(status);
+            var d = eta as DateTime?;
+            if (!d.HasValue) return "<span class=\"muted\">TBD</span>";
+            var text = "<span class=\"cell-main nowrap\">" + d.Value.ToString("MMM d, yyyy") + "</span>";
+            if (!IsClosed(st) && d.Value.Date < TimeHelper.Now.Date)
+            {
+                var days = (TimeHelper.Now.Date - d.Value.Date).Days;
+                text += "<span class=\"issue-flag open\">" + days + "d overdue</span>";
+            }
+            return text;
+        }
+
+        // Last update, date over time.
+        public static string UpdatedCell(object updated)
+        {
+            if (!(updated is DateTime)) return "-";
+            var d = (DateTime)updated;
+            return "<span class=\"cell-main nowrap\">" + d.ToString("MMM d, yyyy") + "</span><span class=\"cell-sub\">" + d.ToString("h:mm tt") + "</span>";
         }
 
         public static string Enc(string s)

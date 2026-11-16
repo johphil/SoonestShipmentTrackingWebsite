@@ -60,7 +60,33 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
                 litDestinationCity.Text = Server.HtmlEncode(shipment.RecipientAddress);
-                litBranchOrigin.Text = Server.HtmlEncode(shipment.BranchOrigin);
+                litBranchOrigin.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.BranchOrigin) ? "-" : shipment.BranchOrigin);
+                litContainerNumber.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.ContainerNumber) ? "-" : shipment.ContainerNumber);
+                litShipmentType.Text = shipment.ShipmentType == ShipmentType.INTERNATIONAL ? "International" : "Domestic";
+
+                pnlDomesticShipmentDetails.Visible = shipment.ShipmentType == ShipmentType.DOMESTIC;
+                pnlInternationalShipmentDetails.Visible = shipment.ShipmentType == ShipmentType.INTERNATIONAL;
+                pnlInternationalPackingList.Visible = shipment.ShipmentType == ShipmentType.INTERNATIONAL;
+
+                if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
+                {
+                    if (!string.IsNullOrWhiteSpace(shipment.PackingList))
+                    {
+                        var imageUrl = ResolveUrl(shipment.PackingList.Trim());
+                        var encodedUrl = HttpUtility.HtmlAttributeEncode(imageUrl);
+
+                        litPackingListImage.Text = "<a href=\"" + encodedUrl + "\" target=\"_blank\" rel=\"noopener\"> View Packing List Image </a>";
+                    }
+                    else
+                    {
+                        litPackingListImage.Text = "No uploaded image.";
+                    }
+                }
+                else
+                {
+                    litPackingListImage.Text = string.Empty;
+                }
+
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 litIssueIndicator.Text = StatusDisplayHelper.IssueIndicator(shipment.IssueReported, shipment.IsIssueResolved);
