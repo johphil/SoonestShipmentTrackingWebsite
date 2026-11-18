@@ -48,8 +48,6 @@ namespace SoonestShipmentTrackingWebsite.Models
         public string RecipientName { get; set; }
         [Required, StringLength(250)]
         public string RecipientAddress { get; set; }
-        [StringLength(100)]
-        public string DestinationCity { get; set; }
 
         [Required, Phone]
         public string RecipientPhone { get; set; }

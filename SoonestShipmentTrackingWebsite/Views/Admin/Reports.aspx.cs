@@ -90,7 +90,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     ShipmentType = s.ShipmentType,
                     ContainerNumber = s.ContainerNumber,
                     PackingList = s.PackingList,
-                    DestinationCity = s.DestinationCity,
                     RecipientName = s.RecipientName,
                     RecipientPhone = s.RecipientPhone,
                     PackageDescription = s.PackageDescription,
@@ -368,7 +367,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             public ShipmentType ShipmentType { get; set; }
             public string ContainerNumber { get; set; }
             public string PackingList { get; set; }
-            public string DestinationCity { get; set; }
             public string RecipientName { get; set; }
             public string RecipientPhone { get; set; }
             public string PackageDescription { get; set; }

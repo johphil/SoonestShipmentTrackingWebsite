@@ -14,7 +14,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
     {
         private static readonly string[] PackageDescriptionOptions =
         {
-            "Carton Box", "Pallet", "Crate", "Drum/Barrel", "Sack", "Roll/Spool"
+            "Documents","Clothing and Apparel","Shoes and Footwear","Bags and Accessories","Electronics and Gadgets","Computer Equipment","Mobile Devices","Household Items","Kitchenware","Furniture and Fixtures","Food Products","Beverages","Health and Beauty Products","Medical Supplies","Automotive Parts and Accessories","Hardware and Tools","Industrial Supplies","Agricultural Products","Toys and Games","Sports and Recreational Items","Books and Educational Materials","Office Supplies","Packaging Materials","Gifts and Souvenirs","Personal Belongings","Fragile Items","Perishable Goods","Miscellaneous Items","Others"
         };
 
         private static readonly string[] RegionAreaOptions =
@@ -85,29 +85,29 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             args.IsValid = cblPackageDescription.Items.Cast<ListItem>().Any(i => i.Selected);
         }
 
-        protected void cvShipmentTypeFields_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            cvShipmentTypeFields.ErrorMessage = string.Empty;
+        //protected void cvShipmentTypeFields_ServerValidate(object source, ServerValidateEventArgs args)
+        //{
+        //    cvShipmentTypeFields.ErrorMessage = string.Empty;
 
-            if (!Enum.TryParse(ddlShipmentType.SelectedValue, out ShipmentType selectedType))
-            {
-                cvShipmentTypeFields.ErrorMessage = "Please select shipment type.";
-                args.IsValid = false;
-                return;
-            }
+        //    if (!Enum.TryParse(ddlShipmentType.SelectedValue, out ShipmentType selectedType))
+        //    {
+        //        cvShipmentTypeFields.ErrorMessage = "Please select shipment type.";
+        //        args.IsValid = false;
+        //        return;
+        //    }
 
-            if (selectedType == ShipmentType.DOMESTIC)
-            {
-                args.IsValid = !string.IsNullOrWhiteSpace(ddlBranchOrigin.SelectedValue);
-                if (!args.IsValid)
-                    cvShipmentTypeFields.ErrorMessage = "Please select a branch origin for domestic shipment.";
-                return;
-            }
+        //    if (selectedType == ShipmentType.DOMESTIC)
+        //    {
+        //        args.IsValid = !string.IsNullOrWhiteSpace(ddlBranchOrigin.SelectedValue);
+        //        if (!args.IsValid)
+        //            cvShipmentTypeFields.ErrorMessage = "Please select a branch origin for domestic shipment.";
+        //        return;
+        //    }
 
-            args.IsValid = !string.IsNullOrWhiteSpace(txtContainerNumber.Text);
-            if (!args.IsValid)
-                cvShipmentTypeFields.ErrorMessage = "Container number is required for international shipment.";
-        }
+        //    args.IsValid = !string.IsNullOrWhiteSpace(txtContainerNumber.Text);
+        //    if (!args.IsValid)
+        //        cvShipmentTypeFields.ErrorMessage = "Container number is required for international shipment.";
+        //}
 
         private void BindCustomers()
         {
@@ -247,7 +247,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     RecipientName = txtRecipientName.Text.Trim(),
                     RecipientAddress = txtRecipientAddress.Text.Trim(),
                     RegionArea = ddlRegionArea.SelectedValue,
-                    DestinationCity = txtRecipientAddress.Text.Trim(),
                     RecipientPhone = txtRecipientPhone.Text.Trim(),
                     RecipientEmail = txtRecipientEmail.Text.Trim(),
                     PackageDescription = string.Join(", ", cblPackageDescription.Items.Cast<ListItem>().Where(i => i.Selected).Select(i => i.Text)),

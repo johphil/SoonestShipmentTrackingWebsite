@@ -12,8 +12,8 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
     public partial class RequestShipment : System.Web.UI.Page
     {
         private static readonly string[] PackageDescriptionOptions =
-        {
-            "Carton Box", "Pallet", "Crate", "Drum/Barrel", "Sack", "Roll/Spool"
+         {
+            "Documents","Clothing and Apparel","Shoes and Footwear","Bags and Accessories","Electronics and Gadgets","Computer Equipment","Mobile Devices","Household Items","Kitchenware","Furniture and Fixtures","Food Products","Beverages","Health and Beauty Products","Medical Supplies","Automotive Parts and Accessories","Hardware and Tools","Industrial Supplies","Agricultural Products","Toys and Games","Sports and Recreational Items","Books and Educational Materials","Office Supplies","Packaging Materials","Gifts and Souvenirs","Personal Belongings","Fragile Items","Perishable Goods","Miscellaneous Items","Others"
         };
 
         private static readonly string[] RegionAreaOptions =
@@ -214,7 +214,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     RecipientName = txtRecipientName.Text.Trim(),
                     RecipientAddress = txtRecipientAddress.Text.Trim(),
                     RegionArea = ddlRegionArea.SelectedValue,
-                    DestinationCity = txtRecipientAddress.Text.Trim(),
                     RecipientPhone = txtRecipientPhone.Text.Trim(),
                     RecipientEmail = txtRecipientEmail.Text.Trim(),
                     PackageDescription = packageDescription,

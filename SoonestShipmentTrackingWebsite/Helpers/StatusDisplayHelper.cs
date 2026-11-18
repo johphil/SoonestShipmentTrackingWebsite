@@ -239,25 +239,23 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             return  $"<span class=\"cell-main nowrap\">{Enc(region.ToString())}</span>";
         }
 
-        // Domestic: origin branch -> destination city, address underneath.
+        // Domestic: origin branch -> destination addr, regionArea underneath.
         // International: container number, packing list / destination underneath.
-        public static string RouteCell(object type, object branch, object container, object packingList, object destCity, object address)
+        public static string RouteCell(object type, object branch, object container, object packingList, object regionArea, object address)
         {
-            var city = Txt(destCity);
+            var addr = Txt(address);
+            var area = Txt(regionArea);
 
             if (AsType(type) == ShipmentType.INTERNATIONAL)
             {
                 var c = Txt(container);
-                var dest = Txt(destCity);
-                var main = "Customs <span class=\"route-arrow\">&rarr;</span> " + HttpUtility.HtmlEncode(city);
-                //var sub = pl != null ? "Packing: " + HttpUtility.HtmlEncode(pl) : (dest != null ? "&rarr; " + HttpUtility.HtmlEncode(dest) : null);
+                var main = "Customs <span class=\"route-arrow\">&rarr;</span> " + HttpUtility.HtmlEncode(TrimText(area));
                 return Cell(main, $"Container No. {c}");
             }
 
             var origin = Txt(branch);
-            var addr = Txt(address);
-            var head = (origin == null ? "<span class=\"muted\">Origin n/a</span>" : HttpUtility.HtmlEncode(origin))
-                     + (city != null ? " <span class=\"route-arrow\">&rarr;</span> " + HttpUtility.HtmlEncode(city) : "");
+            var head = (origin == null ? "<span class=\"muted\">Origin n/a</span>" : HttpUtility.HtmlEncode(TrimText(origin)))
+                     + (addr != null ? " <span class=\"route-arrow\">&rarr;</span> " + HttpUtility.HtmlEncode(TrimText(area)) : "");
             return $"<span class=\"cell-main nowrap\">{head}</span>";
         }
 
@@ -325,6 +323,16 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         public static string Enc(string s)
         {
             return string.IsNullOrWhiteSpace(s) ? "-" : HttpUtility.HtmlEncode(s.Trim());
+        }
+
+        public static string TrimText(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            return text.Length > 15
+                ? text.Substring(0, 15) + "..."
+                : text;
         }
     }
 }

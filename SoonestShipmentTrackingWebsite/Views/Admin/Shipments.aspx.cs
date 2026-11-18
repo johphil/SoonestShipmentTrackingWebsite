@@ -130,7 +130,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         s.ContainerNumber,
                         s.PackingList,
                         s.RegionArea,
-                        s.DestinationCity,
                         s.RecipientAddress,
                         s.PackageDescription,
                         s.WeightKg,
