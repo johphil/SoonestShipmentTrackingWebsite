@@ -60,13 +60,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litRecipientPhone;
 
         /// <summary>
-        /// litBranchOrigin control.
+        /// litShipmentType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litBranchOrigin;
+        protected global::System.Web.UI.WebControls.Literal litShipmentType;
 
         /// <summary>
         /// litRiderInfo control.
@@ -76,6 +76,60 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litRiderInfo;
+
+        /// <summary>
+        /// pnlDomesticShipmentDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlDomesticShipmentDetails;
+
+        /// <summary>
+        /// litBranchOrigin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litBranchOrigin;
+
+        /// <summary>
+        /// pnlInternationalShipmentDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlInternationalShipmentDetails;
+
+        /// <summary>
+        /// litContainerNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litContainerNumber;
+
+        /// <summary>
+        /// pnlInternationalPackingList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlInternationalPackingList;
+
+        /// <summary>
+        /// litPackingListImage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litPackingListImage;
 
         /// <summary>
         /// litDestinationCity control.

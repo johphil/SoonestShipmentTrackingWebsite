@@ -8,7 +8,29 @@ namespace SoonestShipmentTrackingWebsite.Models
 {
     public class Shipment
     {
+        public Shipment()
+        {
+            History = new List<ShipmentHistory>();
+            CreatedDate = Helpers.TimeHelper.Now;
+            UpdatedDate = Helpers.TimeHelper.Now;
+            CurrentStatus = ShipmentStatus.Pending;
+        }
+
         public int Id { get; set; }
+
+        public ShipmentType ShipmentType { get; set; }
+
+        #region Domestic
+        [StringLength(100)]
+        public string BranchOrigin { get; set; } = string.Empty;
+        #endregion
+
+        #region International
+        [StringLength(100)]
+        public string ContainerNumber { get; set; } = string.Empty;
+        [StringLength(1000)]
+        public string PackingList { get; set; } = string.Empty;
+        #endregion
 
         [Required, StringLength(20)]
         public string ControlNumber { get; set; }
@@ -19,15 +41,13 @@ namespace SoonestShipmentTrackingWebsite.Models
 
         [Required, StringLength(100)]
         public string SenderName { get; set; }
-        [Required, StringLength(100)]
-        public string BranchOrigin { get; set; }
 
+        [Required, StringLength(100)]
+        public string RegionArea { get; set; }
         [Required, StringLength(100)]
         public string RecipientName { get; set; }
         [Required, StringLength(250)]
         public string RecipientAddress { get; set; }
-        [StringLength(100)]
-        public string DestinationCity { get; set; }
 
         [Required, Phone]
         public string RecipientPhone { get; set; }
@@ -55,13 +75,11 @@ namespace SoonestShipmentTrackingWebsite.Models
         public DateTime UpdatedDate { get; set; }
 
         public virtual ICollection<ShipmentHistory> History { get; set; }
+    }
 
-        public Shipment()
-        {
-            History = new List<ShipmentHistory>();
-            CreatedDate = Helpers.TimeHelper.Now;
-            UpdatedDate = Helpers.TimeHelper.Now;
-            CurrentStatus = ShipmentStatus.Pending;
-        }
+    public enum ShipmentType
+    {
+        DOMESTIC = 1, 
+        INTERNATIONAL
     }
 }

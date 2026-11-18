@@ -28,10 +28,29 @@
                                     <asp:Literal ID="litSenderName" runat="server" /></div>
                             </div>
                             <div class="kv">
+                                <div class="kv-label">Shipment Type</div>
+                                <div class="kv-value">
+                                    <asp:Literal ID="litShipmentType" runat="server" /></div>
+                            </div>
+
+                            <asp:Panel ID="pnlDomesticShipmentDetails" runat="server" CssClass="kv" Visible="false">
                                 <div class="kv-label">Branch Origin</div>
                                 <div class="kv-value">
                                     <asp:Literal ID="litBranchOrigin" runat="server" /></div>
-                            </div>
+                            </asp:Panel>
+
+                            <asp:Panel ID="pnlInternationalShipmentDetails" runat="server" CssClass="kv" Visible="false">
+                                <div class="kv-label">Container Number</div>
+                                <div class="kv-value">
+                                    <asp:Literal ID="litContainerNumber" runat="server" /></div>
+                            </asp:Panel>
+
+                            <asp:Panel ID="pnlInternationalPackingList" runat="server" CssClass="kv kv-wide" Visible="false">
+                                <div class="kv-label">Packing List Image</div>
+                                <div class="kv-value">
+                                    <asp:Literal ID="litPackingListImage" runat="server" /></div>
+                            </asp:Panel>
+
                             <div class="kv">
                                 <div class="kv-label">Recipient</div>
                                 <div class="kv-value">
@@ -92,12 +111,12 @@
 
                     <asp:Panel ID="pnlFeedback" runat="server" Visible="false" CssClass="card-panel">
                         <h4 class="panel-title">Delivery confirmation</h4>
-                        <asp:Literal ID="litFeedback" runat="server" />
-                        <div style="margin-top: 6px;">
-                            <asp:Button ID="btnOrderReceived" runat="server" CssClass="btn btn-red" Text="Order received" OnClick="btnOrderReceived_Click" />
-                        </div>
-                        <hr style="border: none; border-top: 1px solid #dbe6f0; margin: 10px 0;" />
                         <label style="font-size: 11.5px; font-weight: 700;">Report an issue with your received items</label>
+                        <asp:Literal ID="litFeedback" runat="server" />
+                        <%--<div style="margin-top: 6px;">
+                            <asp:Button ID="btnOrderReceived" runat="server" CssClass="btn btn-red" Text="Order received" OnClick="btnOrderReceived_Click" />
+                        </div>--%>
+                        <hr style="border: none; border-top: 1px solid #dbe6f0; margin: 10px 0;" />
                         <asp:TextBox ID="txtIssueReport" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2" MaxLength="1000" placeholder="Tell us what went wrong..." />
                         <div style="margin-top: 6px;">
                             <asp:Button ID="btnReportIssue" runat="server" CssClass="btn btn-outline" Text="Issue Report" OnClick="btnReportIssue_Click" /></div>

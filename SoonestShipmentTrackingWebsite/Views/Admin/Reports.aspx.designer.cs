@@ -60,6 +60,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Button btnExport;
 
         /// <summary>
+        /// btnExportCSV control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportCSV;
+
+        /// <summary>
         /// lblError control.
         /// </summary>
         /// <remarks>
@@ -105,6 +114,24 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litIssues;
 
         /// <summary>
+        /// gvMonthlySummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvMonthlySummary;
+
+        /// <summary>
+        /// gvQuarterlySummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvQuarterlySummary;
+
+        /// <summary>
         /// gvReport control.
         /// </summary>
         /// <remarks>
@@ -112,5 +139,23 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvReport;
+
+        /// <summary>
+        /// txtCsvPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCsvPassword;
+
+        /// <summary>
+        /// btnConfirmExportXlsx control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmExportXlsx;
     }
 }

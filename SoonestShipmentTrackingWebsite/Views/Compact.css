@@ -227,6 +227,7 @@ div[style*="grid-template-columns"] {
     margin-top: 8px !important;
 }
 
+
 /* ---------- Sections / cards ---------- */
 .section {
     padding: 72px 0;
@@ -1636,4 +1637,233 @@ table.data-grid {
     padding: 7px 13px;
     font-size: 12.5px;
     margin: 0 3px;
+}
+
+
+/* =====================================================================
+   Dense, professional shipment tables
+   (Admin/Shipments, Admin/Dashboard, Admin/Reports, Customer/MyShipments)
+   ===================================================================== */
+.table-scroll {
+    overflow-x: auto;
+    margin-bottom: 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.app-section table.data-grid.data-grid-shipments {
+    width: 100%;
+    min-width: 960px;
+    border: 0;
+    border-radius: 0;
+    font-size: 12.5px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.app-section table.data-grid.data-grid-shipments th {
+    position: sticky;
+    top: 0;
+    padding: 7px 10px;
+    font-size: 10.5px;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: #f1f5f9;
+    color: #475b70;
+    border-bottom: 1px solid #d5dfe9;
+}
+
+.app-section table.data-grid.data-grid-shipments td {
+    padding: 6px 10px;
+    font-size: 12.5px;
+    line-height: 1.3;
+    vertical-align: middle;
+    border-bottom: 1px solid #eaf0f6;
+    background: #fff;
+}
+
+.app-section table.data-grid.data-grid-shipments tr:nth-child(even) td { background: #fafcfe; }
+.app-section table.data-grid.data-grid-shipments tr:hover td { background: #eef5fc; }
+
+.data-grid-shipments .cell-main {
+    display: block;
+    font-weight: 600;
+    font-size: 12.5px;
+    color: var(--navy-900);
+    white-space: nowrap;
+}
+
+.data-grid-shipments .cell-sub {
+    display: block;
+    margin-top: 1px !important;
+    font-size: 11px !important;
+    line-height: 1.25;
+    color: var(--muted);
+}
+
+.data-grid-shipments .cell-sub.ellipsis,
+.data-grid-shipments .ellipsis {
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data-grid-shipments .mono { font-size: 12px; letter-spacing: 0; }
+.muted { color: #8a9bad; }
+.route-arrow { color: #8a9bad; font-weight: 400; margin: 0 1px; }
+
+/* Domestic / international tag next to the control number */
+.type-tag {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 5px;
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 15px;
+    letter-spacing: .5px;
+    border-radius: 3px;
+    vertical-align: 1px;
+}
+.type-dom  { background: #e8f0f9; color: #1f4f82; }
+.type-intl { background: #efe9fb; color: #5b3aa6; }
+
+/* Small badges and issue flags */
+.data-grid-shipments .status-badge {
+    padding: 1px 7px;
+    font-size: 9.5px;
+    line-height: 16px;
+    letter-spacing: .3px;
+    white-space: nowrap;
+}
+
+.issue-flag {
+    display: block;
+    margin-top: 2px;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.issue-flag.open     { color: #b3261e; }
+.issue-flag.resolved { color: #1e7a46; }
+
+/* Compact action button */
+.data-grid-shipments .btn.btn-sm,
+.data-grid-shipments a.btn.btn-sm {
+    padding: 3px 11px !important;
+    margin: 0 !important;
+    font-size: 11.5px !important;
+    line-height: 1.4;
+    border: 1px solid #07233d;
+    color: #07233d;
+    background: #fff;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+.data-grid-shipments .btn.btn-sm:hover { background: #07233d; color: #fff; }
+.data-grid-shipments .col-action { text-align: right; width: 1%; }
+
+/* Pager */
+.app-section .grid-pager td { padding: 8px 10px !important; background: #fff; }
+.app-section .grid-pager a,
+.app-section .grid-pager span { padding: 2px 8px; font-size: 12px; margin: 0 1px; }
+
+/* History tables (tracking events) - tighter but still readable */
+.app-section table.data-grid:not(.data-grid-shipments) th { padding: 7px 10px; font-size: 10.5px; }
+.app-section table.data-grid:not(.data-grid-shipments) td { padding: 7px 10px; font-size: 12.5px; line-height: 1.35; }
+.app-section table.data-grid:not(.data-grid-shipments) .cell-sub { margin-top: 1px; font-size: 11px; }
+
+
+/* =========================================================
+   SITE-WIDE UX POLISH — shared by every page
+   ========================================================= */
+:root {
+    --ux-focus: 0 0 0 3px rgba(30,127,214,.18);
+    --ux-border-hover: #a9bfd3;
+}
+.site-main { min-height: 55vh; }
+.page-heading, .section-heading, .reference-heading {
+    letter-spacing: -.025em;
+    text-wrap: balance;
+}
+.app-section, .auth-section { scroll-margin-top: 76px; }
+a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+:where(a, button, input, select, textarea, .btn, .nav-toggle):focus-visible {
+    outline: 0;
+    box-shadow: var(--ux-focus);
+}
+button, input[type="submit"], input[type="button"], .btn { touch-action: manipulation; }
+.btn { min-height: 36px; }
+.btn:disabled, input:disabled, select:disabled, textarea:disabled {
+    cursor: not-allowed;
+    opacity: .62;
+}
+.btn:not(:disabled):active { transform: translateY(1px); }
+.form-control, input[type="text"], input[type="password"], input[type="email"],
+input[type="number"], input[type="date"], input[type="tel"], input[type="search"],
+select, textarea {
+    max-width: 100%;
+    border-radius: 7px;
+    transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.form-control:hover, input:not([type="checkbox"]):not([type="radio"]):hover,
+select:hover, textarea:hover { border-color: var(--ux-border-hover); }
+.form-control:focus, input:focus, select:focus, textarea:focus {
+    border-color: var(--blue-500);
+    box-shadow: var(--ux-focus);
+}
+.form-group > label, .form-group label { line-height: 1.4; }
+.field-error { display: block; }
+.validation-summary, .alert-success { border-radius: 8px; }
+.card-panel, .auth-card, .hero-track-card, .stat-mini, .content-card {
+    overflow-wrap: anywhere;
+}
+.card-panel, .auth-card { box-shadow: 0 3px 14px rgba(7,35,61,.055); }
+.stat-mini, .info-item, .content-card {
+    transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+.table-responsive, .grid-scroll, .data-grid-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+table.data-grid { max-width: 100%; }
+table.data-grid th { position: sticky; top: 0; z-index: 1; }
+table.data-grid tbody tr { transition: background .12s ease; }
+table.data-grid tbody tr:hover { background: #f5f9fd; }
+table.data-grid td, table.data-grid th { vertical-align: middle; }
+.grid-pager a, .grid-pager span { min-height: 32px; }
+.navbar { isolation: isolate; }
+.nav-links a, .admin-sidebar-nav a { transition: background .15s ease, color .15s ease; }
+.nav-links a.active, .admin-sidebar-nav a.active { font-weight: 750; }
+.notif-dropdown { max-height: min(70vh, 520px); overflow: hidden; }
+.notif-list { max-height: min(54vh, 390px); overflow-y: auto; overscroll-behavior: contain; }
+@media (max-width: 768px) {
+    .container { padding-left: 14px; padding-right: 14px; }
+    .card-panel, .auth-card { max-width: 100%; }
+    .form-grid-2, .form-grid-3, .package-information-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+    .form-grid-2 > *, .form-grid-3 > * { min-width: 0; }
+    .request-form-actions, .form-actions, .action-row { flex-wrap: wrap; }
+    .data-grid { font-size: 12px; }
+    .notif-dropdown { max-width: calc(100vw - 28px); }
+}
+@media (max-width: 480px) {
+    .btn { min-height: 38px; }
+    .request-form-actions > .btn, .form-actions > .btn { flex: 1 1 100%; }
+    .card-panel { padding-left: 14px; padding-right: 14px; }
+    .page-heading { font-size: clamp(22px, 6vw, 30px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
 }
