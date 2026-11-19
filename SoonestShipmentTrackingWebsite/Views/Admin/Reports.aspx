@@ -37,7 +37,10 @@
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
                 <div class="card-panel">
-                    <div class="page-subheading" style="margin-bottom:10px;">Monthly Shipment Summary</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
+                        <div class="page-subheading" style="margin-bottom:0;">Monthly Shipment Summary</div>
+                        <asp:Button ID="btnExportMonthlyPdf" runat="server" Text="Export PDF" CssClass="btn btn-outline" OnClick="btnExportMonthlyPdf_Click" />
+                    </div>
                     <div class="table-scroll">
                         <asp:GridView ID="gvMonthlySummary" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None" EmptyDataText="No monthly data available.">
                             <Columns>
@@ -50,7 +53,10 @@
                     </div>
                 </div>
                 <div class="card-panel">
-                    <div class="page-subheading" style="margin-bottom:10px;">Quarterly Shipment Summary</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
+                        <div class="page-subheading" style="margin-bottom:0;">Quarterly Shipment Summary</div>
+                        <asp:Button ID="btnExportQuarterlyPdf" runat="server" Text="Export PDF" CssClass="btn btn-outline" OnClick="btnExportQuarterlyPdf_Click" />
+                    </div>
                     <div class="table-scroll">
                         <asp:GridView ID="gvQuarterlySummary" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None" EmptyDataText="No quarterly data available.">
                             <Columns>

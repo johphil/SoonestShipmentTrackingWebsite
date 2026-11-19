@@ -114,6 +114,24 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litIssues;
 
         /// <summary>
+        /// btnExportMonthlyPdf control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportMonthlyPdf;
+
+        /// <summary>
+        /// btnExportQuarterlyPdf control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportQuarterlyPdf;
+
+        /// <summary>
         /// gvMonthlySummary control.
         /// </summary>
         /// <remarks>

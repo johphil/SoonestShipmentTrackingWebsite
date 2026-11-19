@@ -193,10 +193,127 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             Response.End();
         }
 
+        protected void btnExportMonthlyPdf_Click(object sender, EventArgs e)
+        {
+            Generate();
+            var rows = CurrentRows ?? new List<ReportRow>();
+            var summary = BuildMonthlySummary(rows);
+            ExportSummaryPdf(summary, "Monthly Shipment Summary", "Month", "shipment-monthly-summary-");
+        }
+
+        protected void btnExportQuarterlyPdf_Click(object sender, EventArgs e)
+        {
+            Generate();
+            var rows = CurrentRows ?? new List<ReportRow>();
+            var summary = BuildQuarterlySummary(rows);
+            ExportSummaryPdf(summary, "Quarterly Shipment Summary", "Quarter", "shipment-quarterly-summary-");
+        }
+
+        private List<ShipmentPeriodSummaryRow> BuildMonthlySummary(IEnumerable<ReportRow> rows)
+        {
+            return rows
+                .GroupBy(s => new { s.UpdatedDate.Year, s.UpdatedDate.Month })
+                .OrderByDescending(g => g.Key.Year)
+                .ThenByDescending(g => g.Key.Month)
+                .Select(g => new ShipmentPeriodSummaryRow
+                {
+                    Period = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMM yyyy", CultureInfo.InvariantCulture),
+                    TotalShipments = g.Count(),
+                    Delivered = g.Count(x => x.StatusValue == ShipmentStatus.Delivered),
+                    IssuesReported = g.Count(x => x.IssueFlag)
+                })
+                .ToList();
+        }
+
+        private List<ShipmentPeriodSummaryRow> BuildQuarterlySummary(IEnumerable<ReportRow> rows)
+        {
+            return rows
+                .GroupBy(s => new { s.UpdatedDate.Year, Quarter = ((s.UpdatedDate.Month - 1) / 3) + 1 })
+                .OrderByDescending(g => g.Key.Year)
+                .ThenByDescending(g => g.Key.Quarter)
+                .Select(g => new ShipmentPeriodSummaryRow
+                {
+                    Period = "Q" + g.Key.Quarter + " " + g.Key.Year,
+                    TotalShipments = g.Count(),
+                    Delivered = g.Count(x => x.StatusValue == ShipmentStatus.Delivered),
+                    IssuesReported = g.Count(x => x.IssueFlag)
+                })
+                .ToList();
+        }
+
+        private void ExportSummaryPdf(List<ShipmentPeriodSummaryRow> rows, string title, string periodHeader, string filenamePrefix)
+        {
+            var pdfBytes = GenerateSummaryPdf(rows, title, periodHeader);
+            var filename = filenamePrefix + DateTime.Now.ToString("yyyyMMdd-HHmm") + ".pdf";
+
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+            Response.BinaryWrite(pdfBytes);
+            Response.End();
+        }
+
+        private byte[] GenerateSummaryPdf(List<ShipmentPeriodSummaryRow> summaryRows, string title, string periodHeader)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+            var data = summaryRows ?? new List<ShipmentPeriodSummaryRow>();
+
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4.Landscape());
+                    page.Margin(20);
+                    page.DefaultTextStyle(x => x.FontSize(9));
+
+                    page.Header().Column(column =>
+                    {
+                        column.Item().Text("SOONEST GLOBAL EXPRESS").FontSize(14).Bold().FontColor("#26364A");
+                        column.Item().Text(title).FontSize(12).Bold().FontColor("#26364A");
+                        column.Item().Text("Generated: " + DateTime.Now.ToString("MMM dd, yyyy hh:mm tt")).FontSize(9).FontColor("#666666");
+                        column.Item().PaddingTop(6).LineHorizontal(1).LineColor("#CCCCCC");
+                    });
+
+                    page.Content().PaddingTop(10).Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.RelativeColumn(1.5f);
+                            columns.RelativeColumn(1f);
+                            columns.RelativeColumn(1f);
+                            columns.RelativeColumn(1f);
+                        });
+
+                        table.Header(header =>
+                        {
+                            foreach (var head in new[] { periodHeader, "Total Shipments", "Delivered", "Issues" })
+                            {
+                                header.Cell().Background("#26364A").Padding(6).Text(head).Bold().FontColor("#FFFFFF").FontSize(9);
+                            }
+                        });
+
+                        var index = 0;
+                        foreach (var row in data)
+                        {
+                            var bg = index++ % 2 == 0 ? "#FFFFFF" : "#F2F5F8";
+                            table.Cell().Background(bg).Padding(6).Text(row.Period ?? "-");
+                            table.Cell().Background(bg).Padding(6).Text(row.TotalShipments.ToString());
+                            table.Cell().Background(bg).Padding(6).Text(row.Delivered.ToString());
+                            table.Cell().Background(bg).Padding(6).Text(row.IssuesReported.ToString());
+                        }
+
+                        if (!data.Any())
+                            table.Cell().ColumnSpan(4).Padding(8).Text("No summary data available.").FontColor("#666666");
+                    });
+                });
+            });
+
+            return document.GeneratePdf();
+        }
+
         private byte[] BuildProtectedXlsx(IEnumerable<ReportRow> rows, string password)
         {
             ExcelPackage.License.SetNonCommercialPersonal("SoonestGlobalExpress");
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var package = new ExcelPackage())
             {
@@ -308,41 +425,41 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                     page.DefaultTextStyle(x => x.FontSize(7));
 
-                    // HEADER
                     page.Header().Column(column =>
                     {
-                        string statusType = string.IsNullOrWhiteSpace(status) || status.ToLower() == "All statuses" ? "All" : status;
-                      
                         column.Item()
-                            .Text($"SHIPMENT TRACKING REPORT")
-                            .FontSize(16)
-                            .Bold()
-                            .FontColor("#26364A");
-
+                        .Text($"SOONEST GLOBAL EXPRESS")
+                        .FontSize(16)
+                        .Bold()
+                        .FontColor("#26364A");
                         column.Item().PaddingTop(5)
-                            .Text($"Filtered Status: {statusType}")
-                            .FontSize(9)
-                            .FontColor("#666666");
-
-                        if (!string.IsNullOrWhiteSpace(txtFromDate.Text) && !string.IsNullOrWhiteSpace(txtToDate.Text))
-                        {
-                            column.Item()
-                                .Text($"Filtered Date: {DateTime.Parse(txtFromDate.Text).ToString("MMM dd, yyyy")} to {DateTime.Parse(txtToDate.Text).ToString("MMM dd, yyyy")}")
-                                .FontSize(9)
-                                .FontColor("#666666");
-                        }
+                        .Text($"SHIPMENT TRACKING REPORT")
+                        .FontSize(12)
+                        .Bold()
+                        .FontColor("#26364A");
 
                         column.Item().Row(row =>
                         {
-                            row.RelativeItem().Text(
-                                $"Total Shipments: {data.Count}")
-                                .FontSize(9)
-                                .FontColor("#666666");
+                            string statusType = string.IsNullOrWhiteSpace(status) || status.ToLower() == "All statuses" ? "All" : status;
+                            row.AutoItem().PaddingRight(2).Text($"Filtered Status: ").FontSize(9).Bold();
+                            row.RelativeItem().Text(statusType).AlignLeft().FontSize(9);
 
-                            row.AutoItem().Text(
-                                $"Generated: {DateTime.Now:MMM dd, yyyy hh:mm tt}")
-                                .FontSize(8)
-                                .FontColor("#666666");
+                            row.RelativeItem().PaddingRight(2).Text($"Total Shipments: ").AlignRight().FontSize(9).Bold();
+                            row.AutoItem().Text(data.Count.ToString()).FontSize(9);
+                        });
+
+                        column.Item().Row(row =>
+                        {
+                            string filterDate = "All";
+
+                            if (!string.IsNullOrWhiteSpace(txtFromDate.Text) && !string.IsNullOrWhiteSpace(txtToDate.Text))
+                                filterDate = $"{DateTime.Parse(txtFromDate.Text).ToString("MMM dd, yyyy")} to {DateTime.Parse(txtToDate.Text).ToString("MMM dd, yyyy")}";
+
+                            row.AutoItem().PaddingRight(2).Text($"Filtered Date: ").FontSize(9).Bold();
+                            row.RelativeItem().Text(filterDate).AlignLeft().FontSize(9);
+
+                            row.RelativeItem().PaddingRight(2).Text($"Generated: ").AlignRight().FontSize(9).Bold();
+                            row.AutoItem().Text($"{DateTime.Now:MMM dd, yyyy hh:mm tt}").FontSize(9);
                         });
 
                         column.Item()
@@ -358,7 +475,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(70);   // Control / Type
+                                columns.ConstantColumn(90);   // Control / Type
                                 columns.RelativeColumn(1.25f); // Parties
                                 columns.RelativeColumn(1.40f); // Route + Cargo
                                 columns.RelativeColumn(1.00f); // Status / Rider
@@ -397,7 +514,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                             {
                                 var background = index++ % 2 == 0 ? "#FFFFFF" : "#F2F5F8";
 
-                                void AddCell(string value)
+                                void AddCell(string value, string PackingUrl = "")
                                 {
                                     table.Cell()
                                         .Background(background)
@@ -405,8 +522,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                                         .BorderColor("#DDDDDD")
                                         .Padding(5)
                                         .AlignMiddle()
-                                        .Text(string.IsNullOrWhiteSpace(value) ? "-" : value)
-                                        .FontSize(7);
+                                        .Text(text =>
+                                        {
+                                            text.Span(string.IsNullOrWhiteSpace(value) ? "-" : value).FontSize(7);
+                                            if (!string.IsNullOrWhiteSpace(PackingUrl))
+                                            {
+                                                text.Line("");
+                                                text.Hyperlink("Packing List", PackingUrl).FontSize(7).Underline().FontColor(Colors.Blue.Darken2);
+                                            }
+                                        });
                                 }
 
                                 var shipmentType = shipment.ShipmentType == ShipmentType.DOMESTIC ? "Domestic" : "International";
@@ -422,17 +546,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                                 var routeLine = shipment.ShipmentType == ShipmentType.DOMESTIC
                                     ? "Branch: " + (string.IsNullOrWhiteSpace(shipment.BranchOrigin) ? "-" : shipment.BranchOrigin)
                                     : "Container: " + (string.IsNullOrWhiteSpace(shipment.ContainerNumber) ? "-" : shipment.ContainerNumber);
-                                var packingLine = shipment.ShipmentType == ShipmentType.INTERNATIONAL
-                                    ? "\nPacking: " + (string.IsNullOrWhiteSpace(shipment.PackingList) ? "-" : shipment.PackingList)
-                                    : string.Empty;
 
+                                string packingLink = Request.Url.GetLeftPart(UriPartial.Authority) + shipment.PackingList;
+                                
                                 AddCell(
                                     routeLine +
-                                    packingLine +
                                     "\nRegion: " + (string.IsNullOrWhiteSpace(shipment.RegionArea) ? "-" : shipment.RegionArea) +
                                     "\nAddress: " + (string.IsNullOrWhiteSpace(shipment.RecipientAddress) ? "-" : shipment.RecipientAddress) +
                                     "\nPackage: " + (string.IsNullOrWhiteSpace(shipment.PackageDescription) ? "-" : shipment.PackageDescription) +
-                                    "\nWeight: " + (shipment.WeightKg.HasValue ? shipment.WeightKg.Value.ToString("0.##") + " kg" : "-"));
+                                    "\nWeight: " + (shipment.WeightKg.HasValue ? shipment.WeightKg.Value.ToString("0.##") + " kg" : "-"), !string.IsNullOrWhiteSpace(shipment.PackingList) ? packingLink : "");
 
                                 var issueDetails = shipment.IssueFlag
                                     ? (string.IsNullOrWhiteSpace(shipment.IssueReport) ? "Issue reported" : shipment.IssueReport)
