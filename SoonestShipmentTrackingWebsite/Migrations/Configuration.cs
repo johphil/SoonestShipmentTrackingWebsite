@@ -28,10 +28,13 @@ namespace SoonestShipmentTrackingWebsite.Migrations
             if (!roleManager.RoleExists("Staff"))
                 roleManager.Create(new IdentityRole("Staff"));
 
+            if (!roleManager.RoleExists("Rider"))
+                roleManager.Create(new IdentityRole("Rider"));
+
             if (!roleManager.RoleExists("Customer"))
                 roleManager.Create(new IdentityRole("Customer"));
 
-            const string adminEmail = "admin@soonestglobalexpress.local";
+            const string adminEmail = "soonestglobalexpress@gmail.com";
             const string adminPassword = "Admin@12345";
 
             if (userManager.FindByEmail(adminEmail) == null)

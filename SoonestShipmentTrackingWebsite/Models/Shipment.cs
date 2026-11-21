@@ -8,7 +8,29 @@ namespace SoonestShipmentTrackingWebsite.Models
 {
     public class Shipment
     {
+        public Shipment()
+        {
+            History = new List<ShipmentHistory>();
+            CreatedDate = Helpers.TimeHelper.Now;
+            UpdatedDate = Helpers.TimeHelper.Now;
+            CurrentStatus = ShipmentStatus.Pending;
+        }
+
         public int Id { get; set; }
+
+        public ShipmentType ShipmentType { get; set; }
+
+        #region Domestic
+        [StringLength(100)]
+        public string BranchOrigin { get; set; } = string.Empty;
+        #endregion
+
+        #region International
+        [StringLength(100)]
+        public string ContainerNumber { get; set; } = string.Empty;
+        [StringLength(1000)]
+        public string PackingList { get; set; } = string.Empty;
+        #endregion
 
         [Required, StringLength(20)]
         public string ControlNumber { get; set; }
@@ -18,36 +40,46 @@ namespace SoonestShipmentTrackingWebsite.Models
         public virtual ApplicationUser Customer { get; set; }
 
         [Required, StringLength(100)]
+        public string SenderName { get; set; }
+
+        [Required, StringLength(100)]
+        public string RegionArea { get; set; }
+        [Required, StringLength(100)]
         public string RecipientName { get; set; }
         [Required, StringLength(250)]
         public string RecipientAddress { get; set; }
 
-        [Phone]
+        [Required, Phone]
         public string RecipientPhone { get; set; }
-        [EmailAddress]
+        [Required, EmailAddress]
         public string RecipientEmail { get; set; }
-
-        [StringLength(100)]
-        public string RiderName { get; set; }
 
         [StringLength(150)]
         public string PackageDescription { get; set; }
         public decimal? WeightKg { get; set; }
 
         public ShipmentStatus CurrentStatus { get; set; }
+        [StringLength(100)]
+        public string RiderName { get; set; }
+        public bool IsOrderReceived { get; set; }
+        public DateTime? OrderReceivedDate { get; set; }
+        public bool IssueReported { get; set; }
+        public bool IsIssueResolved { get; set; }
+        [StringLength(1000)]
+        public string IssueReport { get; set; }
+        public DateTime? IssueReportedDate { get; set; }
+        public DateTime? IssueResolvedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
         public virtual ICollection<ShipmentHistory> History { get; set; }
+    }
 
-        public Shipment()
-        {
-            History = new List<ShipmentHistory>();
-            CreatedDate = DateTime.Now;
-            UpdatedDate = DateTime.Now;
-            CurrentStatus = ShipmentStatus.Pending;
-        }
+    public enum ShipmentType
+    {
+        DOMESTIC = 1, 
+        INTERNATIONAL
     }
 }

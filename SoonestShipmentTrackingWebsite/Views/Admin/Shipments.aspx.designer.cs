@@ -15,6 +15,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
     {
 
         /// <summary>
+        /// litStatusChips control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litStatusChips;
+
+        /// <summary>
         /// gvShipments control.
         /// </summary>
         /// <remarks>

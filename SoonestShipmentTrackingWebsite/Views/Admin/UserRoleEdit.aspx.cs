@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using SoonestShipmentTrackingWebsite.App_Start;
+using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 {
     public partial class UserRoleEdit : System.Web.UI.Page
     {
-        private static readonly string[] AssignableRoles = { "Admin", "Staff", "Customer" };
+        private static readonly string[] AssignableRoles = { "Admin", "Staff", "Rider", "Customer" };
 
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager =>
@@ -57,6 +58,26 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             {
                 rblRole.SelectedValue = currentAssignable;
             }
+            BindBranches();
+            if (user.BranchId.HasValue && ddlBranch.Items.FindByValue(user.BranchId.Value.ToString()) != null)
+                ddlBranch.SelectedValue = user.BranchId.Value.ToString();
+        }
+
+        private void BindBranches()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                ddlBranch.Items.Clear();
+                ddlBranch.Items.Add(new ListItem("-- Select designated branch --", ""));
+                foreach (var branch in db.Branches.Where(b => b.IsActive).OrderBy(b => b.BranchName).ToList())
+                    ddlBranch.Items.Add(new ListItem(branch.BranchName + " - " + branch.City, branch.Id.ToString()));
+            }
+        }
+
+        protected void valBranch_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var role = rblRole.SelectedValue;
+            args.IsValid = (role != "Staff" && role != "Rider") || int.TryParse(ddlBranch.SelectedValue, out _);
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -79,10 +100,38 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             }
 
             var newRole = rblRole.SelectedValue;
+            int branchId = 0;
+            if ((newRole == "Staff" || newRole == "Rider") && !int.TryParse(ddlBranch.SelectedValue, out branchId))
+            {
+                Session["FlashMessage"] = "A designated branch is required for Staff and Rider users.";
+                return;
+            }
+            if (newRole == "Staff" || newRole == "Rider")
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    if (!db.Branches.Any(b => b.Id == branchId && b.IsActive))
+                    {
+                        valBranch.IsValid = false;
+                        valBranch.ErrorMessage = "Select an active branch for this Staff/Rider user.";
+                        return;
+                    }
+                }
+                user.BranchId = branchId;
+            }
+            else
+                user.BranchId = null;
+
+            var userUpdate = UserManager.Update(user);
+            if (!userUpdate.Succeeded)
+            {
+                Session["FlashMessage"] = string.Join(" ", userUpdate.Errors);
+                return;
+            }
 
             // Remove any existing roles this user has among the assignable
             // set, then add exactly the one selected — keeps a user in
-            // exactly one of Admin/Staff/Customer at a time.
+            // exactly one of Admin/Staff/Rider/Customer at a time.
             var currentRoles = UserManager.GetRoles(user.Id);
             foreach (var role in currentRoles.Where(r => AssignableRoles.Contains(r)))
             {

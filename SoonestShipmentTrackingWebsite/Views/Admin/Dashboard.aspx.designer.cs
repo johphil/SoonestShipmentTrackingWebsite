@@ -33,6 +33,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litPending;
 
         /// <summary>
+        /// litInTransit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litInTransit;
+
+        /// <summary>
         /// litOutForDelivery control.
         /// </summary>
         /// <remarks>
@@ -51,13 +60,13 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         protected global::System.Web.UI.WebControls.Literal litDelivered;
 
         /// <summary>
-        /// litFailedDelivery control.
+        /// litIssues control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litFailedDelivery;
+        protected global::System.Web.UI.WebControls.Literal litIssues;
 
         /// <summary>
         /// litCustomers control.
@@ -76,5 +85,23 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvRecent;
+
+        /// <summary>
+        /// litStatusBar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litStatusBar;
+
+        /// <summary>
+        /// litAttention control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litAttention;
     }
 }

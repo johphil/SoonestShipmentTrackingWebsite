@@ -27,6 +27,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             var roleNamesById = _db.Roles.ToDictionary(r => r.Id, r => r.Name);
 
             var rows = _db.Users
+                .OrderBy(u => u.FullName)
                 .ToList()
                 .Select(u => new UserAccountRow
                 {
@@ -37,9 +38,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     CurrentRole = u.Roles.Any()
                         ? string.Join(", ", u.Roles.Select(r => roleNamesById.ContainsKey(r.RoleId) ? roleNamesById[r.RoleId] : "Unknown"))
                         : "(none)",
+                    BranchName = u.Branch == null ? "-" : u.Branch.BranchName,
                     IsCurrentUser = u.Id == currentUserId
                 })
-                .OrderBy(e => e.CurrentRole)
                 .ToList();
 
             gvUsers.DataSource = rows;
@@ -52,6 +53,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             {
                 case "Admin": return "badge-danger";
                 case "Staff": return "badge-info";
+                case "Rider": return "badge-warning";
                 case "Customer": return "badge-success";
                 default: return "badge-pending";
             }

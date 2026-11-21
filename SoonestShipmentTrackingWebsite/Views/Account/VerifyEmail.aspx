@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="VerifyEmail.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.VerifyEmail" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="VerifyEmail.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.VerifyEmail" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Verify Your Email</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section" style="padding-top:44px;">
     <div class="container" style="max-width:460px;">
         <div class="card-panel">
             <div class="page-heading">Verify Your Email</div>

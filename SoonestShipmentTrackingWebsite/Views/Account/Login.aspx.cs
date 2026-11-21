@@ -30,6 +30,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
                     return;
                 }
 
+                if (User.IsInRole("Rider"))
+                {
+                    Response.Redirect("~/Views/Admin/Shipments.aspx");
+                    return;
+                }
+
                 Response.Redirect("~/Views/Customer/MyShipments.aspx");
             }
         }
@@ -66,9 +72,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
             }
 
             var user = UserManager.FindByEmail(email);
-            if (user != null && (UserManager.IsInRole(user.Id, "Admin") || (UserManager.IsInRole(user.Id, "Staff"))))
+            if (user != null && (UserManager.IsInRole(user.Id, "Admin") || UserManager.IsInRole(user.Id, "Staff")))
             {
                 Response.Redirect("~/Views/Admin/Dashboard.aspx");
+                return;
+            }
+
+            if (user != null && UserManager.IsInRole(user.Id, "Rider"))
+            {
+                Response.Redirect("~/Views/Admin/Shipments.aspx");
                 return;
             }
 

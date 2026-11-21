@@ -74,7 +74,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
             }
 
             if (!user.EmailVerificationCodeExpiresAt.HasValue ||
-                user.EmailVerificationCodeExpiresAt.Value < DateTime.Now)
+                user.EmailVerificationCodeExpiresAt.Value < Helpers.TimeHelper.Now)
             {
                 ShowError("This code has expired. Request a new one below.");
                 return;
@@ -101,7 +101,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Account
             }
 
             user.EmailVerificationCode = VerificationCodeHelper.GenerateCode();
-            user.EmailVerificationCodeExpiresAt = DateTime.Now.Add(VerificationCodeHelper.CodeLifetime);
+            user.EmailVerificationCodeExpiresAt = Helpers.TimeHelper.Now.Add(VerificationCodeHelper.CodeLifetime);
             UserManager.Update(user);
 
             string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Account/VerifyEmail.aspx?email=" + HttpUtility.UrlEncode(user.Email));
