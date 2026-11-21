@@ -279,7 +279,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         // Package description with weight underneath.
         public static string CargoCell(object description, object weightKg)
         {
-            return Cell(Enc(Convert.ToString(description)), WeightText(weightKg as decimal?));
+            return Cell(TrimText(Enc(Convert.ToString(description))), WeightText(weightKg as decimal?));
         }
 
         // Status badge, with an issue flag stacked beneath when an issue was reported.

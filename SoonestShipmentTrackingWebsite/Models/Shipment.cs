@@ -54,7 +54,6 @@ namespace SoonestShipmentTrackingWebsite.Models
         [Required, EmailAddress]
         public string RecipientEmail { get; set; }
 
-        [StringLength(150)]
         public string PackageDescription { get; set; }
         public decimal? WeightKg { get; set; }
 
