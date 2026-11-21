@@ -15,6 +15,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             {
                 case ShipmentStatus.Pending: return "badge-pending";
                 case ShipmentStatus.InTransit: return "badge-info";
+                case ShipmentStatus.ArrivedAtWarehouse: return "badge-info";
                 case ShipmentStatus.OutForDelivery: return "badge-warning";
                 case ShipmentStatus.Delivered: return "badge-success";
                 case ShipmentStatus.FailedDelivery: return "badge-danger";
@@ -41,6 +42,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             {
                 case ShipmentStatus.Received: return "Received";
                 case ShipmentStatus.InTransit: return "In Transit";
+                case ShipmentStatus.ArrivedAtWarehouse: return "Arrived at Warehouse";
                 case ShipmentStatus.OutForDelivery: return "Out for Delivery";
                 case ShipmentStatus.FailedDelivery: return "Failed Delivery";
                 default: return status.ToString();
@@ -97,21 +99,26 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
         // Horizontal progress stepper: Pending > In Transit > Out for Delivery > Delivered > Received.
         // Exceptional end states (failed / returned / cancelled) flag the step they stopped at.
-        public static string Progress(ShipmentStatus status)
+        public static string Progress(ShipmentStatus status, ShipmentType shipmentType = ShipmentType.DOMESTIC)
         {
-            string[] labels = { "Pending", "In Transit", "Out for Delivery", "Delivered", "Received" };
+            var isInternational = shipmentType == ShipmentType.INTERNATIONAL;
+            string[] labels = isInternational
+                ? new[] { "Pending", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" }
+                : new[] { "Pending", "In Transit", "Out for Delivery", "Delivered", "Received" };
+
             int current;
             bool exceptional = false;
             switch (status)
             {
                 case ShipmentStatus.Pending: current = 0; break;
-                case ShipmentStatus.InTransit: current = 1; break;
-                case ShipmentStatus.OutForDelivery: current = 2; break;
-                case ShipmentStatus.Delivered: current = 3; break;
-                case ShipmentStatus.Received: current = 4; break;
-                case ShipmentStatus.FailedDelivery: current = 2; exceptional = true; break;
-                case ShipmentStatus.Returned: current = 2; exceptional = true; break;
-                default: current = 0; exceptional = true; break; // Cancelled
+                case ShipmentStatus.ArrivedAtWarehouse: current = isInternational ? 1 : 1; break;
+                case ShipmentStatus.InTransit: current = isInternational ? 2 : 1; break;
+                case ShipmentStatus.OutForDelivery: current = isInternational ? 3 : 2; break;
+                case ShipmentStatus.Delivered: current = isInternational ? 4 : 3; break;
+                case ShipmentStatus.Received: current = isInternational ? 5 : 4; break;
+                case ShipmentStatus.FailedDelivery: current = isInternational ? 3 : 2; exceptional = true; break;
+                case ShipmentStatus.Returned: current = isInternational ? 3 : 2; exceptional = true; break;
+                default: current = 0; exceptional = true; break;
             }
 
             var sb = new System.Text.StringBuilder();
@@ -120,7 +127,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             {
                 string cls = "";
                 string marker = (i + 1).ToString();
-                if (i < current || (i == current && current == 4 && !exceptional))
+                if (i < current || (i == current && current == labels.Length - 1 && !exceptional))
                 {
                     cls = "done";
                     marker = "&#10003;";

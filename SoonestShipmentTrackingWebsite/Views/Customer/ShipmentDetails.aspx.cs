@@ -82,7 +82,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     ? "-" : Server.HtmlEncode(shipment.PackageDescription);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType) + "</div>";
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litRecipientEmail.Text = StatusDisplayHelper.Enc(shipment.RecipientEmail);
                 litWeight.Text = StatusDisplayHelper.WeightText(shipment.WeightKg);

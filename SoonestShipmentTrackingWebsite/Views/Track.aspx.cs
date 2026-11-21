@@ -83,7 +83,7 @@ namespace SoonestShipmentTrackingWebsite.Views
                 litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType) + "</div>";
                 litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litRecipientEmail.Text = StatusDisplayHelper.Enc(shipment.RecipientEmail);

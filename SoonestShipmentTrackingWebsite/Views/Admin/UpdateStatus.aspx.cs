@@ -90,7 +90,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 litIssueIndicator.Text = StatusDisplayHelper.IssueIndicator(shipment.IssueReported, shipment.IsIssueResolved);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType) + "</div>";
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
                 litPackage.Text = StatusDisplayHelper.Enc(shipment.PackageDescription);
@@ -133,7 +133,20 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
                 else
                 {
-                    allowedStatuses = Enum.GetValues(typeof(ShipmentStatus)).Cast<ShipmentStatus>().Where(s => s != ShipmentStatus.Received);
+                    allowedStatuses = Enum.GetValues(typeof(ShipmentStatus))
+                        .Cast<ShipmentStatus>()
+                        .Where(s => s != ShipmentStatus.Received)
+                        .Where(s => shipment.ShipmentType == ShipmentType.INTERNATIONAL || s != ShipmentStatus.ArrivedAtWarehouse)
+                        .OrderBy(s =>
+                        {
+                            if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
+                            {
+                                if (s == ShipmentStatus.Pending) return 0;
+                                if (s == ShipmentStatus.ArrivedAtWarehouse) return 1;
+                                if (s == ShipmentStatus.InTransit) return 2;
+                            }
+                            return 10 + (int)s;
+                        });
                 }
 
                 if (shipment.CurrentStatus == ShipmentStatus.Received || shipment.IsOrderReceived)
@@ -301,6 +314,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 if (newStatus == ShipmentStatus.Received)
                 {
                     ShowError("Staff and admin cannot set the status to RECEIVED. It is set when the recipient confirms receipt.");
+                    return;
+                }
+
+                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL && newStatus == ShipmentStatus.ArrivedAtWarehouse)
+                {
+                    ShowError("Arrived at Warehouse is available only for international shipments.");
                     return;
                 }
                 if (User.IsInRole("Rider"))

@@ -18,6 +18,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         FailedDelivery = 4,
         Returned = 5,
         Cancelled = 6,
-        Received = 7
+        Received = 7,
+        ArrivedAtWarehouse = 8
     }
 }
