@@ -37,7 +37,7 @@
                 <div class="kv kv-wide"><div class="kv-label">Recipient Address</div><div class="kv-value"><asp:Literal ID="litDestinationCity" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Customer</div><div class="kv-value"><asp:Literal ID="litCustomer" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Sender</div><div class="kv-value"><asp:Literal ID="litSenderName" runat="server" /></div></div>
-
+                
                 <div class="kv"><div class="kv-label">Package</div><div class="kv-value"><asp:Literal ID="litPackage" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Weight</div><div class="kv-value"><asp:Literal ID="litWeight" runat="server" /></div></div>
                 <div class="kv"><div class="kv-label">Estimated Delivery</div><div class="kv-value"><asp:Literal ID="litEta" runat="server" /></div></div>

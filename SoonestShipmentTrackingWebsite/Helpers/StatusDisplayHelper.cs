@@ -37,11 +37,15 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             return "<div style=\"margin-top:6px;\"><strong>Proof of delivery:</strong><br /><a href=\"" + src + "\" target=\"_blank\"><img src=\"" + src + "\" alt=\"Proof of delivery\" style=\"max-width:140px;max-height:140px;border-radius:6px;border:1px solid #dbe6f0;\" /></a></div>";
         }
 
-        // Domestic shipments routed through NCR hide the "In Transit" step in favor of "Arrived at Warehouse".
+        public static bool IsNcrArea(string regionArea)
+        {
+            return string.Equals((regionArea ?? string.Empty).Trim(), "NCR", StringComparison.OrdinalIgnoreCase);
+        }
+
+        // Domestic shipments routed through NCR hide the "In Transit" step in favor of "Arrived".
         public static bool IsNcrDomestic(ShipmentType shipmentType, string regionArea)
         {
-            return shipmentType == ShipmentType.DOMESTIC
-                && string.Equals((regionArea ?? string.Empty).Trim(), "NCR", StringComparison.OrdinalIgnoreCase);
+            return shipmentType == ShipmentType.DOMESTIC && IsNcrArea(regionArea);
         }
 
         public static string Label(ShipmentStatus status, bool arrivedAtWarehouseOverride = false)
@@ -73,7 +77,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             var status = AsStatus(statusValue);
             var shipment = shipmentObj as Shipment;
-            var arrivedAtWarehouseOverride = shipment != null && IsNcrDomestic(shipment.ShipmentType, shipment.RegionArea);
+            var arrivedAtWarehouseOverride = shipment != null && IsNcrArea(shipment.RegionArea);
             return Badge(status, arrivedAtWarehouseOverride);
         }
 
@@ -123,24 +127,93 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         public static string Progress(ShipmentStatus status, ShipmentType shipmentType = ShipmentType.DOMESTIC, bool arrivedAtWarehouseOverride = false)
         {
             var isInternational = shipmentType == ShipmentType.INTERNATIONAL;
-            string[] labels = isInternational
-                ? new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" }
-                : new[] { "Pending", arrivedAtWarehouseOverride ? "Arrived at Warehouse" : "In Transit", "Out for Delivery", "Delivered", "Received" };
+
+            string[] labels;
+            int pendingIndex = 0;
+            int processingCustomsIndex = -1;
+            int arrivedAtWarehouseIndex = -1;
+            int inTransitIndex = -1;
+            int outForDeliveryIndex;
+            int deliveredIndex;
+            int receivedIndex;
+
+            if (isInternational)
+            {
+                if (arrivedAtWarehouseOverride)
+                {
+                    labels = new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "Out for Delivery", "Delivered", "Received" };
+                    processingCustomsIndex = 1;
+                    arrivedAtWarehouseIndex = 2;
+                    outForDeliveryIndex = 3;
+                    deliveredIndex = 4;
+                    receivedIndex = 5;
+                }
+                else
+                {
+                    labels = new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" };
+                    processingCustomsIndex = 1;
+                    arrivedAtWarehouseIndex = 2;
+                    inTransitIndex = 3;
+                    outForDeliveryIndex = 4;
+                    deliveredIndex = 5;
+                    receivedIndex = 6;
+                }
+            }
+            else
+            {
+                if (arrivedAtWarehouseOverride)
+                {
+                    labels = new[] { "Pending", "Arrived at Warehouse", "Out for Delivery", "Delivered", "Received" };
+                    arrivedAtWarehouseIndex = 1;
+                    outForDeliveryIndex = 2;
+                    deliveredIndex = 3;
+                    receivedIndex = 4;
+                }
+                else
+                {
+                    labels = new[] { "Pending", "In Transit", "Out for Delivery", "Delivered", "Received" };
+                    inTransitIndex = 1;
+                    outForDeliveryIndex = 2;
+                    deliveredIndex = 3;
+                    receivedIndex = 4;
+                }
+            }
 
             int current;
             bool exceptional = false;
+
             switch (status)
             {
-                case ShipmentStatus.Pending: current = 0; break;
-                case ShipmentStatus.ProcessingCustoms: current = isInternational ? 1 : 1; break;
-                case ShipmentStatus.ArrivedAtWarehouse: current = isInternational ? 2 : 1; break;
-                case ShipmentStatus.InTransit: current = isInternational ? 3 : 1; break;
-                case ShipmentStatus.OutForDelivery: current = isInternational ? 4 : 2; break;
-                case ShipmentStatus.Delivered: current = isInternational ? 5 : 3; break;
-                case ShipmentStatus.Received: current = isInternational ? 6 : 4; break;
-                case ShipmentStatus.FailedDelivery: current = isInternational ? 4 : 2; exceptional = true; break;
-                case ShipmentStatus.Returned: current = isInternational ? 4 : 2; exceptional = true; break;
-                default: current = 0; exceptional = true; break;
+                case ShipmentStatus.Pending:
+                    current = pendingIndex;
+                    break;
+                case ShipmentStatus.ProcessingCustoms:
+                    current = processingCustomsIndex >= 0 ? processingCustomsIndex : pendingIndex;
+                    break;
+                case ShipmentStatus.ArrivedAtWarehouse:
+                    current = arrivedAtWarehouseIndex >= 0 ? arrivedAtWarehouseIndex : (inTransitIndex >= 0 ? inTransitIndex : pendingIndex);
+                    break;
+                case ShipmentStatus.InTransit:
+                    current = inTransitIndex >= 0 ? inTransitIndex : (arrivedAtWarehouseIndex >= 0 ? arrivedAtWarehouseIndex : pendingIndex);
+                    break;
+                case ShipmentStatus.OutForDelivery:
+                    current = outForDeliveryIndex;
+                    break;
+                case ShipmentStatus.Delivered:
+                    current = deliveredIndex;
+                    break;
+                case ShipmentStatus.Received:
+                    current = receivedIndex;
+                    break;
+                case ShipmentStatus.FailedDelivery:
+                case ShipmentStatus.Returned:
+                    current = outForDeliveryIndex;
+                    exceptional = true;
+                    break;
+                default:
+                    current = pendingIndex;
+                    exceptional = true;
+                    break;
             }
 
             var sb = new System.Text.StringBuilder();
@@ -163,7 +236,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
             sb.Append("</ol>");
             if (exceptional)
-                sb.Append("<div class=\"stepper-note\">Current state: " + Label(status) + "</div>");
+                sb.Append("<div class=\"stepper-note\">Current state: " + Label(status, arrivedAtWarehouseOverride) + "</div>");
             return sb.ToString();
         }
 

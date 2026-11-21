@@ -59,7 +59,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litDestinationCity.Text = Server.HtmlEncode(shipment.RecipientAddress);
+                litDestinationCity.Text = Server.HtmlEncode(shipment.RecipientAddress + $" ({shipment.RegionArea})");
                 litBranchOrigin.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.BranchOrigin) ? "-" : shipment.BranchOrigin);
                 litContainerNumber.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.ContainerNumber) ? "-" : shipment.ContainerNumber);
                 litShipmentType.Text = shipment.ShipmentType == ShipmentType.INTERNATIONAL ? "International" : "Domestic";
@@ -87,11 +87,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     litPackingListImage.Text = string.Empty;
                 }
 
-                var isNcrDomestic = StatusDisplayHelper.IsNcrDomestic(shipment.ShipmentType, shipment.RegionArea);
-                litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrDomestic);
+                var isNcrArea = StatusDisplayHelper.IsNcrArea(shipment.RegionArea);
+                litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrArea);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 litIssueIndicator.Text = StatusDisplayHelper.IssueIndicator(shipment.IssueReported, shipment.IsIssueResolved);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrDomestic) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrArea) + "</div>";
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
                 litPackage.Text = StatusDisplayHelper.Enc(shipment.PackageDescription);
@@ -134,23 +134,57 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
                 else
                 {
-                    allowedStatuses = Enum.GetValues(typeof(ShipmentStatus))
-                        .Cast<ShipmentStatus>()
-                        .Where(s => s != ShipmentStatus.Received)
-                        .Where(s =>
-                            shipment.ShipmentType == ShipmentType.INTERNATIONAL ||
-                            (s != ShipmentStatus.ArrivedAtWarehouse && s != ShipmentStatus.ProcessingCustoms))
-                        .OrderBy(s =>
-                        {
-                            if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
+                    if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
+                    {
+                        allowedStatuses = isNcrArea
+                            ? new[]
                             {
-                                if (s == ShipmentStatus.Pending) return 0;
-                                if (s == ShipmentStatus.ProcessingCustoms) return 1;
-                                if (s == ShipmentStatus.ArrivedAtWarehouse) return 2;
-                                if (s == ShipmentStatus.InTransit) return 3;
+                                ShipmentStatus.Pending,
+                                ShipmentStatus.ProcessingCustoms,
+                                ShipmentStatus.ArrivedAtWarehouse,
+                                ShipmentStatus.OutForDelivery,
+                                ShipmentStatus.Delivered,
+                                ShipmentStatus.Received,
+                                ShipmentStatus.FailedDelivery,
+                                ShipmentStatus.Returned
                             }
-                            return 10 + (int)s;
-                        });
+                            : new[]
+                            {
+                                ShipmentStatus.Pending,
+                                ShipmentStatus.ProcessingCustoms,
+                                ShipmentStatus.ArrivedAtWarehouse,
+                                ShipmentStatus.InTransit,
+                                ShipmentStatus.OutForDelivery,
+                                ShipmentStatus.Delivered,
+                                ShipmentStatus.Received,
+                                ShipmentStatus.FailedDelivery,
+                                ShipmentStatus.Returned
+                            };
+                    }
+                    else
+                    {
+                        allowedStatuses = isNcrArea
+                            ? new[]
+                            {
+                                ShipmentStatus.Pending,
+                                ShipmentStatus.ArrivedAtWarehouse,
+                                ShipmentStatus.OutForDelivery,
+                                ShipmentStatus.Delivered,
+                                ShipmentStatus.Received,
+                                ShipmentStatus.FailedDelivery,
+                                ShipmentStatus.Returned
+                            }
+                            : new[]
+                            {
+                                ShipmentStatus.Pending,
+                                ShipmentStatus.InTransit,
+                                ShipmentStatus.OutForDelivery,
+                                ShipmentStatus.Delivered,
+                                ShipmentStatus.Received,
+                                ShipmentStatus.FailedDelivery,
+                                ShipmentStatus.Returned
+                            };
+                    }
                 }
 
                 if (shipment.CurrentStatus == ShipmentStatus.Received || shipment.IsOrderReceived)
@@ -166,7 +200,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
 
                 foreach (var status in allowedStatuses)
-                    ddlNewStatus.Items.Add(new System.Web.UI.WebControls.ListItem(StatusDisplayHelper.Label(status, isNcrDomestic), status.ToString()));
+                    ddlNewStatus.Items.Add(new System.Web.UI.WebControls.ListItem(StatusDisplayHelper.Label(status, isNcrArea), status.ToString()));
 
                 if (ddlNewStatus.Items.FindByValue(shipment.CurrentStatus.ToString()) != null)
                     ddlNewStatus.SelectedValue = shipment.CurrentStatus.ToString();
@@ -321,12 +355,18 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     return;
                 }
 
-                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL &&
-                    (newStatus == ShipmentStatus.ArrivedAtWarehouse || newStatus == ShipmentStatus.ProcessingCustoms))
+                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL && (newStatus == ShipmentStatus.ArrivedAtWarehouse || newStatus == ShipmentStatus.ProcessingCustoms))
                 {
                     ShowError("Processing Customs and Arrived at Warehouse are available only for international shipments.");
                     return;
                 }
+
+                if (shipment.ShipmentType == ShipmentType.INTERNATIONAL && newStatus == ShipmentStatus.InTransit && shipment.RegionArea == "NCR")
+                {
+                    ShowError("You cannot select In-Transit if the region of delivery is NCR.");
+                    return;
+                }
+
                 if (User.IsInRole("Rider"))
                 {
                     var riderAllowed = new[]
@@ -401,15 +441,35 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 shipment.UpdatedDate = Helpers.TimeHelper.Now;
                 await _db.SaveChangesAsync();
 
-                _db.ShipmentHistories.Add(new ShipmentHistory
+                string loc = "";
+
+                if (newStatus == ShipmentStatus.Delivered)
                 {
-                    ShipmentId = shipment.Id,
-                    Status = newStatus,
-                    Location = newStatus == ShipmentStatus.Delivered ? shipment.RecipientAddress : newStatus == ShipmentStatus.ProcessingCustoms ? "Philippines" : txtLocation.Text.Trim(),
-                    Notes = txtNotes.Text.Trim(),
-                    ProofOfDelivery = proofBytes,
-                    ProofContentType = proofType
-                });
+                    loc = shipment.RecipientAddress;
+                }
+                else if (newStatus == ShipmentStatus.ProcessingCustoms)
+                {
+                    loc = "Philippines";
+                }
+                else if (newStatus == ShipmentStatus.ArrivedAtWarehouse)
+                {
+                    loc = "Las Pinas Branch";
+                }
+                else
+                {
+                    loc = txtLocation.Text.Trim();
+                }
+
+
+                _db.ShipmentHistories.Add(new ShipmentHistory
+                    {
+                        ShipmentId = shipment.Id,
+                        Status = newStatus,
+                        Location = loc,
+                        Notes = txtNotes.Text.Trim(),
+                        ProofOfDelivery = proofBytes,
+                        ProofContentType = proofType
+                    });
                 await _db.SaveChangesAsync();
 
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} updated to {StatusDisplayHelper.Label(newStatus)}.";

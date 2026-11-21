@@ -75,14 +75,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                     litPackingListImage.Text = string.Empty;
                 }
 
-                litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
+                var isNcrArea = StatusDisplayHelper.IsNcrArea(shipment.RegionArea);
+                litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrArea);
                 litSenderName.Text = Server.HtmlEncode(shipment.SenderName);
-                litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress);
+                litRecipientAddress.Text = Server.HtmlEncode(shipment.RecipientAddress + $" ({shipment.RegionArea})");
                 litPackageDescription.Text = string.IsNullOrWhiteSpace(shipment.PackageDescription)
                     ? "-" : Server.HtmlEncode(shipment.PackageDescription);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrArea) + "</div>";
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litRecipientEmail.Text = StatusDisplayHelper.Enc(shipment.RecipientEmail);
                 litWeight.Text = StatusDisplayHelper.WeightText(shipment.WeightKg);

@@ -80,11 +80,11 @@ namespace SoonestShipmentTrackingWebsite.Views
                     litPackingListImage.Text = string.Empty;
                 }
 
-                var isNcrDomestic = StatusDisplayHelper.IsNcrDomestic(shipment.ShipmentType, shipment.RegionArea);
-                litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrDomestic);
+                var isNcrArea = StatusDisplayHelper.IsNcrArea(shipment.RegionArea);
+                litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrArea);
                 litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrDomestic) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrArea) + "</div>";
                 litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litRecipientEmail.Text = StatusDisplayHelper.Enc(shipment.RecipientEmail);
