@@ -136,14 +136,17 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     allowedStatuses = Enum.GetValues(typeof(ShipmentStatus))
                         .Cast<ShipmentStatus>()
                         .Where(s => s != ShipmentStatus.Received)
-                        .Where(s => shipment.ShipmentType == ShipmentType.INTERNATIONAL || s != ShipmentStatus.ArrivedAtWarehouse)
+                        .Where(s =>
+                            shipment.ShipmentType == ShipmentType.INTERNATIONAL ||
+                            (s != ShipmentStatus.ArrivedAtWarehouse && s != ShipmentStatus.ProcessingCustoms))
                         .OrderBy(s =>
                         {
                             if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
                             {
                                 if (s == ShipmentStatus.Pending) return 0;
-                                if (s == ShipmentStatus.ArrivedAtWarehouse) return 1;
-                                if (s == ShipmentStatus.InTransit) return 2;
+                                if (s == ShipmentStatus.ProcessingCustoms) return 1;
+                                if (s == ShipmentStatus.ArrivedAtWarehouse) return 2;
+                                if (s == ShipmentStatus.InTransit) return 3;
                             }
                             return 10 + (int)s;
                         });
@@ -317,9 +320,10 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     return;
                 }
 
-                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL && newStatus == ShipmentStatus.ArrivedAtWarehouse)
+                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL &&
+                    (newStatus == ShipmentStatus.ArrivedAtWarehouse || newStatus == ShipmentStatus.ProcessingCustoms))
                 {
-                    ShowError("Arrived at Warehouse is available only for international shipments.");
+                    ShowError("Processing Customs and Arrived at Warehouse are available only for international shipments.");
                     return;
                 }
                 if (User.IsInRole("Rider"))

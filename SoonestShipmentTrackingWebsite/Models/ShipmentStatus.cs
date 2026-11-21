@@ -19,6 +19,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         Returned = 5,
         Cancelled = 6,
         Received = 7,
-        ArrivedAtWarehouse = 8
+        ArrivedAtWarehouse = 8,
+        ProcessingCustoms = 9
     }
 }

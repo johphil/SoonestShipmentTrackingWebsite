@@ -14,6 +14,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             switch (status)
             {
                 case ShipmentStatus.Pending: return "badge-pending";
+                case ShipmentStatus.ProcessingCustoms: return "badge-info";
                 case ShipmentStatus.InTransit: return "badge-info";
                 case ShipmentStatus.ArrivedAtWarehouse: return "badge-info";
                 case ShipmentStatus.OutForDelivery: return "badge-warning";
@@ -41,6 +42,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             switch (status)
             {
                 case ShipmentStatus.Received: return "Received";
+                case ShipmentStatus.ProcessingCustoms: return "Processing Customs";
                 case ShipmentStatus.InTransit: return "In Transit";
                 case ShipmentStatus.ArrivedAtWarehouse: return "Arrived at Warehouse";
                 case ShipmentStatus.OutForDelivery: return "Out for Delivery";
@@ -103,7 +105,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         {
             var isInternational = shipmentType == ShipmentType.INTERNATIONAL;
             string[] labels = isInternational
-                ? new[] { "Pending", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" }
+                ? new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" }
                 : new[] { "Pending", "In Transit", "Out for Delivery", "Delivered", "Received" };
 
             int current;
@@ -111,13 +113,14 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             switch (status)
             {
                 case ShipmentStatus.Pending: current = 0; break;
-                case ShipmentStatus.ArrivedAtWarehouse: current = isInternational ? 1 : 1; break;
-                case ShipmentStatus.InTransit: current = isInternational ? 2 : 1; break;
-                case ShipmentStatus.OutForDelivery: current = isInternational ? 3 : 2; break;
-                case ShipmentStatus.Delivered: current = isInternational ? 4 : 3; break;
-                case ShipmentStatus.Received: current = isInternational ? 5 : 4; break;
-                case ShipmentStatus.FailedDelivery: current = isInternational ? 3 : 2; exceptional = true; break;
-                case ShipmentStatus.Returned: current = isInternational ? 3 : 2; exceptional = true; break;
+                case ShipmentStatus.ProcessingCustoms: current = isInternational ? 1 : 1; break;
+                case ShipmentStatus.ArrivedAtWarehouse: current = isInternational ? 2 : 1; break;
+                case ShipmentStatus.InTransit: current = isInternational ? 3 : 1; break;
+                case ShipmentStatus.OutForDelivery: current = isInternational ? 4 : 2; break;
+                case ShipmentStatus.Delivered: current = isInternational ? 5 : 3; break;
+                case ShipmentStatus.Received: current = isInternational ? 6 : 4; break;
+                case ShipmentStatus.FailedDelivery: current = isInternational ? 4 : 2; exceptional = true; break;
+                case ShipmentStatus.Returned: current = isInternational ? 4 : 2; exceptional = true; break;
                 default: current = 0; exceptional = true; break;
             }
 
