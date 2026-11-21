@@ -87,10 +87,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     litPackingListImage.Text = string.Empty;
                 }
 
-                litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
+                var isNcrDomestic = StatusDisplayHelper.IsNcrDomestic(shipment.ShipmentType, shipment.RegionArea);
+                litCurrentBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrDomestic);
                 litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
                 litIssueIndicator.Text = StatusDisplayHelper.IssueIndicator(shipment.IssueReported, shipment.IsIssueResolved);
-                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType) + "</div>";
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrDomestic) + "</div>";
                 litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
                 litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
                 litPackage.Text = StatusDisplayHelper.Enc(shipment.PackageDescription);
@@ -165,7 +166,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 }
 
                 foreach (var status in allowedStatuses)
-                    ddlNewStatus.Items.Add(new System.Web.UI.WebControls.ListItem(StatusDisplayHelper.Label(status), status.ToString()));
+                    ddlNewStatus.Items.Add(new System.Web.UI.WebControls.ListItem(StatusDisplayHelper.Label(status, isNcrDomestic), status.ToString()));
 
                 if (ddlNewStatus.Items.FindByValue(shipment.CurrentStatus.ToString()) != null)
                     ddlNewStatus.SelectedValue = shipment.CurrentStatus.ToString();
@@ -404,7 +405,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     ShipmentId = shipment.Id,
                     Status = newStatus,
-                    Location = newStatus == ShipmentStatus.Delivered ? shipment.RecipientAddress : txtLocation.Text.Trim(),
+                    Location = newStatus == ShipmentStatus.Delivered ? shipment.RecipientAddress : newStatus == ShipmentStatus.ProcessingCustoms ? "Philippines" : txtLocation.Text.Trim(),
                     Notes = txtNotes.Text.Trim(),
                     ProofOfDelivery = proofBytes,
                     ProofContentType = proofType

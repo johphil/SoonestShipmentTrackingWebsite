@@ -262,7 +262,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     ShipmentId = shipment.Id,
                     Status = ShipmentStatus.Pending,
-                    Location = selectedShipmentType == ShipmentType.DOMESTIC ? branchOrigin : "-",
+                    Location = selectedShipmentType == ShipmentType.DOMESTIC ? branchOrigin : "Overseas",
                     Notes = "Shipment created."
                 });
                 int result = _db.SaveChanges();

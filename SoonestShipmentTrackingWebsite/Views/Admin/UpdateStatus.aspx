@@ -106,7 +106,7 @@
                         <ItemTemplate>
                             <tr>
                                 <td class="nowrap"><%# Eval("Timestamp", "{0:MMM d, yyyy}") %><span class="cell-sub"><%# Eval("Timestamp", "{0:h:mm tt}") %></span></td>
-                                <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("Status")) %></td>
+                                <td><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.HistoryBadge(Eval("Status"), Eval("Shipment")) %></td>
                                 <td><%# Eval("Location") %></td>
                                 <td><%# Eval("Notes") %><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ProofImage(Eval("ProofOfDelivery"), Eval("ProofContentType")) %></td>
                             </tr>

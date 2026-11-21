@@ -37,8 +37,18 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             return "<div style=\"margin-top:6px;\"><strong>Proof of delivery:</strong><br /><a href=\"" + src + "\" target=\"_blank\"><img src=\"" + src + "\" alt=\"Proof of delivery\" style=\"max-width:140px;max-height:140px;border-radius:6px;border:1px solid #dbe6f0;\" /></a></div>";
         }
 
-        public static string Label(ShipmentStatus status)
+        // Domestic shipments routed through NCR hide the "In Transit" step in favor of "Arrived at Warehouse".
+        public static bool IsNcrDomestic(ShipmentType shipmentType, string regionArea)
         {
+            return shipmentType == ShipmentType.DOMESTIC
+                && string.Equals((regionArea ?? string.Empty).Trim(), "NCR", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static string Label(ShipmentStatus status, bool arrivedAtWarehouseOverride = false)
+        {
+            if (arrivedAtWarehouseOverride && status == ShipmentStatus.InTransit)
+                return "Arrived at Warehouse";
+
             switch (status)
             {
                 case ShipmentStatus.Received: return "Received";
@@ -53,9 +63,18 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
         // Returns a ready-to-render <span> badge, used from .aspx inline
         // data-binding expressions: <%# StatusDisplayHelper.Badge(...) %>
-        public static string Badge(ShipmentStatus status)
+        public static string Badge(ShipmentStatus status, bool arrivedAtWarehouseOverride = false)
         {
-            return "<span class=\"status-badge " + BadgeClass(status) + "\">" + Label(status) + "</span>";
+            return "<span class=\"status-badge " + BadgeClass(status) + "\">" + Label(status, arrivedAtWarehouseOverride) + "</span>";
+        }
+
+        // Badge for a ShipmentHistory row, deriving the NCR-domestic override from its parent Shipment.
+        public static string HistoryBadge(object statusValue, object shipmentObj)
+        {
+            var status = AsStatus(statusValue);
+            var shipment = shipmentObj as Shipment;
+            var arrivedAtWarehouseOverride = shipment != null && IsNcrDomestic(shipment.ShipmentType, shipment.RegionArea);
+            return Badge(status, arrivedAtWarehouseOverride);
         }
 
         public static string RiderInfo(object statusValue, object riderNameValue)
@@ -101,12 +120,12 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 
         // Horizontal progress stepper: Pending > In Transit > Out for Delivery > Delivered > Received.
         // Exceptional end states (failed / returned / cancelled) flag the step they stopped at.
-        public static string Progress(ShipmentStatus status, ShipmentType shipmentType = ShipmentType.DOMESTIC)
+        public static string Progress(ShipmentStatus status, ShipmentType shipmentType = ShipmentType.DOMESTIC, bool arrivedAtWarehouseOverride = false)
         {
             var isInternational = shipmentType == ShipmentType.INTERNATIONAL;
             string[] labels = isInternational
                 ? new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" }
-                : new[] { "Pending", "In Transit", "Out for Delivery", "Delivered", "Received" };
+                : new[] { "Pending", arrivedAtWarehouseOverride ? "Arrived at Warehouse" : "In Transit", "Out for Delivery", "Delivered", "Received" };
 
             int current;
             bool exceptional = false;
