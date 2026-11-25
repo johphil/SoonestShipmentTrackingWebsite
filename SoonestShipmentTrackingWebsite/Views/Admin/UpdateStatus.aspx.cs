@@ -105,7 +105,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 litCustomer.Text = customerUser == null
                     ? "-"
                     : Server.HtmlEncode(customerUser.FullName ?? customerUser.Email ?? "-");
-                BindRiders(shipment.RiderName);
+                BindRiders(shipment.RiderId, shipment.RiderName);
 
                 pnlIssue.Visible = shipment.IssueReported;
                 if (shipment.IssueReported)
@@ -235,33 +235,39 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             return keys.Distinct(StringComparer.OrdinalIgnoreCase);
         }
 
-        private void BindRiders(string selectedRiderName)
+        private void BindRiders(int? selectedRiderId, string selectedRiderName)
         {
             using (var db = new ApplicationDbContext())
             {
-                var riderRoleId = db.Roles
-                    .Where(r => r.Name == "Rider")
-                    .Select(r => r.Id)
-                    .FirstOrDefault();
+                var riders = db.Riders
+                    .Where(r => r.IsActive)
+                    .OrderBy(r => r.FullName)
+                    .ToList();
 
-                var riders = riderRoleId == null
-                    ? new List<ApplicationUser>()
-                    : db.Users
-                        .Where(u => u.Roles.Any(ur => ur.RoleId == riderRoleId))
-                        .OrderBy(u => u.FullName)
-                        .ToList();
+                if (selectedRiderId.HasValue && riders.All(r => r.RiderId != selectedRiderId.Value))
+                {
+                    var selectedInactive = db.Riders.FirstOrDefault(r => r.RiderId == selectedRiderId.Value);
+                    if (selectedInactive != null)
+                        riders.Insert(0, selectedInactive);
+                }
 
                 ddlRider.Items.Clear();
                 ddlRider.Items.Add(new ListItem("-- Select rider --", ""));
 
                 foreach (var rider in riders)
                 {
-                    var riderName = string.IsNullOrWhiteSpace(rider.FullName) ? rider.Email : rider.FullName;
-                    ddlRider.Items.Add(new ListItem(riderName, riderName));
+                    var label = rider.FullName + (rider.IsActive ? string.Empty : " (Inactive)");
+                    ddlRider.Items.Add(new ListItem(label, rider.RiderId.ToString()));
                 }
 
-                if (!string.IsNullOrWhiteSpace(selectedRiderName) && ddlRider.Items.FindByValue(selectedRiderName) != null)
-                    ddlRider.SelectedValue = selectedRiderName;
+                if (selectedRiderId.HasValue && ddlRider.Items.FindByValue(selectedRiderId.Value.ToString()) != null)
+                    ddlRider.SelectedValue = selectedRiderId.Value.ToString();
+                else if (!string.IsNullOrWhiteSpace(selectedRiderName))
+                {
+                    var byName = riders.FirstOrDefault(r => string.Equals(r.FullName, selectedRiderName, StringComparison.OrdinalIgnoreCase));
+                    if (byName != null && ddlRider.Items.FindByValue(byName.RiderId.ToString()) != null)
+                        ddlRider.SelectedValue = byName.RiderId.ToString();
+                }
             }
         }
 
@@ -421,13 +427,32 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     ShowError("Please select a rider when the shipment is marked Out for Delivery.");
                     return;
                 }
-                else if (!User.IsInRole("Rider"))
-                {
-                    shipment.RiderName = string.Empty;
-                }
 
                 if (!User.IsInRole("Rider") && !string.IsNullOrWhiteSpace(ddlRider.SelectedValue))
-                    shipment.RiderName = ddlRider.SelectedValue;
+                {
+                    int riderId;
+                    if (!int.TryParse(ddlRider.SelectedValue, out riderId))
+                    {
+                        ShowError("Please select a valid rider.");
+                        return;
+                    }
+
+                    var rider = _db.Riders.FirstOrDefault(r => r.RiderId == riderId);
+                    if (rider == null)
+                    {
+                        ShowError("Selected rider record no longer exists.");
+                        return;
+                    }
+
+                    if (newStatus == ShipmentStatus.OutForDelivery && !rider.IsActive)
+                    {
+                        ShowError("Selected rider is inactive and cannot be assigned.");
+                        return;
+                    }
+
+                    shipment.RiderId = rider.RiderId;
+                    shipment.RiderName = rider.FullName;
+                }
 
                 //Prevent duplicate status na magkasunod
                 //if (shipment.CurrentStatus == newStatus)
@@ -479,7 +504,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                 {
                     if (newStatus == ShipmentStatus.OutForDelivery)
                     {
+                        await SMSHelper.SendRiderAssignmentSMS(shipment.Rider.MobileNumber, shipment.Rider.FullName, shipment.ControlNumber);
                         await SMSHelper.SendDeliveryOnTheWaySMS(shipment.RecipientPhone, shipment.RecipientName, shipment.ControlNumber, shipment.RiderName);
+
+                        var riderUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/MarkDelivered.aspx?controlNumber=" + Uri.EscapeDataString(shipment.ControlNumber) + "&token=" + EmailHelper.GenerateReceiptToken(shipment.ControlNumber));
+                        EmailHelper.SendRiderShipmentAssignmentEmail(shipment, riderUrl);
                     }
 
                     string redirectUrl = Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Views/Track.aspx?controlNumber=" + shipment.ControlNumber);

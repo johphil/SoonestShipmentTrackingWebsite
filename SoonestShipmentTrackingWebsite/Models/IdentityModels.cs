@@ -40,6 +40,7 @@ namespace SoonestShipmentTrackingWebsite.Models
         }
 
         public DbSet<Branch> Branches { get; set; }
+        public DbSet<Rider> Riders { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<ShipmentHistory> ShipmentHistories { get; set; }
 
@@ -56,6 +57,12 @@ namespace SoonestShipmentTrackingWebsite.Models
                 .HasOptional(u => u.Branch)
                 .WithMany()
                 .HasForeignKey(u => u.BranchId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Shipment>()
+                .HasOptional(s => s.Rider)
+                .WithMany()
+                .HasForeignKey(s => s.RiderId)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Shipment>()

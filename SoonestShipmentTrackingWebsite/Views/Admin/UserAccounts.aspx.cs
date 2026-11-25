@@ -25,10 +25,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             var currentUserId = User.Identity.GetUserId();
             var roleNamesById = _db.Roles.ToDictionary(r => r.Id, r => r.Name);
+            var riderRoleId = _db.Roles.Where(r => r.Name == "Rider").Select(r => r.Id).FirstOrDefault();
 
             var rows = _db.Users
                 .OrderBy(u => u.FullName)
                 .ToList()
+                .Where(u => string.IsNullOrEmpty(riderRoleId) || !u.Roles.Any(r => r.RoleId == riderRoleId))
                 .Select(u => new UserAccountRow
                 {
                     Id = u.Id,
@@ -53,7 +55,6 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             {
                 case "Admin": return "badge-danger";
                 case "Staff": return "badge-info";
-                case "Rider": return "badge-warning";
                 case "Customer": return "badge-success";
                 default: return "badge-pending";
             }

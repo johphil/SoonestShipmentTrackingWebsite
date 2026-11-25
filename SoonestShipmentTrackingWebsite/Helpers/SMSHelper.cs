@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Services.Description;
+using System.Web.UI;
 
 namespace SoonestShipmentTrackingWebsite.Helpers
 {
@@ -48,6 +49,67 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                     sender_id = _senderName,
                     type = "plain",
                     message = $"Hello {customerName}! Your package {shipmentControlNo} is scheduled to be delivered today! Your rider is {rider}. Please prepare your identification document for validation."
+                };
+
+                string json =
+                    JsonConvert.SerializeObject(requestData);
+
+                using (var content = new StringContent(
+                    json,
+                    Encoding.UTF8,
+                    "application/json"))
+                {
+                    try
+                    {
+                        var response = await client.PostAsync(
+                            "https://dashboard.philsms.com/api/v3/sms/send",
+                            content);
+
+                        string responseBody = await response.Content.ReadAsStringAsync();
+
+                        return $"HTTP {(int)response.StatusCode}: {responseBody}";
+                    }
+                    catch
+                    {
+                        return $"Error sending SMS";
+                    }
+                }
+            }
+        }
+
+        public static async Task<string> SendRiderAssignmentSMS(string contactNumber, string riderName, string shipmentControlNo)
+        {
+            string _apiKey, _senderName = "";
+
+            _apiKey = ConfigurationManager.AppSettings["PhilSmsApiToken"];
+            _senderName = ConfigurationManager.AppSettings["PhilSmsSenderID"];
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation(
+                    "Authorization",
+                    "Bearer " + _apiKey);
+
+                client.DefaultRequestHeaders.TryAddWithoutValidation(
+                    "Accept",
+                    "application/json");
+
+                //reformat number
+                if (contactNumber.StartsWith("09"))
+                {
+                    contactNumber = "63" + contactNumber.Substring(1);
+                }
+                else if (contactNumber.StartsWith("9"))
+                {
+                    contactNumber = "63" + contactNumber;
+                }
+
+                var requestData = new
+                {
+                    recipient = contactNumber,
+                    sender_id = _senderName,
+                    type = "plain",
+                    message = $"Hello {riderName}! You have been assigned a delivery.\n\nControl No. {shipmentControlNo}\n\nAn email containing the tracking link and complete shipment details has also been sent to your registered email address. Please proceed with the delivery and confirm once the package has been received. Thank you!"
                 };
 
                 string json =

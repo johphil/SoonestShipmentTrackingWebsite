@@ -24,6 +24,7 @@
                 <a href="<%= ResolveUrl("~/Views/Admin/Shipments.aspx") %>">Manage Shipments</a>
                 <asp:PlaceHolder ID="pnlSidebarAdminOnly" runat="server" Visible="false">
                     <a href="<%= ResolveUrl("~/Views/Admin/UserAccounts.aspx") %>">Manage Users</a>
+                    <a href="<%= ResolveUrl("~/Views/Admin/Riders.aspx") %>">Manage Riders</a>
                     <a href="<%= ResolveUrl("~/Views/Admin/Branches.aspx") %>">Manage Branch</a>
                     <a href="<%= ResolveUrl("~/Views/Admin/Reports.aspx") %>">Reports</a>
                 </asp:PlaceHolder>
@@ -56,7 +57,8 @@
                     <li><a runat="server" href="~/Views/Admin/Shipments.aspx">Manage Shipments</a></li>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="pnlAdminNav" runat="server" Visible="false">
-                    <li><a runat="server" href="~/Views/Admin/UserAccounts.aspx">Manage Staff</a></li>
+                    <li><a runat="server" href="~/Views/Admin/UserAccounts.aspx">Manage Users</a></li>
+                    <li><a runat="server" href="~/Views/Admin/Riders.aspx">Manage Riders</a></li>
                     <li><a runat="server" href="~/Views/Admin/Branches.aspx">Manage Branch</a></li>
                     <li><a runat="server" href="~/Views/Admin/Reports.aspx">Reports</a></li>
                 </asp:PlaceHolder>

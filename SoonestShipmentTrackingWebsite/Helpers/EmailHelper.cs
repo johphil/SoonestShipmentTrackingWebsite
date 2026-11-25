@@ -64,6 +64,32 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             }
         }
 
+
+        public static void SendRiderShipmentAssignmentEmail(Shipment shipment, string shipmentDetailsUrl)
+        {
+            if (shipment == null)
+                throw new ArgumentNullException(nameof(shipment));
+
+            if (string.IsNullOrWhiteSpace(shipment.Rider.Email))
+                return;
+
+            using (var mail = CreateMailMessage(
+                $"New Shipment Assignment - {shipment.ControlNumber}",
+                EmailFormatRiderShipmentAssignment(
+                    shipment.RiderName,
+                    shipment.ControlNumber,
+                    shipment.Customer?.FullName,
+                    shipment.RecipientName,
+                    shipment.BranchOrigin,
+                    shipment.RecipientAddress,
+                    shipmentDetailsUrl)))
+            {
+                mail.To.Add(shipment.Rider.Email.Trim());
+                SendMail(mail);
+            }
+        }
+
+
         public static void SendShipmentUpdateEmail(Shipment shipment, string shipmentTrackUrl)
         {
             using (var mail = CreateMailMessage($"Shipment Status Update - {StatusDisplayHelper.Label(shipment.CurrentStatus)}", string.Empty))
@@ -388,6 +414,78 @@ namespace SoonestShipmentTrackingWebsite.Helpers
 </table></td></tr></table>
 </body></html>";
         }
+
+
+        private static string EmailFormatRiderShipmentAssignment(
+            string riderName,
+            string controlNumber,
+            string customerName,
+            string recipientName,
+            string origin,
+            string destination,
+            string shipmentDetailsUrl)
+        {
+            var content = $@"
+<div style=""padding:14px 16px;background:#f7fafd;border:1px solid #e4ebf2;border-radius:10px;"">
+    <div style=""font-size:12px;color:#60758a;letter-spacing:.5px;"">SHIPMENT CONTROL NUMBER</div>
+    <div style=""font-size:24px;color:#07233d;font-weight:800;margin-top:6px;letter-spacing:.6px;"">
+        {Encode(controlNumber)}
+    </div>
+</div>
+
+<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0""
+       style=""margin-top:16px;border-collapse:collapse;"">
+    <tr>
+        <td style=""padding:10px 0;color:#6a7d91;font-size:13px;"">Customer</td>
+        <td align=""right"" style=""padding:10px 0;color:#1b2d3d;font-weight:600;font-size:13px;"">
+            {Encode(customerName)}
+        </td>
+    </tr>
+    <tr>
+        <td style=""padding:10px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Recipient</td>
+        <td align=""right"" style=""padding:10px 0;color:#1b2d3d;font-weight:600;font-size:13px;border-top:1px solid #eef3f8;"">
+            {Encode(recipientName)}
+        </td>
+    </tr>
+    <tr>
+        <td style=""padding:10px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Branch Origin</td>
+        <td align=""right"" style=""padding:10px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">
+            {Encode(origin)}
+        </td>
+    </tr>
+    <tr>
+        <td style=""padding:10px 0;color:#6a7d91;font-size:13px;border-top:1px solid #eef3f8;"">Destination</td>
+        <td align=""right"" style=""padding:10px 0;color:#1b2d3d;font-size:13px;border-top:1px solid #eef3f8;"">
+            {Encode(destination)}
+        </td>
+    </tr>
+</table>
+
+<div style=""margin-top:18px;padding:14px;background:#fff7e6;color:#8a5a00;border-radius:8px;font-size:13px;line-height:1.6;"">
+    <strong>Delivery Assignment Notice</strong><br>
+    You are officially assigned to deliver this shipment.
+    Please review the shipment details and proceed with the necessary delivery arrangements.
+</div>
+
+<div style=""margin-top:22px;text-align:center;"">
+    <a href=""{EncodeUrl(shipmentDetailsUrl)}""
+       style=""display:inline-block;background:#e63946;color:#ffffff;text-decoration:none;
+              font-size:15px;font-weight:700;padding:14px 32px;border-radius:8px;"">
+        Shipment Details
+    </a>
+</div>
+
+<div style=""margin-top:16px;font-size:12px;color:#60758a;line-height:1.7;text-align:center;"">
+    Please click the button above to access the complete shipment information.
+    Keep this email for your reference.
+</div>";
+
+            return BuildEmailTemplate(
+                "New Shipment Assignment",
+                $"Hello {Safe(riderName)}, a shipment has been assigned to you for delivery. Please review the information below.",
+                content);
+        }
+
 
         private static string Encode(string text)
         {

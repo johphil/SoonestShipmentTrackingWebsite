@@ -51,14 +51,14 @@ namespace SoonestShipmentTrackingWebsite.Helpers
         public static string Label(ShipmentStatus status, bool arrivedAtWarehouseOverride = false)
         {
             if (arrivedAtWarehouseOverride && status == ShipmentStatus.InTransit)
-                return "Arrived at Warehouse";
+                return "Arrived";
 
             switch (status)
             {
                 case ShipmentStatus.Received: return "Received";
-                case ShipmentStatus.ProcessingCustoms: return "Processing Customs";
+                case ShipmentStatus.ProcessingCustoms: return "Customs";
                 case ShipmentStatus.InTransit: return "In Transit";
-                case ShipmentStatus.ArrivedAtWarehouse: return "Arrived at Warehouse";
+                case ShipmentStatus.ArrivedAtWarehouse: return "Arrived";
                 case ShipmentStatus.OutForDelivery: return "Out for Delivery";
                 case ShipmentStatus.FailedDelivery: return "Failed Delivery";
                 default: return status.ToString();
@@ -141,7 +141,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             {
                 if (arrivedAtWarehouseOverride)
                 {
-                    labels = new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "Out for Delivery", "Delivered", "Received" };
+                    labels = new[] { "Pending", "Customs", "Arrived", "Out for Delivery", "Delivered", "Received" };
                     processingCustomsIndex = 1;
                     arrivedAtWarehouseIndex = 2;
                     outForDeliveryIndex = 3;
@@ -150,7 +150,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
                 }
                 else
                 {
-                    labels = new[] { "Pending", "Processing Customs", "Arrived at Warehouse", "In Transit", "Out for Delivery", "Delivered", "Received" };
+                    labels = new[] { "Pending", "Customs", "Arrived", "In Transit", "Out for Delivery", "Delivered", "Received" };
                     processingCustomsIndex = 1;
                     arrivedAtWarehouseIndex = 2;
                     inTransitIndex = 3;
@@ -163,7 +163,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             {
                 if (arrivedAtWarehouseOverride)
                 {
-                    labels = new[] { "Pending", "Arrived at Warehouse", "Out for Delivery", "Delivered", "Received" };
+                    labels = new[] { "Pending", "Arrived", "Out for Delivery", "Delivered", "Received" };
                     arrivedAtWarehouseIndex = 1;
                     outForDeliveryIndex = 2;
                     deliveredIndex = 3;

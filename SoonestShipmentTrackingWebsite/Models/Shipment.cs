@@ -58,6 +58,8 @@ namespace SoonestShipmentTrackingWebsite.Models
         public decimal? WeightKg { get; set; }
 
         public ShipmentStatus CurrentStatus { get; set; }
+        public int? RiderId { get; set; }
+        public virtual Rider Rider { get; set; }
         [StringLength(100)]
         public string RiderName { get; set; }
         public bool IsOrderReceived { get; set; }

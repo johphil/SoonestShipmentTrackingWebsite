@@ -161,6 +161,8 @@
     <Content Include="Views\Admin\CreateShipment.aspx" />
     <Content Include="Views\Admin\Dashboard.aspx" />
     <Content Include="Views\Admin\Reports.aspx" />
+    <Content Include="Views\Admin\RiderEdit.aspx" />
+    <Content Include="Views\Admin\Riders.aspx" />
     <Content Include="Views\Admin\Shipments.aspx" />
     <Content Include="Views\Admin\UpdateStatus.aspx" />
     <Content Include="Views\Admin\UserAccounts.aspx" />
@@ -172,6 +174,7 @@
     <Content Include="Views\Customer\ShipmentDetails.aspx" />
     <Content Include="Views\Default.aspx" />
     <Content Include="Views\Forbidden.aspx" />
+    <Content Include="Views\MarkDelivered.aspx" />
     <Content Include="Views\NotFound.aspx" />
     <Content Include="Views\OrderReceived.aspx" />
     <Content Include="Views\Theme.css" />
@@ -190,9 +193,11 @@
     <Compile Include="Helpers\StatusDisplayHelper.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Helpers\VerificationCodeHelper.cs" />
+    <Compile Include="Migrations\202611250001_AddRiderManagementModule.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Rider.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipmentHistory.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
@@ -261,6 +266,20 @@
     </Compile>
     <Compile Include="Views\Admin\Reports.aspx.designer.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\RiderEdit.aspx.cs">
+      <DependentUpon>RiderEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\RiderEdit.aspx.designer.cs">
+      <DependentUpon>RiderEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Admin\Riders.aspx.cs">
+      <DependentUpon>Riders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\Riders.aspx.designer.cs">
+      <DependentUpon>Riders.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\Admin\Shipments.aspx.cs">
       <DependentUpon>Shipments.aspx</DependentUpon>
