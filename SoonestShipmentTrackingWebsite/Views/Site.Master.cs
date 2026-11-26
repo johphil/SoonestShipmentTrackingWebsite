@@ -49,7 +49,7 @@ namespace SoonestShipmentTrackingWebsite.Views
                 litSidebarUserName.Text = HttpUtility.HtmlEncode(Context.User.Identity.Name);
 
                 if (isAdminStaffRiderShell)
-                    mainForm.Attributes["class"] = "admin-shell-mode";
+                    mainForm.Attributes["class"] = "site-layout admin-shell-mode";
 
                 if (isCustomer || isRider)
                     LoadNotifications();

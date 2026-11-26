@@ -10,7 +10,7 @@
                 <div class="page-subheading">Operations overview &mdash; click a tile to open that filtered shipment list.</div>
             </div>
             <div class="page-head-actions">
-                <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
+                <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-primary">+ New Shipment</a>
                 <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline">Manage All Shipments</a>
             </div>
         </div>

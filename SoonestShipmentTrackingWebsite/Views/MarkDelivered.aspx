@@ -152,21 +152,21 @@
 
     private void ShowMessage(string message, bool success)
     {
-        litMessage.Text = "<div class=\"validation-summary\"" + (success ? " style=\"background:#e8f5e9;color:#2e7d32;\"" : "") + ">" + Server.HtmlEncode(message) + "</div>";
+        litMessage.Text = "<div class=\"" + (success ? "alert-success" : "validation-summary") + "\">" + Server.HtmlEncode(message) + "</div>";
     }
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Mark Shipment as Delivered</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section app-section" style="padding-top:44px;">
-    <div class="container" style="max-width:700px;">
+<div class="section app-section">
+    <div class="container container-md">
         <div class="card-panel">
             <div class="page-heading">Delivery Confirmation</div>
             <div class="page-subheading">Review shipment details and confirm delivery.</div>
 
             <asp:Literal ID="litMessage" runat="server" />
 
-            <asp:Panel ID="pnlDetails" runat="server" Visible="false" style="margin-top:12px;">
+            <asp:Panel ID="pnlDetails" runat="server" Visible="false">
                 <div class="kv-grid">
                     <div class="kv"><div class="kv-label">Tracking Number</div><div class="kv-value"><asp:Literal ID="litControlNumber" runat="server" /></div></div>
                     <div class="kv"><div class="kv-label">Recipient</div><div class="kv-value"><asp:Literal ID="litRecipient" runat="server" /></div></div>
@@ -176,14 +176,14 @@
                 </div>
 
                 <asp:Panel ID="pnlProof" runat="server">
-                    <div class="form-group" style="margin-top:14px;">
+                    <div class="form-group mt-16">
                         <label>Proof of Delivery Image</label>
                         <asp:FileUpload ID="fileProof" runat="server" CssClass="form-control" accept="image/*" />
                     </div>
                 </asp:Panel>
 
-                <div style="margin-top:14px;">
-                    <asp:Button ID="btnMarkDelivered" runat="server" CssClass="btn btn-red" Text="Mark as Delivered" OnClick="btnMarkDelivered_Click" OnClientClick="return confirm('Mark this shipment as delivered?');" />
+                <div class="mt-16">
+                    <asp:Button ID="btnMarkDelivered" runat="server" CssClass="btn btn-primary" Text="Mark as Delivered" OnClick="btnMarkDelivered_Click" OnClientClick="return confirm('Mark this shipment as delivered?');" />
                 </div>
             </asp:Panel>
         </div>

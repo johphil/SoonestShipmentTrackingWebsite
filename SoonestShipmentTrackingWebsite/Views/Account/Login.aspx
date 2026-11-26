@@ -25,14 +25,14 @@
             </div>
 
             <div class="form-group">
-                <label style="font-weight: normal; display: inline-flex; align-items: center; gap: 6px; color: #808080;">
+                <label class="check-row">
                     <asp:CheckBox ID="chkRememberMe" runat="server" /> Remember me
                 </label>
             </div>
 
-            <asp:Button ID="btnLogin" runat="server" CssClass="btn btn-red btn-block" Text="Log In" OnClick="btnLogin_Click" ValidationGroup="Login" />
+            <asp:Button ID="btnLogin" runat="server" CssClass="btn btn-primary btn-block" Text="Log In" OnClick="btnLogin_Click" ValidationGroup="Login" />
 
-            <p style="text-align: center; margin-top: 24px; color: #93aac3;">
+            <p class="auth-links">
                 <a runat="server" href="~/Views/Account/ForgotPassword.aspx">Forgot password?</a><br />
                 No account yet? <a runat="server" href="~/Views/Account/Register.aspx">Register</a>
             </p>

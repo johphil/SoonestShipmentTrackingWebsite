@@ -41,7 +41,7 @@
                 <h2 class="reference-heading">Moving Packages.<br /><span>Connecting People.</span></h2>
                 <p class="section-lead">Soonest Global Express Corporation provides dependable logistics solutions for local and international shipments. Our goal is to make shipping easier through secure handling, clear communication, and reliable delivery.</p>
                 <p class="section-lead">With experienced teams, trusted partners, and branches across the Philippines, we connect businesses and families to the people and places that matter most.</p>
-                <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red btn-sm">Learn More <img class="btn-arrow" src="../Assets/icons/arrow-right.svg" alt="" /></a>
+                <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-primary btn-sm">Learn More <img class="btn-arrow" src="../Assets/icons/arrow-right.svg" alt="" /></a>
             </div>
         </div>
     </section>
@@ -70,8 +70,8 @@
         <div class="reference-kicker">READY WHEN YOU ARE</div>
         <h2 class="reference-heading">Let's move what<br /><span>matters to you.</span></h2>
         <p class="section-lead">Create a customer account to manage and track every shipment in one place.</p>
-        <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-red btn-sm">Get Started <img class="btn-arrow" src="../Assets/icons/arrow-right.svg" alt="" /></a>
-        <a runat="server" href="~/Views/Track.aspx" class="btn btn-navy btn-sm">Track a Shipment</a>
+        <a runat="server" href="~/Views/Account/Register.aspx" class="btn btn-primary btn-sm">Get Started <img class="btn-arrow" src="../Assets/icons/arrow-right.svg" alt="" /></a>
+        <a runat="server" href="~/Views/Track.aspx" class="btn btn-outline btn-sm">Track a Shipment</a>
     </div></section>
 
 <script type="text/javascript">

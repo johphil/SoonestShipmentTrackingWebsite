@@ -2,12 +2,12 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Reports</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="section app-section" style="padding-top: 44px;">
+    <div class="section app-section">
         <div class="container">
-            <div class="card-panel" style="margin-bottom: 20px;">
+            <div class="card-panel">
                 <div class="page-heading">Shipment Reports</div>
                 <div class="page-subheading">Filter operational shipments, delivery exceptions, and customer feedback.</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: end;">
+                <div class="filter-grid">
                     <div class="form-group">
                         <label>Status</label><asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" /></div>
                     <div class="form-group">
@@ -15,30 +15,22 @@
                     <div class="form-group">
                         <label>To date</label><asp:TextBox ID="txtToDate" runat="server" CssClass="form-control" TextMode="Date" /></div>
                 </div>
-                <asp:Button ID="btnGenerate" runat="server" Text="Generate Report" CssClass="btn btn-red" OnClick="btnGenerate_Click" />
+                <asp:Button ID="btnGenerate" runat="server" Text="Generate Report" CssClass="btn btn-primary" OnClick="btnGenerate_Click" />
                 <asp:Button ID="btnExport" runat="server" Text="Export to PDF" CssClass="btn btn-outline" OnClick="btnExport_Click" />
                 <asp:Button ID="btnExportCSV" runat="server" Text="Export to Spreadsheet" CssClass="btn btn-outline" UseSubmitBehavior="false" OnClientClick="showXlsxPasswordModal(); return false;" />
                 <asp:Label ID="lblError" runat="server" CssClass="field-error" Visible="false" />
             </div>
-            <div style="display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px;">
-                <div class="card-panel"><strong>Total Shipments</strong><h2>
-                    <asp:Literal ID="litTotal" runat="server" /></h2>
-                </div>
-                <div class="card-panel"><strong>Delivered</strong><h2>
-                    <asp:Literal ID="litDelivered" runat="server" /></h2>
-                </div>
-                <div class="card-panel"><strong>Out for delivery</strong><h2>
-                    <asp:Literal ID="litOutForDelivery" runat="server" /></h2>
-                </div>
-                <div class="card-panel"><strong>Issues Reported</strong><h2>
-                    <asp:Literal ID="litIssues" runat="server" /></h2>
-                </div>
+            <div class="stat-mini-grid">
+                <div class="stat-mini"><div class="num"><asp:Literal ID="litTotal" runat="server" /></div><div class="lbl">Total Shipments</div></div>
+                <div class="stat-mini"><div class="num"><asp:Literal ID="litDelivered" runat="server" /></div><div class="lbl">Delivered</div></div>
+                <div class="stat-mini"><div class="num"><asp:Literal ID="litOutForDelivery" runat="server" /></div><div class="lbl">Out for delivery</div></div>
+                <div class="stat-mini"><div class="num"><asp:Literal ID="litIssues" runat="server" /></div><div class="lbl">Issues Reported</div></div>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
+            <div class="grid-2">
                 <div class="card-panel">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
-                        <div class="page-subheading" style="margin-bottom:0;">Monthly Shipment Summary</div>
+                    <div class="panel-head">
+                        <h4 class="panel-title">Monthly Shipment Summary</h4>
                         <asp:Button ID="btnExportMonthlyPdf" runat="server" Text="Export PDF" CssClass="btn btn-outline" OnClick="btnExportMonthlyPdf_Click" />
                     </div>
                     <div class="table-scroll">
@@ -53,8 +45,8 @@
                     </div>
                 </div>
                 <div class="card-panel">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
-                        <div class="page-subheading" style="margin-bottom:0;">Quarterly Shipment Summary</div>
+                    <div class="panel-head">
+                        <h4 class="panel-title">Quarterly Shipment Summary</h4>
                         <asp:Button ID="btnExportQuarterlyPdf" runat="server" Text="Export PDF" CssClass="btn btn-outline" OnClick="btnExportQuarterlyPdf_Click" />
                     </div>
                     <div class="table-scroll">
@@ -92,17 +84,17 @@
         </div>
     </div>
 
-    <div id="xlsxPasswordModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,.48); z-index:2000; align-items:center; justify-content:center;">
-        <div style="width:min(420px,92vw); background:#fff; border-radius:12px; box-shadow:0 16px 40px rgba(15,23,42,.24); padding:18px;">
-            <div style="font-size:18px; font-weight:700; margin-bottom:8px; color:#1f2937;">Export XLSX</div>
-            <div style="font-size:13px; color:#6b7280; margin-bottom:12px;">Enter a password to protect the Excel file.</div>
-            <div class="form-group" style="margin-bottom:12px;">
+    <div id="xlsxPasswordModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="xlsxModalTitle">
+        <div class="modal-dialog">
+            <h3 class="modal-title" id="xlsxModalTitle">Export to Spreadsheet</h3>
+            <p class="modal-text">Enter a password to protect the Excel file.</p>
+            <div class="form-group">
                 <label>Password</label>
                 <asp:TextBox ID="txtCsvPassword" runat="server" CssClass="form-control" TextMode="Password" />
             </div>
-            <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <div class="modal-actions">
                 <button type="button" class="btn btn-outline" onclick="hideXlsxPasswordModal()">Cancel</button>
-                <asp:Button ID="btnConfirmExportXlsx" runat="server" Text="Export" CssClass="btn btn-red" OnClick="btnExportCSV_Click" />
+                <asp:Button ID="btnConfirmExportXlsx" runat="server" Text="Export" CssClass="btn btn-primary" OnClick="btnExportCSV_Click" />
             </div>
         </div>
     </div>
@@ -111,7 +103,7 @@
         function showXlsxPasswordModal() {
             var modal = document.getElementById('xlsxPasswordModal');
             if (!modal) return;
-            modal.style.display = 'flex';
+            modal.classList.add('is-open');
             var passwordBox = document.getElementById('<%= txtCsvPassword.ClientID %>');
             if (passwordBox) {
                 passwordBox.value = '';
@@ -121,7 +113,7 @@
 
         function hideXlsxPasswordModal() {
             var modal = document.getElementById('xlsxPasswordModal');
-            if (modal) modal.style.display = 'none';
+            if (modal) modal.classList.remove('is-open');
         }
 
         (function () {

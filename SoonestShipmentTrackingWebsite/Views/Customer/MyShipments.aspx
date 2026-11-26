@@ -11,7 +11,7 @@
                 </div>
                 <div class="page-head-actions">
                     <a runat="server" href="~/Views/Track.aspx" class="btn btn-outline">Track by Control No.</a>
-                    <asp:LinkButton ID="btnRequestShipment" runat="server" CssClass="btn btn-red" OnClick="btnRequestShipment_Click" CausesValidation="false">+ Request Shipment</asp:LinkButton>
+                    <asp:LinkButton ID="btnRequestShipment" runat="server" CssClass="btn btn-primary" OnClick="btnRequestShipment_Click" CausesValidation="false">+ Request Shipment</asp:LinkButton>
                 </div>
             </div>
             <asp:Literal ID="litSummary" runat="server" />

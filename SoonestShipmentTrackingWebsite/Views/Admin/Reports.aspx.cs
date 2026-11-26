@@ -669,7 +669,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             {
                 get
                 {
-                    return string.IsNullOrEmpty(ProofPath) ? "-" : "<a href=\"" + ProofPath + "\" target=\"_blank\"><img src=\"" + ProofPath + "\" alt=\"Proof of delivery\" style=\"max-width:44px;max-height:44px;border-radius:6px;border:1px solid #dbe6f0;\" /></a>";
+                    return string.IsNullOrEmpty(ProofPath) ? "-" : "<a href=\"" + ProofPath + "\" target=\"_blank\"><img src=\"" + ProofPath + "\" alt=\"Proof of delivery\" class=\"proof-thumb is-small\" /></a>";
                 }
             }
         }

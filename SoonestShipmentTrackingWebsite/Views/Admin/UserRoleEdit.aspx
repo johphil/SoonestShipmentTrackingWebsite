@@ -2,8 +2,8 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Manage Access</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="section app-section" style="padding-top: 44px;">
-        <div class="container" style="max-width: 520px;">
+    <div class="section app-section">
+        <div class="container container-sm">
             <div class="card-panel">
                 <div class="page-heading">Manage Access</div>
                 <div class="page-subheading">
@@ -27,14 +27,13 @@
                 </div>
 
                 <div class="form-group" id="branchGroup">
-                    <label>
-                        Designated Branch
+                    <label for="<%= ddlBranch.ClientID %>">Designated Branch</label>
                 <asp:DropDownList ID="ddlBranch" runat="server" CssClass="form-control" />
                         <asp:CustomValidator ID="valBranch" runat="server" Display="Dynamic" CssClass="field-error" ValidationGroup="Role" OnServerValidate="valBranch_ServerValidate" ErrorMessage="Select the branch where this Staff member is designated." />
                 </div>
 
-                <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Access Level" OnClick="btnSave_Click" ValidationGroup="Role" />
-                <a runat="server" href="~/Views/Admin/UserAccounts.aspx" class="btn btn-outline" style="border-color: #07233d; color: #07233d;">Cancel</a>
+                <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary" Text="Save Access Level" OnClick="btnSave_Click" ValidationGroup="Role" />
+                <a runat="server" href="~/Views/Admin/UserAccounts.aspx" class="btn btn-outline">Cancel</a>
             </div>
         </div>
     </div>

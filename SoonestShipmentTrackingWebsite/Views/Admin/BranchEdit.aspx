@@ -1,8 +1,8 @@
 <%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="BranchEdit.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.BranchEdit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Branch</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section app-section" style="padding-top:44px;">
-    <div class="container" style="max-width:640px;">
+<div class="section app-section">
+    <div class="container container-md">
         <div class="card-panel">
             <div class="page-heading"><asp:Literal ID="litHeading" runat="server" Text="Add Branch" /></div>
 
@@ -30,7 +30,7 @@
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="txtAddress" Display="Dynamic" CssClass="field-error" ErrorMessage="Address is required." ValidationGroup="Branch" />
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-grid-2">
                 <div class="form-group">
                     <label>Contact Number</label>
                     <asp:TextBox ID="txtContactNumber" runat="server" CssClass="form-control" placeholder="0987 654 3210" />
@@ -42,13 +42,13 @@
             </div>
 
             <div class="form-group">
-                <label style="font-weight:normal;display:inline-flex;align-items:center;gap:6px;">
+                <label class="check-row">
                     <asp:CheckBox ID="chkIsActive" runat="server" /> Active
                 </label>
             </div>
 
-            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Branch" OnClick="btnSave_Click" ValidationGroup="Branch" />
-            <a runat="server" href="~/Views/Admin/Branches.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Cancel</a>
+            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary" Text="Save Branch" OnClick="btnSave_Click" ValidationGroup="Branch" />
+            <a runat="server" href="~/Views/Admin/Branches.aspx" class="btn btn-outline">Cancel</a>
         </div>
     </div>
 </div>

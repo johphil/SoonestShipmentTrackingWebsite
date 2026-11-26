@@ -49,8 +49,8 @@
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">My Profile</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
-    <div class="container" style="max-width:480px;">
+<div class="section">
+    <div class="container container-sm">
         <div class="card-panel">
             <div class="page-heading">My Profile</div>
             <asp:Panel ID="pnlError" runat="server" Visible="false">
@@ -76,8 +76,8 @@
                 <label for="txtAddress">Address</label>
                 <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" />
             </div>
-            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red btn-block" Text="Save Changes" OnClick="btnSave_Click" ValidationGroup="Profile" />
-            <p style="text-align:center;margin-top:16px;font-size:13.5px;">
+            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save Changes" OnClick="btnSave_Click" ValidationGroup="Profile" />
+            <p class="auth-links">
                 <a runat="server" href="~/Views/Account/ChangePassword.aspx">Change password</a>
             </p>
         </div>

@@ -113,7 +113,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
             var today = Helpers.TimeHelper.Now.Date;
             var createdToday = shipments.Count(s => s.CreatedDate.Date == today);
             var updatedToday = shipments.Count(s => s.UpdatedDate.Date == today);
-            sb.Append("<ul class=\"fact-list\" style=\"margin-top:8px;\">");
+            sb.Append("<ul class=\"fact-list\">");
             sb.Append("<li><span>Active (not closed)</span><b>" + open + "</b></li>");
             sb.Append("<li><span>Created today</span><b>" + createdToday + "</b></li>");
             sb.Append("<li><span>Updated today</span><b>" + updatedToday + "</b></li>");

@@ -2,8 +2,8 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Rider Details</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="section app-section" style="padding-top: 44px;">
-        <div class="container" style="max-width: 760px;">
+    <div class="section app-section">
+        <div class="container container-lg">
             <div class="card-panel">
                 <div class="page-heading">
                     <asp:Literal ID="litHeading" runat="server" /></div>
@@ -51,43 +51,16 @@
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtAddress" CssClass="field-error" Display="Dynamic" ValidationGroup="Rider" ErrorMessage="Address is required." />
                 </div>
 
-                <asp:Panel ID="pnlMetadata" runat="server" Visible="false" Style="margin-bottom: 12px; color: #49627b; font-size: 12px;">
+                <asp:Panel ID="pnlMetadata" runat="server" Visible="false" CssClass="form-hint">
                     <div><strong>Date Created:</strong>
                         <asp:Literal ID="litDateCreated" runat="server" /></div>
                     <div><strong>Date Modified:</strong>
                         <asp:Literal ID="litDateModified" runat="server" /></div>
                 </asp:Panel>
 
-                <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Rider" ValidationGroup="Rider" OnClick="btnSave_Click" />
-                <a runat="server" href="~/Views/Admin/Riders.aspx" class="btn btn-outline" style="border-color: #07233d; color: #07233d;">Cancel</a>
+                <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary" Text="Save Rider" ValidationGroup="Rider" OnClick="btnSave_Click" />
+                <a runat="server" href="~/Views/Admin/Riders.aspx" class="btn btn-outline">Cancel</a>
             </div>
         </div>
     </div>
-    <style>
-        .phone-input-group {
-            display: flex;
-            align-items: stretch;
-        }
-
-        .phone-prefix {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 54px;
-            height: 34px;
-            padding: 0 12px;
-            box-sizing: border-box;
-            border: 1px solid #dbe6f0;
-            border-right: 0;
-            border-radius: 8px 0 0 8px;
-            background: #f7fafd;
-            color: #334d66;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .phone-input-group .phone-input {
-            border-radius: 0 8px 8px 0;
-        }
-    </style>
 </asp:Content>

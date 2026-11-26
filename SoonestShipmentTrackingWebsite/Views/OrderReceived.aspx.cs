@@ -62,7 +62,7 @@ namespace SoonestShipmentTrackingWebsite.Views
 
         private void ShowMessage(string message, bool success)
         {
-            litMessage.Text = "<div class=\"validation-summary\"" + (success ? " style=\"background:#e8f5e9;color:#2e7d32;\"" : "") + ">" + Server.HtmlEncode(message) + "</div>";
+            litMessage.Text = "<div class=\"" + (success ? "alert-success" : "validation-summary") + "\">" + Server.HtmlEncode(message) + "</div>";
         }
     }
 }

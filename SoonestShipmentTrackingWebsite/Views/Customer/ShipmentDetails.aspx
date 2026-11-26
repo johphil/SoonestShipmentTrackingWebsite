@@ -19,7 +19,7 @@
 
             <div class="split">
                 <div class="split-col">
-                    <div class="card-panel" style="margin-top: 10px;">
+                    <div class="card-panel">
                         <h4 class="panel-title">Shipment Details</h4>
                         <div class="kv-grid cols-2">
                             <div class="kv">
@@ -111,20 +111,20 @@
 
                     <asp:Panel ID="pnlFeedback" runat="server" Visible="false" CssClass="card-panel">
                         <h4 class="panel-title">Delivery confirmation</h4>
-                        <label style="font-size: 11.5px; font-weight: 700;">Report an issue with your received items</label>
+                        <label class="form-label">Report an issue with your received items</label>
                         <asp:Literal ID="litFeedback" runat="server" />
-                        <%--<div style="margin-top: 6px;">
-                            <asp:Button ID="btnOrderReceived" runat="server" CssClass="btn btn-red" Text="Order received" OnClick="btnOrderReceived_Click" />
+                        <%--<div class="mt-16">
+                            <asp:Button ID="btnOrderReceived" runat="server" CssClass="btn btn-primary" Text="Order received" OnClick="btnOrderReceived_Click" />
                         </div>--%>
-                        <hr style="border: none; border-top: 1px solid #dbe6f0; margin: 10px 0;" />
+                        <hr class="divider" />
                         <asp:TextBox ID="txtIssueReport" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2" MaxLength="1000" placeholder="Tell us what went wrong..." />
-                        <div style="margin-top: 6px;">
+                        <div class="mt-16">
                             <asp:Button ID="btnReportIssue" runat="server" CssClass="btn btn-outline" Text="Issue Report" OnClick="btnReportIssue_Click" /></div>
                     </asp:Panel>
                 </div>
 
                 <div class="split-col">
-                    <div class="card-panel" style="margin-top: 10px;">
+                    <div class="card-panel">
                         <h4 class="panel-title">Shipment History</h4>
                         <div class="table-scroll">
                             <asp:Repeater ID="rptHistory" runat="server">

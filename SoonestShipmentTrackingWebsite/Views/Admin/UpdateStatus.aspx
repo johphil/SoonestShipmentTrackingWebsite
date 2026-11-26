@@ -49,15 +49,15 @@
             </div>
         </div>
 
-        <div class="split" style="margin-top: 10px;">
+        <div class="split">
             <div class="split-col">
                 <asp:Panel ID="pnlIssue" runat="server" Visible="false" CssClass="alert-warning">
                     <div><strong>Reported Issue:</strong> <asp:Literal ID="litIssueReport" runat="server" /></div>
-                    <div style="margin-top:3px;"><strong>Reported On:</strong> <asp:Literal ID="litIssueDate" runat="server" /></div>
-                    <asp:Panel ID="pnlIssueResolvedInfo" runat="server" Visible="false" style="margin-top:3px;color:#1f7a2e;">
+                    <div><strong>Reported On:</strong> <asp:Literal ID="litIssueDate" runat="server" /></div>
+                    <asp:Panel ID="pnlIssueResolvedInfo" runat="server" Visible="false" CssClass="proof-note">
                         <strong>Resolved On:</strong> <asp:Literal ID="litIssueResolvedDate" runat="server" />
                     </asp:Panel>
-                    <asp:Button ID="btnResolveIssue" runat="server" CssClass="btn btn-red" Text="Mark Issue as Resolved" OnClick="btnResolveIssue_Click" style="margin-top:6px;" />
+                    <asp:Button ID="btnResolveIssue" runat="server" CssClass="btn btn-primary" Text="Mark Issue as Resolved" OnClick="btnResolveIssue_Click" />
                 </asp:Panel>
 
                 <div class="card-panel">
@@ -92,8 +92,8 @@
                         <asp:TextBox ID="txtNotes" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2" />
                     </div>
 
-                    <asp:Button ID="btnSave" runat="server" CssClass="btn btn-red" Text="Save Status Update" OnClick="btnSave_Click" />
-                    <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline" style="border-color:#07233d;color:#07233d;">Cancel</a>
+                    <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary" Text="Save Status Update" OnClick="btnSave_Click" />
+                    <a runat="server" href="~/Views/Admin/Shipments.aspx" class="btn btn-outline">Cancel</a>
                 </div>
             </div>
 

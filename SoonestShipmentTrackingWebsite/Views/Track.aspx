@@ -4,27 +4,27 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="section app-section">
         <div class="container">
-            <div class="card-panel" style="margin-bottom:10px;">
-                <div class="page-head" style="margin-bottom:0;">
+            <div class="card-panel">
+                <div class="page-head mb-0">
                     <div>
                         <div class="page-heading">Track Your Shipment</div>
-                        <div class="page-subheading" style="margin:0;">Enter your Control No. to see the current status, delivery details and full history.</div>
+                        <div class="page-subheading">Enter your Control No. to see the current status, delivery details and full history.</div>
                     </div>
-                    <div style="display:flex;gap:6px;flex:1;max-width:520px;min-width:260px;">
+                    <div class="toolbar track-inline">
                         <asp:TextBox ID="txtControlNumber" runat="server" CssClass="form-control" placeholder="Enter Control No." />
-                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-red" Text="Track" OnClick="btnSearch_Click" Style="white-space: nowrap;" />
+                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Track" OnClick="btnSearch_Click" />
                     </div>
                 </div>
 
                 <asp:Panel ID="pnlNotFound" runat="server" Visible="false">
-                    <div class="alert-warning" style="margin:8px 0 0;">No shipment found for that Control No. Please check the number and try again.</div>
+                    <div class="alert-warning mt-16">No shipment found for that Control No. Please check the number and try again.</div>
                 </asp:Panel>
             </div>
 
             <asp:Panel ID="pnlResult" runat="server" Visible="false">
                 <div class="split">
                     <div class="split-col">
-                        <div class="card-panel" style="margin-top: 10px;">
+                        <div class="card-panel">
                             <div class="ship-head">
                                 <div class="ship-head-main">
                                     <h2 class="ship-no"><asp:Literal ID="litControlNumber" runat="server" /></h2>
@@ -35,7 +35,7 @@
                             <asp:Literal ID="litProgress" runat="server" />
                         </div>
 
-                        <div class="card-panel" style="margin-top: 10px;">
+                        <div class="card-panel">
                             <h4 class="panel-title">Shipment Details</h4>
                             <div class="kv-grid cols-2">
                                 <div class="kv">
@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="split-col">
-                        <div class="card-panel" style="margin-top: 10px;">
+                        <div class="card-panel">
                             <h4 class="panel-title">Shipment History</h4>
                             <div class="table-scroll">
                             <asp:Repeater ID="rptHistory" runat="server">
@@ -115,9 +115,9 @@
                                     <table class="data-grid">
                                         <thead>
                                             <tr>
-                                                <th style="width:150px;">Date</th>
-                                                <th style="width:130px;">Status</th>
-                                                <th style="width:240px;">Location</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Location</th>
                                                 <th>Notes</th>
                                             </tr>
                                         </thead>

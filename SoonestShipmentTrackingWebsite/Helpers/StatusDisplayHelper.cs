@@ -34,7 +34,7 @@ namespace SoonestShipmentTrackingWebsite.Helpers
             var type = contentTypeObj as string;
             if (string.IsNullOrWhiteSpace(type) || !type.StartsWith("image/")) type = "image/jpeg";
             var src = "data:" + type + ";base64," + Convert.ToBase64String(bytes);
-            return "<div style=\"margin-top:6px;\"><strong>Proof of delivery:</strong><br /><a href=\"" + src + "\" target=\"_blank\"><img src=\"" + src + "\" alt=\"Proof of delivery\" style=\"max-width:140px;max-height:140px;border-radius:6px;border:1px solid #dbe6f0;\" /></a></div>";
+            return "<div class=\"proof-note\"><strong>Proof of delivery:</strong><br /><a href=\"" + src + "\" target=\"_blank\"><img src=\"" + src + "\" alt=\"Proof of delivery\" class=\"proof-thumb\" /></a></div>";
         }
 
         public static bool IsNcrArea(string regionArea)

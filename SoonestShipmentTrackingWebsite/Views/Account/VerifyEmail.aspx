@@ -1,8 +1,8 @@
 <%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="VerifyEmail.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Account.VerifyEmail" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Verify Your Email</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section app-section" style="padding-top:44px;">
-    <div class="container" style="max-width:460px;">
+<div class="section app-section">
+    <div class="container container-sm">
         <div class="card-panel">
             <div class="page-heading">Verify Your Email</div>
             <div class="page-subheading">
@@ -28,9 +28,9 @@
                     ErrorMessage="The code must be exactly 6 digits." ValidationExpression="^\d{6}$" ValidationGroup="Verify" />
             </div>
 
-            <asp:Button ID="btnVerify" runat="server" CssClass="btn btn-red btn-block" Text="Verify Email" OnClick="btnVerify_Click" ValidationGroup="Verify" />
+            <asp:Button ID="btnVerify" runat="server" CssClass="btn btn-primary btn-block" Text="Verify Email" OnClick="btnVerify_Click" ValidationGroup="Verify" />
 
-            <p style="text-align:center;margin-top:16px;font-size:13.5px;">
+            <p class="auth-links">
                 Didn't get a code?
                 <asp:LinkButton ID="btnResend" runat="server" OnClick="btnResend_Click" CausesValidation="false">Resend Code</asp:LinkButton>
             </p>

@@ -97,12 +97,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 btnReportIssue.Visible = deliveredOrReceived && !shipment.IssueReported;
                 txtIssueReport.Visible = deliveredOrReceived && !shipment.IssueReported;
                 litFeedback.Text = shipment.IsOrderReceived
-                    ? "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Order received on " + shipment.OrderReceivedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>"
+                    ? "<div class=\"alert-success\">Order received on " + shipment.OrderReceivedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>"
                     : "";
                 if (shipment.IssueReported)
                     litFeedback.Text += "<div class=\"validation-summary\">Issue report submitted on " + shipment.IssueReportedDate.Value.ToString("MMM d, yyyy h:mm tt") + ".</div>";
                 if (shipment.IsIssueResolved)
-                    litFeedback.Text += "<div class=\"validation-summary\" style=\"background:#e8f5e9;color:#2e7d32;\">Issue resolved on " + (shipment.IssueResolvedDate.HasValue ? shipment.IssueResolvedDate.Value.ToString("MMM d, yyyy h:mm tt") : "-") + ".</div>";
+                    litFeedback.Text += "<div class=\"alert-success\">Issue resolved on " + (shipment.IssueResolvedDate.HasValue ? shipment.IssueResolvedDate.Value.ToString("MMM d, yyyy h:mm tt") : "-") + ".</div>";
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
                 rptHistory.DataSource = history;

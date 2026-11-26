@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Create Account</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="section auth-section">
-        <div class="auth-card">
+        <div class="auth-card is-wide">
             <div class="page-heading">Create an Account</div>
             <div class="page-subheading">Register to view and track every shipment tied to you.</div>
 
@@ -48,9 +48,9 @@
                 <asp:CompareValidator runat="server" ControlToValidate="txtConfirmPassword" ControlToCompare="txtPassword" Display="Dynamic" CssClass="field-error" ErrorMessage="Passwords do not match." ValidationGroup="Register" />
             </div>
 
-            <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-red btn-block" Text="Register" OnClick="btnRegister_Click" ValidationGroup="Register" />
+            <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-primary btn-block" Text="Register" OnClick="btnRegister_Click" ValidationGroup="Register" />
 
-            <p style="text-align:center;margin-top:24px;color:#93aac3;">
+            <p class="auth-links">
                 Already have an account? <a runat="server" href="~/Views/Account/Login.aspx">Log in</a>
             </p>
         </div>
