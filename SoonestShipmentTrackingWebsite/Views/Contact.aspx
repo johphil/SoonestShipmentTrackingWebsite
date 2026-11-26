@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Contact Us</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <section class="hero hero-compact">
+    <section class="hero hero-compact hero-overlap">
         <div class="container">
             <div>
                 <div class="eyebrow"><span class="eyebrow-bar"></span>WE&rsquo;RE HERE TO HELP</div>
@@ -12,38 +12,16 @@
         </div>
     </section>
 
-    <section class="section">
+    <section class="section pt-0">
         <div class="container">
-            <div class="two-col is-top">
+            <div class="info-cards">
+                <div class="info-card"><div class="icon-round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .3 2 .7 3a2 2 0 01-.5 2L8 10a16 16 0 006 6l1.3-1.3a2 2 0 012-.5c1 .4 2 .6 3 .7a2 2 0 011.7 2z" /></svg></div><div><h5>Call Us</h5><p>0987 654 3210</p></div></div>
+                <div class="info-card"><div class="icon-round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z" /><path d="M4 6l8 7 8-7" /></svg></div><div><h5>Email Us</h5><p><a href="mailto:info@soonestglobal.com">info@soonestglobal.com</a></p></div></div>
+                <div class="info-card"><div class="icon-round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-7.4 7-12.5A7 7 0 105 9.5C5 14.6 12 22 12 22z" /><circle cx="12" cy="9.5" r="2.3" /></svg></div><div><h5>Visit Us</h5><p>Jerusalem St., BF Martinville Manuyo Dos, Las Pi&ntilde;as City</p></div></div>
+                <div class="info-card"><div class="icon-round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 3.5" /></svg></div><div><h5>Office Hours</h5><p>Mon&ndash;Sat, 9:00 AM &ndash; 7:00 PM</p></div></div>
+            </div>
 
-                <div>
-                    <div class="kicker"><span class="kicker-bar"></span>CONTACT INFO</div>
-                    <h2 class="section-heading is-sm">Reach us <span>directly.</span></h2>
-
-                    <div class="contact-info-list">
-                        <div class="contact-info-item">
-                            <div class="icon-round icon-tint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .3 2 .7 3a2 2 0 01-.5 2L8 10a16 16 0 006 6l1.3-1.3a2 2 0 012-.5c1 .4 2 .6 3 .7a2 2 0 011.7 2z" /></svg></div>
-                            <div><h5>Call Us</h5><p>0987 654 3210<br />Mon&ndash;Sat, 9:00 AM &ndash; 7:00 PM</p></div>
-                        </div>
-                        <div class="contact-info-item">
-                            <div class="icon-round icon-tint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" /><path d="M4 6l8 7 8-7" /></svg></div>
-                            <div><h5>Email Us</h5><p>info@soonestglobal.com</p></div>
-                        </div>
-                        <div class="contact-info-item">
-                            <div class="icon-round icon-tint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 105 9.5C5 14.6 12 22 12 22z" /><circle cx="12" cy="9.5" r="2.3" /></svg></div>
-                            <div><h5>Visit Us</h5><p>Jerusalem Street, BF Martinville Manuyo Dos,<br />Las Pi&ntilde;as City, Philippines</p></div>
-                        </div>
-                        <div class="contact-info-item">
-                            <div class="icon-round icon-tint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 3.5" /></svg></div>
-                            <div><h5>Office Hours</h5><p>Monday &ndash; Saturday, 9:00 AM &ndash; 7:00 PM<br />Closed on Sundays and public holidays</p></div>
-                        </div>
-                    </div>
-
-                    <div class="contact-map">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3697.3050371882305!2d120.99718697484197!3d14.46708218033218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397ce6df296db7b%3A0x26d09e52a60ce058!2sSoonest%20Global%20Express%20Corp!5e1!3m2!1sen!2sph!4v1790752807036!5m2!1sen!2sph" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Soonest Global Express location"></iframe>
-                    </div>
-                </div>
-
+            <div class="contact-layout">
                 <div class="card-panel">
                     <h3 class="card-title">Send Us a Message</h3>
 
@@ -87,6 +65,16 @@
                     </asp:Panel>
                 </div>
 
+                <div class="contact-side">
+                    <div class="contact-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3697.3050371882305!2d120.99718697484197!3d14.46708218033218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397ce6df296db7b%3A0x26d09e52a60ce058!2sSoonest%20Global%20Express%20Corp!5e1!3m2!1sen!2sph!4v1790752807036!5m2!1sen!2sph" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Soonest Global Express location"></iframe>
+                    </div>
+                    <div class="card-panel hours-card">
+                        <h4>Office Hours</h4>
+                        <div class="hours-row"><span>Monday &ndash; Saturday</span><b>9:00 AM &ndash; 7:00 PM</b></div>
+                        <div class="hours-row"><span>Sunday &amp; public holidays</span><b>Closed</b></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
