@@ -202,9 +202,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Customer
                 var customerId = User.Identity.GetUserId();
                 var customer = _db.Users.FirstOrDefault(u => u.Id == customerId);
 
+                var controlNo = selectedShipmentType == ShipmentType.INTERNATIONAL ? containerNumber : GenerateControlNumber();
+
                 var shipment = new Shipment
                 {
-                    ControlNumber = GenerateControlNumber(),
+                    ControlNumber = controlNo,
                     CustomerId = customerId,
                     ShipmentType = selectedShipmentType,
                     SenderName = txtSenderName.Text.Trim(),

@@ -235,9 +235,11 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     return;
                 }
 
+                var controlNo = selectedShipmentType == ShipmentType.INTERNATIONAL ? containerNumber : GenerateControlNumber();
+
                 var shipment = new Shipment
                 {
-                    ControlNumber = GenerateControlNumber(),
+                    ControlNumber = controlNo,
                     CustomerId = customer.Id,
                     ShipmentType = selectedShipmentType,
                     SenderName = txtSenderName.Text.Trim(),

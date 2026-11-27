@@ -361,7 +361,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     return;
                 }
 
-                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL && (newStatus == ShipmentStatus.ArrivedAtWarehouse || newStatus == ShipmentStatus.ProcessingCustoms))
+                if (shipment.ShipmentType != ShipmentType.INTERNATIONAL && newStatus == ShipmentStatus.ProcessingCustoms)
                 {
                     ShowError("Processing Customs and Arrived at Warehouse are available only for international shipments.");
                     return;
