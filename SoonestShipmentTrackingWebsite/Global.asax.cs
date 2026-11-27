@@ -1,7 +1,9 @@
-﻿using SoonestShipmentTrackingWebsite.Models;
+﻿using QuestPDF.Drawing;
+using SoonestShipmentTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -18,6 +20,18 @@ namespace SoonestShipmentTrackingWebsite
             // they're touched, and Admin/Customer roles + a default admin
             // account are seeded (see Migrations/Configuration.cs).
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Migrations.Configuration>());
+
+            //string fontPath = HttpContext.Current.Server.MapPath("~/Assets/fonts/");
+
+            //using (var arial = File.OpenRead(Path.Combine(fontPath, "Arial.ttf")))
+            //{
+            //    FontManager.RegisterFontFromStream(arial);
+            //}
+
+            //using (var lato = File.OpenRead(Path.Combine(fontPath, "Lato-Regular.ttf")))
+            //{
+            //    FontManager.RegisterFontFromStream(lato);
+            //}
         }
 
         protected void Session_Start(object sender, EventArgs e)

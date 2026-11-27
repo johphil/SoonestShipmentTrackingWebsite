@@ -53,12 +53,49 @@ namespace SoonestShipmentTrackingWebsite.Views
 
                 litControlNumber.Text = Server.HtmlEncode(shipment.ControlNumber);
                 litRecipientName.Text = Server.HtmlEncode(shipment.RecipientName);
-                litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus);
-                litEta.Text = shipment.EstimatedDeliveryDate.HasValue
-                    ? shipment.EstimatedDeliveryDate.Value.ToString("MMM d, yyyy")
-                    : "TBD";
+                litDestinationCity.Text = Server.HtmlEncode(shipment.RecipientAddress);
+                litBranchOrigin.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.BranchOrigin) ? "-" : shipment.BranchOrigin);
+                litContainerNumber.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(shipment.ContainerNumber) ? "-" : shipment.ContainerNumber);
+                litShipmentType.Text = shipment.ShipmentType == ShipmentType.INTERNATIONAL ? "International" : "Domestic";
+
+                pnlDomesticShipmentDetails.Visible = shipment.ShipmentType == ShipmentType.DOMESTIC;
+                pnlInternationalShipmentDetails.Visible = shipment.ShipmentType == ShipmentType.INTERNATIONAL;
+                pnlInternationalPackingList.Visible = shipment.ShipmentType == ShipmentType.INTERNATIONAL;
+
+                if (shipment.ShipmentType == ShipmentType.INTERNATIONAL)
+                {
+                    if (!string.IsNullOrWhiteSpace(shipment.PackingList))
+                    {
+                        var imageUrl = ResolveUrl(shipment.PackingList.Trim());
+                        var encodedUrl = HttpUtility.HtmlAttributeEncode(imageUrl);
+                        litPackingListImage.Text = "<a href=\"" + encodedUrl + "\" target=\"_blank\" rel=\"noopener\"> View Packing List Image </a>";
+                    }
+                    else
+                    {
+                        litPackingListImage.Text = "-";
+                    }
+                }
+                else
+                {
+                    litPackingListImage.Text = string.Empty;
+                }
+
+                var isNcrArea = StatusDisplayHelper.IsNcrArea(shipment.RegionArea);
+                litStatusBadge.Text = StatusDisplayHelper.Badge(shipment.CurrentStatus, isNcrArea);
+                litEta.Text = StatusDisplayHelper.EtaText(shipment.EstimatedDeliveryDate, shipment.CurrentStatus);
+                litRiderInfo.Text = StatusDisplayHelper.RiderInfo(shipment.CurrentStatus, shipment.RiderName);
+                litProgress.Text = "<div class=\"stepper-wrap\">" + StatusDisplayHelper.Progress(shipment.CurrentStatus, shipment.ShipmentType, isNcrArea) + "</div>";
+                litSenderName.Text = StatusDisplayHelper.Enc(shipment.SenderName);
+                litRecipientPhone.Text = StatusDisplayHelper.Enc(shipment.RecipientPhone);
+                litRecipientEmail.Text = StatusDisplayHelper.Enc(shipment.RecipientEmail);
+                litPackage.Text = StatusDisplayHelper.Enc(shipment.PackageDescription);
+                litWeight.Text = StatusDisplayHelper.WeightText(shipment.WeightKg);
+                litCreated.Text = shipment.CreatedDate.ToString("MMM d, yyyy h:mm tt");
+                litUpdated.Text = shipment.UpdatedDate.ToString("MMM d, yyyy h:mm tt");
 
                 var history = shipment.History.OrderByDescending(h => h.Timestamp).ToList();
+                var endTime = StatusDisplayHelper.IsClosed(shipment.CurrentStatus) ? shipment.UpdatedDate : TimeHelper.Now;
+                litElapsed.Text = StatusDisplayHelper.Elapsed(shipment.CreatedDate, endTime);
                 rptHistory.DataSource = history;
                 rptHistory.DataBind();
                 lblNoHistory.Visible = !history.Any();
@@ -68,3 +105,4 @@ namespace SoonestShipmentTrackingWebsite.Views
         }
     }
 }
+

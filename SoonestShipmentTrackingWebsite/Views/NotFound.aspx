@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="NotFound.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.NotFound" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="NotFound.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.NotFound" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Page Not Found</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container">
@@ -9,7 +9,7 @@
             The page you're looking for doesn't exist, may have been moved, or the
             link you followed might be out of date.
         </p>
-        <a runat="server" href="~/Views/Default.aspx" class="btn btn-red">Back to Home</a>
+        <div class="error-actions"><a runat="server" href="~/Views/Default.aspx" class="btn btn-primary">Back to Home</a></div>
     </div>
 </div>
 </asp:Content>

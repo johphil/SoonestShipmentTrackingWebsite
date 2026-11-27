@@ -25,9 +25,12 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
         {
             var currentUserId = User.Identity.GetUserId();
             var roleNamesById = _db.Roles.ToDictionary(r => r.Id, r => r.Name);
+            var riderRoleId = _db.Roles.Where(r => r.Name == "Rider").Select(r => r.Id).FirstOrDefault();
 
             var rows = _db.Users
+                .OrderBy(u => u.FullName)
                 .ToList()
+                .Where(u => string.IsNullOrEmpty(riderRoleId) || !u.Roles.Any(r => r.RoleId == riderRoleId))
                 .Select(u => new UserAccountRow
                 {
                     Id = u.Id,
@@ -37,9 +40,9 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                     CurrentRole = u.Roles.Any()
                         ? string.Join(", ", u.Roles.Select(r => roleNamesById.ContainsKey(r.RoleId) ? roleNamesById[r.RoleId] : "Unknown"))
                         : "(none)",
+                    BranchName = u.Branch == null ? "-" : u.Branch.BranchName,
                     IsCurrentUser = u.Id == currentUserId
                 })
-                .OrderBy(e => e.CurrentRole)
                 .ToList();
 
             gvUsers.DataSource = rows;

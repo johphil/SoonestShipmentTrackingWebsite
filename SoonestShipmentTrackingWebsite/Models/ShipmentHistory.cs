@@ -16,14 +16,22 @@ namespace SoonestShipmentTrackingWebsite.Models
 
         public ShipmentStatus Status { get; set; }
 
+        [StringLength(150)]
+        public string Location { get; set; }
+
         [StringLength(500)]
         public string Notes { get; set; }
 
         public DateTime Timestamp { get; set; }
 
+        public byte[] ProofOfDelivery { get; set; }
+
+        [StringLength(100)]
+        public string ProofContentType { get; set; }
+
         public ShipmentHistory()
         {
-            Timestamp = DateTime.Now;
+            Timestamp = Helpers.TimeHelper.Now;
         }
     }
 }

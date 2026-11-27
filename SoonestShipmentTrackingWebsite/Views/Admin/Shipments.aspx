@@ -1,37 +1,54 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Shipments.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Shipments" %>
+<%@ Page Language="C#" MasterPageFile="~/Views/Site.Master" AutoEventWireup="true" CodeBehind="Shipments.aspx.cs" Inherits="SoonestShipmentTrackingWebsite.Views.Admin.Shipments" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">Manage Shipments</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<div class="section" style="padding-top:36px;">
+<div class="section app-section">
     <div class="container">
         <div class="card-panel">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                <div class="page-heading" style="margin:0;">All Shipments</div>
-                <a runat="server" href="~/Views/Admin/CreateShipment.aspx" class="btn btn-red">+ New Shipment</a>
+            <div class="page-head">
+                <div>
+                    <div class="page-heading">All Shipments</div>
+                    <div class="page-subheading">Filter by status using the chips below. Newest activity first.</div>
+                </div>
             </div>
-
-            <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid" GridLines="None"
-                EmptyDataText="No shipments yet. Create one to get started.">
+            <asp:Literal ID="litStatusChips" runat="server" />
+            <div class="table-scroll">
+            <asp:GridView ID="gvShipments" runat="server" AutoGenerateColumns="false" CssClass="data-grid data-grid-shipments" GridLines="None"
+                            AllowPaging="true" PageSize="20" OnPageIndexChanging="gvShipments_PageIndexChanging" PagerStyle-CssClass="grid-pager"
+                EmptyDataText="No shipments match this view.">
                 <Columns>
-                    <asp:BoundField DataField="ControlNumber" HeaderText="Control No." />
+                    <asp:TemplateField HeaderText="Shipment">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.ShipmentCell(Eval("ControlNumber"), Eval("ShipmentType"), Eval("CreatedDate")) %></ItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Customer">
-                        <ItemTemplate>
-                            <%# Eval("CustomerName") %><br />
-                            <span style="color:#6b7684;font-size:12px;"><%# Eval("CustomerEmail") %></span>
-                        </ItemTemplate>
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.PartyCell(Eval("CustomerName"), Eval("CustomerEmail")) %></ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="RecipientName" HeaderText="Recipient" />
+                    <asp:TemplateField HeaderText="Area">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RegionAreaCell(Eval("RegionArea")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Route / Container">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.RouteCell(Eval("ShipmentType"), Eval("BranchOrigin"), Eval("ContainerNumber"), Eval("PackingList"), Eval("RegionArea"), Eval("RecipientAddress")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Cargo">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.CargoCell(Eval("PackageDescription"), Eval("WeightKg")) %></ItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Status">
-                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.Badge((SoonestShipmentTrackingWebsite.Models.ShipmentStatus)Eval("CurrentStatus")) %></ItemTemplate>
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.StatusCell(Eval("CurrentStatus"), Eval("IssueReported"), Eval("IsIssueResolved")) %></ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="UpdatedDate" HeaderText="Last Update" DataFormatString="{0:MMM d, h:mm tt}" />
+                    <asp:TemplateField HeaderText="Est. Delivery">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.EtaCell(Eval("EstimatedDeliveryDate"), Eval("CurrentStatus")) %></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Updated">
+                        <ItemTemplate><%# SoonestShipmentTrackingWebsite.Helpers.StatusDisplayHelper.UpdatedCell(Eval("UpdatedDate")) %></ItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="">
+                        <ItemStyle CssClass="col-action" />
                         <ItemTemplate>
-                            <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/UpdateStatus.aspx?id=" + Eval("Id") %>'
-                                CssClass="btn btn-outline" Text="Update Status" style="padding:5px 12px;font-size:11.5px;border-color:#0b2540;color:#0b2540;" />
+                            <asp:HyperLink runat="server" NavigateUrl='<%# "~/Views/Admin/UpdateStatus.aspx?id=" + Eval("Id") %>' CssClass="btn btn-sm" Text="Update" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+            </div>
         </div>
     </div>
 </div>
