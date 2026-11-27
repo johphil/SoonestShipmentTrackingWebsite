@@ -83,6 +83,13 @@
                 ProofContentType = contentType
             });
 
+            //Update rider status
+            var rider = db.Riders.FirstOrDefault(e => e.RiderId == shipment.RiderId);
+            if (rider != null)
+            {
+                rider.IsActive = true;
+            }
+
             db.SaveChanges();
         }
 

@@ -256,7 +256,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                 foreach (var rider in riders)
                 {
-                    var label = rider.FullName + (rider.IsActive ? string.Empty : " (Inactive)");
+                    var label = rider.FullName + (rider.IsActive ? string.Empty : " (Unavailable)");
                     ddlRider.Items.Add(new ListItem(label, rider.RiderId.ToString()));
                 }
 
@@ -446,20 +446,15 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
 
                     if (newStatus == ShipmentStatus.OutForDelivery && !rider.IsActive)
                     {
-                        ShowError("Selected rider is inactive and cannot be assigned.");
+                        ShowError("Selected rider is unavailable and cannot be assigned.");
                         return;
                     }
 
                     shipment.RiderId = rider.RiderId;
                     shipment.RiderName = rider.FullName;
-                }
 
-                //Prevent duplicate status na magkasunod
-                //if (shipment.CurrentStatus == newStatus)
-                //{
-                //    ShowError("Shipment status cannot be the same.");
-                //    return;
-                //}
+                    rider.IsActive = false;
+                }
 
                 var previousStatus = shipment.CurrentStatus;
                 shipment.CurrentStatus = newStatus;
@@ -495,6 +490,7 @@ namespace SoonestShipmentTrackingWebsite.Views.Admin
                         ProofOfDelivery = proofBytes,
                         ProofContentType = proofType
                     });
+
                 await _db.SaveChangesAsync();
 
                 Session["FlashMessage"] = $"Shipment {shipment.ControlNumber} updated to {StatusDisplayHelper.Label(newStatus)}.";
